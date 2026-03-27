@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="LinkLobby.API/LinkLobby.API.csproj" />
+  <Project Path="LinkLobby.APIClient/LinkLobby.APIClient.csproj" />
+  <Project Path="LinkLobby.Data/LinkLobby.Data.csproj" />
+  <Project Path="LinkLobby.Desktop/LinkLobby.Desktop.csproj" />
+  <Project Path="LinkLobby.Models/LinkLobby.Models.csproj" />
+  <Project Path="LinkLobby.Tests/LinkLobby.Tests.csproj" />
+  <Project Path="LinkLobby.Web/LinkLobby.Web.csproj" />
+</Solution>
