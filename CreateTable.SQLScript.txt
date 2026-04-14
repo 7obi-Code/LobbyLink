@@ -1,1 +1,89 @@
-.
+CREATE DATABASE LobbyLink;
+GO
+
+USE LobbyLink;
+GO
+
+CREATE TABLE Account (
+    accountId INT PRIMARY KEY,
+    name VARCHAR(100),
+    surname VARCHAR(100),
+    birthday DATE,
+    email VARCHAR(255),
+    phoneno VARCHAR(20),
+    type VARCHAR(50)
+);
+
+CREATE TABLE Wallet (
+    walletId INT PRIMARY KEY,
+    saldo DECIMAL,
+);
+
+CREATE TABLE UserAccount (
+    accountId INT PRIMARY KEY,
+    username VARCHAR(100),
+    level INT,
+    walletId INT,
+
+    CONSTRAINT fk_user_account_wallet
+        FOREIGN KEY (walletId)
+        REFERENCES Wallet(walletId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_user_account
+        FOREIGN KEY (accountId)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE
+
+);
+
+CREATE TABLE AdminAccount (
+    accountId INT PRIMARY KEY,
+    role VARCHAR(50),
+
+    CONSTRAINT fk_admin_account
+        FOREIGN KEY (accountId)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE ItemInstance (
+    itemInstanceId INT PRIMARY KEY,
+    itemIdentificationId INT,
+    accountId INT,
+
+    CONSTRAINT fk_iteminstance_accountId
+        FOREIGN KEY (accountId)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_iteminstance_itemIdentificationId
+        FOREIGN KEY (itemIdentificationId)
+        REFERENCES ItemIdentification(itemIdentificationId)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Listing (
+    listingId INT PRIMARY KEY,
+    itemInstanceId INT,
+    accountId INT,
+    price DECIMAL,
+    creationTimeStamp DATETIME2,
+    status VARCHAR,
+
+    CONSTRAINT fk_listing_iteminstance
+        FOREIGN KEY (itemInstanceId)
+        REFERENCES ItemInstance(itemInstanceId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_listing_account
+        FOREIGN KEY (accountId)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE
+);
+
+
+    CONSTRAINT fk_
+        FOREIGN KEY ()
+        REFERENCES
+        ON DELETE CASCADE
