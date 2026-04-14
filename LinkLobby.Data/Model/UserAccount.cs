@@ -4,7 +4,26 @@ using System.Text;
 
 namespace LobbyLink.DataAccess.Model
 {
-    internal class UserAccount
+    public class UserAccount : Person
     {
+
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public int Level { get; set; }
+        public Wallet Wallet { get; set; }
+        public List<Game> Games { get; set; }
+        public List<Listing> Listings { get; set; }
+        public List <ItemInstance> ItemInstance { get; set; }
+
+        public UserAccount(int userId, string userName, int level, Wallet wallet, List<Game> games, List<Listing> listings, ItemInstance itemInstance)
+        {
+            UserId = userId;
+            UserName = userName;
+            Level = level;
+            Wallet = wallet;
+            Games = games;
+            Listings = listings;
+            ItemInstance = ItemInstance;
+        }
     }
 }

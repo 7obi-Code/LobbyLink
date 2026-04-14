@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LobbyLink.DataAccess.Model
 {
-    internal class Wallet
+    public class Wallet
     {
     }
 }
