@@ -2,11 +2,10 @@
   <Folder Name="/SQLScripts/">
     <File Path="Table.SQLScript.txt" />
   </Folder>
-  <Project Path="LinkLobby.API/LobbyLink.API.csproj" />
-  <Project Path="LinkLobby.APIClient/LobbyLink.APIClient.csproj" />
-  <Project Path="LinkLobby.Data/LobbyLink.Data.csproj" />
-  <Project Path="LinkLobby.Desktop/LobbyLink.Desktop.csproj" />
-  <Project Path="LinkLobby.Models/LobbyLink.Models.csproj" />
-  <Project Path="LinkLobby.Tests/LobbyLink.Tests.csproj" />
-  <Project Path="LinkLobby.Web/LobbyLink.Web.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LinkLobby.API/LobbyLink.API.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LinkLobby.APIClient/LobbyLink.APIClient.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LinkLobby.Data/LobbyLink.DataAccess.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LinkLobby.Desktop/LobbyLink.Desktop.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LinkLobby.Tests/LobbyLink.Tests.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LinkLobby.Web/LobbyLink.Web.csproj" />
 </Solution>
