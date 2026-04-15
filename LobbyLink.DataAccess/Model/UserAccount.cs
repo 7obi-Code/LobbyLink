@@ -13,9 +13,9 @@ namespace LobbyLink.DataAccess.Model
         public Wallet Wallet { get; set; }
         public List<Game> Games { get; set; }
         public List<Listing> Listings { get; set; }
-        public List <ItemInstance> ItemInstance { get; set; }
+        public List <ItemInstance> ItemInstances { get; set; }
 
-        public UserAccount(int userId, string userName, int level, Wallet wallet, List<Game> games, List<Listing> listings, ItemInstance itemInstance)
+        public UserAccount(int userId, string userName, int level, Wallet wallet, List<Game> games, List<Listing> listings, List<ItemInstance> itemInstances)
         {
             UserId = userId;
             UserName = userName;
@@ -23,7 +23,7 @@ namespace LobbyLink.DataAccess.Model
             Wallet = wallet;
             Games = games;
             Listings = listings;
-            ItemInstance = ItemInstance;
+            ItemInstances = itemInstances;
         }
     }
 }
