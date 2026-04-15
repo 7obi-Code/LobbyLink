@@ -1,10 +1,13 @@
-﻿using System;
+﻿using LobbyLink.DataAccess.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LobbyLink.DataAccess.Interfaces
 {
-    internal interface IFItemInstanceDao
+    public interface IFItemInstanceDao
     {
+        ItemInstance? GetItemInstance(int id);
+        IEnumerable<ItemInstance> GetAllItemInstances();
     }
 }

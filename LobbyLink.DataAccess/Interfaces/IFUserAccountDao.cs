@@ -5,9 +5,9 @@ using System.Text;
 
 namespace LobbyLink.DataAccess.Interfaces
 {
-    public interface IFGameDao
+    public interface IFUserAccountDao
     {
-        Game? GetGamebyGameId();
-        IEnumerable<Game> GetAllGames();
+        UserAccount GetUserAccountById(int id);
+        IEnumerable<UserAccount> GetAllUserAccounts();
     }
 }
