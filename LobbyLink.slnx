@@ -1,7 +1,4 @@
 <Solution>
-  <Folder Name="/SQLScripts/">
-    <File Path="Table.SQLScript.txt" />
-  </Folder>
   <Project Path="LobbyLink.API/LobbyLink.API.csproj" />
   <Project Path="LobbyLink.APIClient/LobbyLink.APIClient.csproj" />
   <Project Path="LobbyLink.DataAccess/LobbyLink.DataAccess.csproj" />
