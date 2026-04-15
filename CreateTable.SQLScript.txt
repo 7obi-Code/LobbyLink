@@ -5,23 +5,23 @@ USE LobbyLink;
 GO
 
 CREATE TABLE Account (
-    accountId INT PRIMARY KEY,
-    name VARCHAR(100),
-    surname VARCHAR(100),
+    accountId INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
     birthday DATE,
-    email VARCHAR(255),
+    email VARCHAR(255) NOT NULL,
     phoneno VARCHAR(20),
     type VARCHAR(50)
 );
 
 CREATE TABLE Wallet (
     walletId INT PRIMARY KEY,
-    saldo DECIMAL,
+    saldo DECIMAL (10,2)
 );
 
 CREATE TABLE UserAccount (
     accountId INT PRIMARY KEY,
-    username VARCHAR(100),
+    username VARCHAR(100) NOT NULL,
     level INT,
     walletId INT,
 
@@ -48,7 +48,7 @@ CREATE TABLE AdminAccount (
 );
 
 CREATE TABLE ItemInstance (
-    itemInstanceId INT PRIMARY KEY,
+    itemInstanceId INT IDENDITY(1,1) PRIMARY KEY,
     itemIdentificationId INT,
     accountId INT,
 
@@ -64,12 +64,12 @@ CREATE TABLE ItemInstance (
 );
 
 CREATE TABLE Listing (
-    listingId INT PRIMARY KEY,
+    listingId INT IDENTITY(1,1) PRIMARY KEY,
     itemInstanceId INT,
     accountId INT,
-    price DECIMAL,
-    creationTimeStamp DATETIME2,
-    status VARCHAR,
+    price DECIMAL (10,2),
+    creationTimeStamp DATETIME2 NOT NULL,
+    status VARCHAR (),
 
     CONSTRAINT fk_listing_iteminstance
         FOREIGN KEY (itemInstanceId)
