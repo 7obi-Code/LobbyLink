@@ -48,7 +48,7 @@ CREATE TABLE AdminAccount (
 CREATE TABLE ItemDefinition (
     itemDefinitionId INT IDENTITY(1,1) PRIMARY KEY,
     itemName VARCHAR (40) NOT NULL,
-    itemImageUrl VARCHAR NOT NULL,
+    itemImageUrl VARCHAR(255) NOT NULL,
     itemDescription VARCHAR (400),
     itemTags VARCHAR (40),
     gameId INT,
