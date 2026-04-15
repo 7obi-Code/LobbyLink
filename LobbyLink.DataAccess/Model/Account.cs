@@ -15,6 +15,9 @@ namespace LobbyLink.DataAccess.Model
         public string PhoneNo { get; set; }
         public string Type { get; set; }
 
+        public Account() {
+        }
+
         public Account(int accountId, string name, string surname, DateTime birthday, string email, string phoneNo, string type)
         {
             AccountId = accountId;
