@@ -1,0 +1,3 @@
+﻿
+
+string conn = "Server=hildur.ucn.dk;Database=DMA-CSD-V252_10666018;User Id=DMA-CSD-V252_10666018;Password=Password1!;Encrypt=True;TrustServerCertificate=True;";
