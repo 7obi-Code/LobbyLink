@@ -7,7 +7,7 @@ namespace LobbyLink.DataAccess.Interfaces
 {
     public interface IFItemPropertyDao
     {
-        ItemProperty GetItemPropertyById(int id);
+        ItemProperty? GetItemPropertyById(int id);
         IEnumerable<ItemProperty> GetAllItemProperties();
 
         void InsertItemProperty(ItemProperty itemProperty);

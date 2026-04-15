@@ -7,7 +7,7 @@ namespace LobbyLink.DataAccess.Interfaces
 {
     public interface IFItemPropertyLineDao
     {
-        ItemPropertyLine GetItemPropertyLineById(int id);
+        ItemPropertyLine? GetItemPropertyLineById(int id);
 
         IEnumerable<ItemPropertyLine> GetAllItemPropertyLines();
         IEnumerable<ItemPropertyLine> GetLinesByItemDefinitionId(int itemDefinitionId);
