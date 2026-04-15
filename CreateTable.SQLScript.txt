@@ -10,13 +10,18 @@ CREATE TABLE Account (
     surname VARCHAR(100) NOT NULL,
     birthday DATE,
     email VARCHAR(255) NOT NULL,
-    phoneno VARCHAR(20),
-    type VARCHAR(50)
+    phoneno VARCHAR(20)
 );
 
 CREATE TABLE Wallet (
-    walletId INT PRIMARY KEY,
-    saldo DECIMAL (10,2)
+    walletId INT IDENTITY(1,1) PRIMARY KEY,
+    saldo DECIMAL (10,2) NOT NULL
+);
+
+CREATE TABLE Game (
+    gameId INT IDENTITY(1,1) PRIMARY KEY,
+    gameTitle VARCHAR(100),
+    gameStudio VARCHAR(100)
 );
 
 CREATE TABLE UserAccount (
@@ -34,7 +39,6 @@ CREATE TABLE UserAccount (
         FOREIGN KEY (accountId)
         REFERENCES Account(accountId)
         ON DELETE CASCADE
-
 );
 
 CREATE TABLE AdminAccount (
@@ -47,9 +51,23 @@ CREATE TABLE AdminAccount (
         ON DELETE CASCADE
 );
 
+CREATE TABLE ItemDefinition (
+    itemDefinitionId INT IDENTITY(1,1) PRIMARY KEY,
+    itemName VARCHAR (40) NOT NULL,
+    itemImageUrl VARCHAR NOT NULL,
+    itemDescription VARCHAR (400),
+    itemTags VARCHAR (40),
+    gameId INT,
+
+    CONSTRAINT fk_itemdefinition_gameid
+        FOREIGN KEY (gameId)
+        REFERENCES Game(gameId)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE ItemInstance (
-    itemInstanceId INT IDENDITY(1,1) PRIMARY KEY,
-    itemIdentificationId INT,
+    itemInstanceId INT IDENTITY(1,1) PRIMARY KEY,
+    itemDefinitionId INT,
     accountId INT,
 
     CONSTRAINT fk_iteminstance_accountId
@@ -57,9 +75,9 @@ CREATE TABLE ItemInstance (
         REFERENCES Account(accountId)
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_iteminstance_itemIdentificationId
-        FOREIGN KEY (itemIdentificationId)
-        REFERENCES ItemIdentification(itemIdentificationId)
+    CONSTRAINT fk_iteminstance_itemdefinitionId
+        FOREIGN KEY (itemdefinitionId)
+        REFERENCES ItemDefinition(itemdefinitionId)
         ON DELETE CASCADE
 );
 
@@ -69,21 +87,123 @@ CREATE TABLE Listing (
     accountId INT,
     price DECIMAL (10,2),
     creationTimeStamp DATETIME2 NOT NULL,
-    status VARCHAR (),
+    status VARCHAR (40),
 
     CONSTRAINT fk_listing_iteminstance
         FOREIGN KEY (itemInstanceId)
         REFERENCES ItemInstance(itemInstanceId)
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_listing_account
+    CONSTRAINT fk_listing_accountid
         FOREIGN KEY (accountId)
         REFERENCES Account(accountId)
         ON DELETE CASCADE
 );
 
+CREATE TABLE UserAccountItem (
+    itemInstanceId INT, 
+    accountId INT,
+    PRIMARY KEY (itemInstanceId, accountId),
 
-    CONSTRAINT fk_
-        FOREIGN KEY ()
-        REFERENCES
+    CONSTRAINT fk_useraccountitem_accountid
+        FOREIGN KEY (accountId)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_useraccountitem_iteminstanceid
+        FOREIGN KEY (itemInstanceId)
+        REFERENCES ItemInstance(itemInstanceId)
         ON DELETE CASCADE
+);
+
+CREATE TABLE UserGame (
+    accountId INT,
+    gameId INT,
+    PRIMARY KEY (accountId, gameId),
+
+    CONSTRAINT fk_usergame_accountId
+        FOREIGN KEY (accountId)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_usergame_gameid
+        FOREIGN KEY (gameId)
+        REFERENCES Game(gameId)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE ItemProperty (
+    itemPropertyId INT IDENTITY(1,1) PRIMARY KEY,
+    propertyName VARCHAR(40),
+    propertyLabel VARCHAR(40),
+    filterType VARCHAR(40),
+    isFilterable BIT NOT NULL DEFAULT 1,
+    gameId INT,
+
+    CONSTRAINT fk_itemproperty_gameid
+        FOREIGN KEY (gameId)
+        REFERENCES Game(gameId)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE ItemPropertyValue (
+    itemPropertyValueId INT IDENTITY(1,1) PRIMARY KEY,
+    value VARCHAR (40),
+    itemPropertyId INT,
+
+    CONSTRAINT fk_itempropertyvalue_itempropertyid
+        FOREIGN KEY (itempropertyid)
+        REFERENCES ItemProperty(itempropertyid)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE InstanceProperty (
+    instancePropertyId INT IDENTITY(1,1) PRIMARY KEY,
+    instancePropertyName VARCHAR (40),
+    instancePropertyLabel VARCHAR (40),
+    gameId INT,
+
+    CONSTRAINT fk_instanceproperty_gameid
+        FOREIGN KEY (gameId)
+        REFERENCES Game(gameId)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE ItemInstancePropertyLine (
+    itemInstancePropertyLineId INT IDENTITY(1,1) PRIMARY KEY,
+    value VARCHAR (40),
+    itemInstanceId INT,
+    instancePropertyId INT,
+
+    CONSTRAINT fk_iteminstancepropertyline_itemInstanceId
+        FOREIGN KEY (itemInstanceId)
+        REFERENCES ItemInstance(itemInstanceId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_iteminstancepropertyline_instancepropertyid
+        FOREIGN KEY (instancePropertyId)
+        REFERENCES InstanceProperty(instancePropertyId)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE ItemPropertyLine (
+    itemPropertyLine INT IDENTITY(1,1) PRIMARY KEY,
+    itemDefinitionId INT,
+    itemPropertyId INT,
+    itemPropertyValueId INT,
+
+    CONSTRAINT fk_itempropertyline_itemidentificationid
+        FOREIGN KEY (itemdefinitionId)
+        REFERENCES ItemDefinition(itemdefinitionId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_itempropertyline_itempropertyid
+        FOREIGN KEY (itempropertyid)
+        REFERENCES ItemProperty(itempropertyid)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_itempropertyline_itempropertyvalueid
+        FOREIGN KEY (itempropertyvalueid)
+        REFERENCES ItemPropertyValue(itempropertyvalueid)
+        ON DELETE CASCADE
+);
