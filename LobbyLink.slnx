@@ -2,10 +2,10 @@
   <Folder Name="/SQLScripts/">
     <File Path="Table.SQLScript.txt" />
   </Folder>
-  <Project Path="../../../../../../../../LobbyLink/LobbyLink.API/LobbyLink.API.csproj" />
-  <Project Path="../../../../../../../../LobbyLink/LobbyLink.APIClient/LobbyLink.APIClient.csproj" />
-  <Project Path="../../../../../../../../LobbyLink/LobbyLink.Data/LobbyLink.DataAccess.csproj" />
-  <Project Path="../../../../../../../../LobbyLink/LobbyLink.Desktop/LobbyLink.Desktop.csproj" />
-  <Project Path="../../../../../../../../LobbyLink/LobbyLink.Tests/LobbyLink.Tests.csproj" />
-  <Project Path="../../../../../../../../LobbyLink/LobbyLink.Web/LobbyLink.Web.csproj" />
+  <Project Path="LobbyLink.API/LobbyLink.API.csproj" />
+  <Project Path="LobbyLink.APIClient/LobbyLink.APIClient.csproj" />
+  <Project Path="LobbyLink.DataAccess/LobbyLink.DataAccess.csproj" />
+  <Project Path="LobbyLink.Desktop/LobbyLink.Desktop.csproj" />
+  <Project Path="LobbyLink.Test/LobbyLink.Test.csproj" />
+  <Project Path="LobbyLink.Website/LobbyLink.Website.csproj" />
 </Solution>
