@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LobbyLink.DataAccess.Model
 {
-    public class UserAccount : Person
+    public class UserAccount : Account
     {
 
         public int UserId { get; set; }
