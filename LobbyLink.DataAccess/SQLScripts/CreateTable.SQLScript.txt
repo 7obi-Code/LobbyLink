@@ -29,13 +29,11 @@ CREATE TABLE UserAccount (
 
     CONSTRAINT fk_user_account_wallet
         FOREIGN KEY (walletId)
-        REFERENCES Wallet(walletId)
-        ON DELETE CASCADE,
+        REFERENCES Wallet(walletId),
 
     CONSTRAINT fk_user_account
         FOREIGN KEY (accountId)
         REFERENCES Account(accountId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE AdminAccount (
@@ -45,7 +43,6 @@ CREATE TABLE AdminAccount (
     CONSTRAINT fk_admin_account
         FOREIGN KEY (accountId)
         REFERENCES Account(accountId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemDefinition (
@@ -59,7 +56,6 @@ CREATE TABLE ItemDefinition (
     CONSTRAINT fk_itemdefinition_gameid
         FOREIGN KEY (gameId)
         REFERENCES Game(gameId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemInstance (
@@ -69,13 +65,11 @@ CREATE TABLE ItemInstance (
 
     CONSTRAINT fk_iteminstance_accountId
         FOREIGN KEY (accountId)
-        REFERENCES Account(accountId)
-        ON DELETE CASCADE,
+        REFERENCES Account(accountId),
 
     CONSTRAINT fk_iteminstance_itemdefinitionId
         FOREIGN KEY (itemdefinitionId)
         REFERENCES ItemDefinition(itemdefinitionId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE Listing (
@@ -88,13 +82,11 @@ CREATE TABLE Listing (
 
     CONSTRAINT fk_listing_iteminstance
         FOREIGN KEY (itemInstanceId)
-        REFERENCES ItemInstance(itemInstanceId)
-        ON DELETE CASCADE,
+        REFERENCES ItemInstance(itemInstanceId),
 
     CONSTRAINT fk_listing_accountid
         FOREIGN KEY (accountId)
         REFERENCES Account(accountId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE UserAccountItem (
@@ -104,13 +96,11 @@ CREATE TABLE UserAccountItem (
 
     CONSTRAINT fk_useraccountitem_accountid
         FOREIGN KEY (accountId)
-        REFERENCES Account(accountId)
-        ON DELETE CASCADE,
+        REFERENCES Account(accountId),
 
     CONSTRAINT fk_useraccountitem_iteminstanceid
         FOREIGN KEY (itemInstanceId)
         REFERENCES ItemInstance(itemInstanceId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE UserGame (
@@ -120,13 +110,11 @@ CREATE TABLE UserGame (
 
     CONSTRAINT fk_usergame_accountId
         FOREIGN KEY (accountId)
-        REFERENCES Account(accountId)
-        ON DELETE CASCADE,
+        REFERENCES Account(accountId),
 
     CONSTRAINT fk_usergame_gameid
         FOREIGN KEY (gameId)
         REFERENCES Game(gameId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemProperty (
@@ -140,7 +128,6 @@ CREATE TABLE ItemProperty (
     CONSTRAINT fk_itemproperty_gameid
         FOREIGN KEY (gameId)
         REFERENCES Game(gameId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemPropertyValue (
@@ -151,7 +138,6 @@ CREATE TABLE ItemPropertyValue (
     CONSTRAINT fk_itempropertyvalue_itempropertyid
         FOREIGN KEY (itempropertyid)
         REFERENCES ItemProperty(itempropertyid)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE InstanceProperty (
@@ -163,7 +149,6 @@ CREATE TABLE InstanceProperty (
     CONSTRAINT fk_instanceproperty_gameid
         FOREIGN KEY (gameId)
         REFERENCES Game(gameId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemInstancePropertyLine (
@@ -174,13 +159,11 @@ CREATE TABLE ItemInstancePropertyLine (
 
     CONSTRAINT fk_iteminstancepropertyline_itemInstanceId
         FOREIGN KEY (itemInstanceId)
-        REFERENCES ItemInstance(itemInstanceId)
-        ON DELETE CASCADE,
+        REFERENCES ItemInstance(itemInstanceId),
 
     CONSTRAINT fk_iteminstancepropertyline_instancepropertyid
         FOREIGN KEY (instancePropertyId)
         REFERENCES InstanceProperty(instancePropertyId)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemPropertyLine (
@@ -191,16 +174,13 @@ CREATE TABLE ItemPropertyLine (
 
     CONSTRAINT fk_itempropertyline_itemidentificationid
         FOREIGN KEY (itemdefinitionId)
-        REFERENCES ItemDefinition(itemdefinitionId)
-        ON DELETE CASCADE,
+        REFERENCES ItemDefinition(itemdefinitionId),
 
     CONSTRAINT fk_itempropertyline_itempropertyid
         FOREIGN KEY (itempropertyid)
-        REFERENCES ItemProperty(itempropertyid)
-        ON DELETE CASCADE,
+        REFERENCES ItemProperty(itempropertyid),
 
     CONSTRAINT fk_itempropertyline_itempropertyvalueid
         FOREIGN KEY (itempropertyvalueid)
         REFERENCES ItemPropertyValue(itempropertyvalueid)
-        ON DELETE CASCADE
 );
