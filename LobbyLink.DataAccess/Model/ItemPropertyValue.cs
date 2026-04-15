@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LobbyLink.DataAccess.Model
+namespace LobbyLink.DataAccess.Model;
+public class ItemPropertyValue
 {
-    internal class ItemPropertyValue
+    public int Id { get; set; }
+    public String Value { get; set; }
+    public ItemPropertyValue(int id, string value)
     {
+        Id = id;
+        Value = value;
     }
 }
