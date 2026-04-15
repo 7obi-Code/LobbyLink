@@ -1,4 +1,6 @@
 ﻿using LobbyLink.DataAccess.Model;
+using LobbyLink.DataAccess.Interfaces;
+using LobbyLink.DataAccess.SQLClient;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
@@ -9,7 +11,7 @@ namespace LinkLobby.Test.DaoTests;
 public class ItemInstanceOwnershipTest
 {
     const string CONNECTION_STRING = "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True";
-
+    
     IFItemInstanceDao itemInstanceDao;
     IFUserAccountDao userAccountDao;
     List<int> _cleanupTestItemInstancesById = new List<int>();
