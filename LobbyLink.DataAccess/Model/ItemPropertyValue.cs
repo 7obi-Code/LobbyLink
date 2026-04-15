@@ -6,7 +6,7 @@ namespace LobbyLink.DataAccess.Model;
 public class ItemPropertyValue
 {
     public int Id { get; set; }
-    public String Value { get; set; }
+    public string Value { get; set; }
     public ItemPropertyValue(int id, string value)
     {
         Id = id;

@@ -6,6 +6,7 @@ namespace LobbyLink.DataAccess.Model
 {
     public class ItemProperty
     {
+        public int Id { get; set; }
         public string PropertyTitle { get; set; }
 
         public string PropertyLabel { get; set; }
@@ -18,8 +19,9 @@ namespace LobbyLink.DataAccess.Model
 
         public List<ItemPropertyValue> ItemPropertyValues { get; set; }
 
-        public ItemProperty(string propertyTitle, string propertyLabel, string filterType, bool isFilterable, List<ItemPropertyLine> itemPropertyLines, List<ItemPropertyValue> itemPropertyValues)
+        public ItemProperty(int id, string propertyTitle, string propertyLabel, string filterType, bool isFilterable, List<ItemPropertyLine> itemPropertyLines, List<ItemPropertyValue> itemPropertyValues)
         {
+            Id = id;
             PropertyTitle = propertyTitle;
             PropertyLabel = propertyLabel;
             FilterType = filterType;
