@@ -1,7 +1,4 @@
-CREATE DATABASE LobbyLink;
-GO
-
-USE LobbyLink;
+USE [DMA-CSD-V252_10666018];
 GO
 
 CREATE TABLE Account (
