@@ -1,1 +1,129 @@
+USE LobbyLink;
+GO
 
+-- =========================
+-- Accounts
+-- =========================
+INSERT INTO Account (name, surname, birthday, email, phoneno)
+VALUES 
+('Tobias', 'Jensen', '2000-01-01', 'tobias@gmail.com', '12345678'),
+('Laura', 'Berthelsen', '1999-07-21', 'laura@gmail.com', '22222222'),
+('Jonas', 'Larsen', '1997-03-15', 'jonas@gmail.com', '33333333'),
+('Noah', 'Quito', '2001-11-05', 'noah@gmail.com', '44444444'),
+('Admin', 'Admin', '1990-03-03', 'admin@gmail.com', '11111111');
+
+-- =========================
+-- Wallets
+-- =========================
+INSERT INTO Wallet (saldo)
+VALUES 
+(1000.00),
+(750.00),
+(500.00),
+(300.00);
+
+-- =========================
+-- UserAccounts
+-- =========================
+INSERT INTO UserAccount (accountId, username, level, walletId)
+VALUES 
+(1, 'Tobi', 10, 1),
+(2, 'LauraGamer', 7, 2),
+(3, 'JonasPro', 12, 3),
+(4, 'NoahPlayz', 3, 4);
+
+-- =========================
+-- AdminAccount
+-- =========================
+INSERT INTO AdminAccount (accountId, role)
+VALUES 
+(5, 'SuperAdmin');
+
+-- =========================
+-- Games
+-- =========================
+INSERT INTO Game (gameTitle, gameStudio)
+VALUES 
+('CS2', 'Valve'),
+('Valorant', 'Riot');
+
+-- =========================
+-- Item Definitions
+-- =========================
+INSERT INTO ItemDefinition (itemName, itemImageUrl, itemDescription, itemTags, gameId)
+VALUES 
+('AK-47 Redline', 'url1', 'Popular rifle skin', 'weapon', 1),
+('Karambit Knife', 'url2', 'Rare knife', 'knife', 1),
+('Vandal Skin', 'url3', 'Valorant rifle skin', 'weapon', 2);
+
+-- =========================
+-- Item Instances
+-- =========================
+INSERT INTO ItemInstance (itemDefinitionId, accountId)
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3),
+(1, 4);
+
+-- =========================
+-- Listings
+-- =========================
+INSERT INTO Listing (itemInstanceId, accountId, price, creationTimeStamp, status)
+VALUES 
+(1, 1, 250.00, GETDATE(), 'ACTIVE'),
+(2, 2, 500.00, GETDATE(), 'ACTIVE'),
+(3, 3, 150.00, GETDATE(), 'SOLD');
+
+-- =========================
+-- UserGame
+-- =========================
+INSERT INTO UserGame (accountId, gameId)
+VALUES 
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 2);
+
+-- =========================
+-- Item Properties
+-- =========================
+INSERT INTO ItemProperty (propertyName, propertyLabel, filterType, isFilterable, gameId)
+VALUES 
+('Rarity', 'Rarity', 'dropdown', 1, 1),
+('Condition', 'Condition', 'dropdown', 1, 1);
+
+-- =========================
+-- Item Property Values
+-- =========================
+INSERT INTO ItemPropertyValue (value, itemPropertyId)
+VALUES 
+('Common', 1),
+('Rare', 1),
+('Factory New', 2),
+('Used', 2);
+
+-- =========================
+-- Item Property Lines
+-- =========================
+INSERT INTO ItemPropertyLine (itemDefinitionId, itemPropertyId, itemPropertyValueId)
+VALUES 
+(1, 1, 2),
+(1, 2, 3),
+(2, 1, 2);
+
+-- =========================
+-- Instance Properties
+-- =========================
+INSERT INTO InstanceProperty (instancePropertyName, instancePropertyLabel, gameId)
+VALUES 
+('FloatValue', 'Float Value', 1);
+
+-- =========================
+-- Item Instance Property Lines
+-- =========================
+INSERT INTO ItemInstancePropertyLine (value, itemInstanceId, instancePropertyId)
+VALUES 
+('0.12', 1, 1),
+('0.45', 2, 1),
+('0.78', 3, 1);
