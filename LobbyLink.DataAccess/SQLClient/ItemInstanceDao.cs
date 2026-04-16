@@ -19,9 +19,9 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             var rowsAffected = connection.Execute(query, new { id });
             return rowsAffected > 0;
         }
+
         catch (Exception ex)
         {
-
             throw new Exception($"Error while trying to delete ItemInstance with id='{id}'. Error was: '{ex.Message}'", ex);
         }
     }
@@ -56,16 +56,17 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 
     public int InsertItemInstance(ItemInstance itemInstance)
     {
+        //INSERT INTO Author (Email, BlogTitle, PasswordHash) OUTPUT INSERTED.Id  VALUES (@Email, @BlogTitle, @PasswordHash)
         try
         {
-            var query = "INSERT INTO ItemInstance (add attributes) OUTPUT INSERTED.Id  VALUES (add attributes); ";
+            var query = "INSERT INTO ItemInstance (itemDefinitonId, accountId) OUTPUT INSERTED.Id  VALUES (@ItemDefinitionId_FK, @AccountId_FK); ";
             using var connection = CreateConnection();
             var newId = connection.QuerySingle<int>(query, itemInstance);
             return newId;
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.Id}'. Error was: '{ex.Message}'", ex);
+            throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.ItemInstanceId}'. Error was: '{ex.Message}'", ex);
         }
     }
 
@@ -80,7 +81,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.Id}'. Error was: '{ex.Message}'", ex);
+            throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.ItemInstanceId}'. Error was: '{ex.Message}'", ex);
         }
     }
 }

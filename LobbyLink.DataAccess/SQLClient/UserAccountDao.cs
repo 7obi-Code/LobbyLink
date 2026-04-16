@@ -1,5 +1,6 @@
 ﻿using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
