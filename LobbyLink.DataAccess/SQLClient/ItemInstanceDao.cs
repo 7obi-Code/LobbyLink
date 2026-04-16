@@ -9,10 +9,12 @@ namespace LobbyLink.DataAccess.SQLClient;
 public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 {
     public IFUserAccountDao userAccountDao { get; set; }
+    public IFItemDefinitionDao itemDefinitionDao { get; set; }
 
     public ItemInstanceDao(string connectionString) : base(connectionString) 
     {
         userAccountDao = new UserAccountDao(connectionString);
+        itemDefinitionDao = new ItemDefinitionDao(connectionString);
     }
  
     public bool DeleteItemInstanceById(int id)
@@ -63,6 +65,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             if (itemInstance != null)
             {
                 itemInstance.UserAccount = userAccountDao.GetUserAccountById(itemInstance.AccountId_FK);
+                itemInstance.ItemDefinition = itemDefinitionDao.GetItemDefinitionById(itemInstance.ItemDefinitionId_FK);
             }
 
             return itemInstance;
