@@ -10,7 +10,6 @@ using LobbyLink.DataAccess.SQLClient;
 namespace LinkLobby.Test.DaoTests;
 public class ItemInstanceOwnershipTest
 {
-    const string CONNECTION_STRING = "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True";
 
     IFItemInstanceDao itemInstanceDao;
     IFUserAccountDao userAccountDao;
@@ -19,8 +18,8 @@ public class ItemInstanceOwnershipTest
     [SetUp]
     public void Setup()
     {
-        itemInstanceDao = new ItemInstanceDao(CONNECTION_STRING);
-        userAccountDao = new UserAccountDao(CONNECTION_STRING);
+        itemInstanceDao = new ItemInstanceDao(TestSettings.CONNECTION_STRING);
+        userAccountDao = new UserAccountDao(TestSettings.CONNECTION_STRING);
     }
 
     [TearDown]
