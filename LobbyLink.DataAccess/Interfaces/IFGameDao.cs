@@ -1,10 +1,13 @@
-﻿using System;
+﻿using LobbyLink.DataAccess.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LobbyLink.DataAccess.Interfaces
 {
-    internal interface Interface1
-    {
+    public interface IFGameDao
+    { 
+        Game? GetGameByID (int id);
+        IEnumerable<Game> GetAllGames (int id);    
     }
 }
