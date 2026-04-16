@@ -3,6 +3,7 @@ using LobbyLink.DataAccess.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Dapper;
 
 namespace LobbyLink.DataAccess.SQLClient
 {
