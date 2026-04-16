@@ -25,5 +25,7 @@ namespace LobbyLink.DataAccess.Model
             Listings = listings;
             ItemInstances = itemInstances;
         }
+
+        public UserAccount() { }
     }
 }

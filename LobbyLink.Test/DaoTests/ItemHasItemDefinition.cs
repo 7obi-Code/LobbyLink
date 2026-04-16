@@ -41,7 +41,7 @@ namespace LobbyLink.Test.DaoTests
             {
                 try
                 {
-                    _itemDefinitionDao.DeleteItemDefinition(id);
+                    //_itemDefinitionDao.DeleteItemDefinition(id);
                 }
                 catch { }
             }

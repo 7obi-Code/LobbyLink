@@ -16,9 +16,9 @@ namespace LobbyLink.DataAccess.SQLClient
         {
             try
             {
-                var query = "SELECT * FROM USERACCOUNT WHERE Id=@Id";
+                var query = "SELECT * FROM UserAccount WHERE accountId=@UserId";
                 using var connection = CreateConnection();
-                return connection.QuerySingleOrDefault<UserAccount>(query, new { id });
+                return connection.QuerySingleOrDefault<UserAccount>(query, new { UserId = id });
             }
             catch (Exception ex)
             {
