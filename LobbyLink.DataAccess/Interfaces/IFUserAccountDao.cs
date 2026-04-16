@@ -7,7 +7,7 @@ namespace LobbyLink.DataAccess.Interfaces
 {
     public interface IFUserAccountDao
     {
-        UserAccount GetUserAccountById(int id);
+        UserAccount? GetUserAccountById(int id);
         IEnumerable<UserAccount> GetAllUserAccounts();
     }
 }
