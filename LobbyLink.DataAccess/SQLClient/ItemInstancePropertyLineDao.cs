@@ -15,18 +15,18 @@ namespace LobbyLink.DataAccess.SQLClient
         {
             throw new NotImplementedException();
         }
-
+        //hej
         public IEnumerable<ItemInstancePropertyLine> GetAllItemInstancePropertyLines()
         {
             try
             {
-                var query = "SELECT * FROM BlogPost WHERE FK_UserAcc_Id=@AuthorId";
+                var query = "SELECT * FROM ItemInstancePropertyLine";
                 using var connection = CreateConnection();
-                return connection.Query<BlogPost>(query, new { AuthorId = authorId });
+                return connection.Query<ItemInstancePropertyLine>(query);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while trying to get blog posts for author with id='{authorId}'. Error was: '{ex.Message}'", ex);
+                throw new Exception($"Error while trying to get all ItemInstancePropertyLine. Error was: '{ex.Message}'", ex);
             }
         }
 
