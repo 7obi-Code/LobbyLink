@@ -1,6 +1,6 @@
-﻿using LobbyLink.DataAccess.SQLClient;
-using LobbyLink.DataAccess.Interfaces;
+﻿using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,27 +11,56 @@ namespace LobbyLink.DataAccess.SQLClient
     {
         public ItemPropertyDao(string connectionString) : base(connectionString) { }
 
-        public void DeleteItemProperty(int id)
+        public bool DeleteItemProperty(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = "DELETE FROM ItemProperty WHERE Id=@Id";
+                using var connection = CreateConnection();
+                var rowsAffected = connection.Execute(query, new { id });
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"Error while trying to delete ItemProperty with id='{id}'. Error was: '{ex.Message}'", ex);
+            }
         }
 
         public IEnumerable<ItemProperty> GetAllItemProperties()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = "SELECT * FROM ItemProperty";
+                using var connection = CreateConnection();
+                return connection.Query<ItemProperty>(query);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error while trying to get all Item Properties. Error was: '{ex.Message}'", ex);
+            }
         }
 
         public ItemProperty? GetItemPropertyById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = "SELECT * FROM ItemProperty WHERE Id=@Id";
+                using var connection = CreateConnection();
+                return connection.QuerySingleOrDefault<ItemProperty>(query, new { id });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error while trying to get ItemProperty with id='{id}'. Error was: '{ex.Message}'", ex);
+            }
         }
 
-        public void InsertItemProperty(ItemProperty itemProperty)
+        public int InsertItemProperty(ItemProperty itemProperty)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateItemProperty(ItemProperty itemProperty)
+        public bool UpdateItemProperty(ItemProperty itemProperty)
         {
             throw new NotImplementedException();
         }
