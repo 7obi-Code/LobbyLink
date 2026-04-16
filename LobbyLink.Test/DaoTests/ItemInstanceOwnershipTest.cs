@@ -43,30 +43,26 @@ public class ItemInstanceOwnershipTest
     {
         // Arrange
         ItemInstance testItemInstance = CreateTestItemInstance();
+        var id = itemInstanceDao.InsertItemInstance(testItemInstance);
+        _cleanupTestItemInstancesById.Add(id);
 
         // Act
-        ItemInstance itemInstance = itemInstanceDao.GetItemInstanceById(testItemInstance.ItemInstanceId);
+
+        ItemInstance itemInstance = itemInstanceDao.GetItemInstanceById(id);
 
         // Assert
         Assert.That(itemInstance, Is.Not.Null, "Item Instance was not found");
         Assert.That(itemInstance.UserAccount, Is.Not.Null, "A User was not connected to the ItemInstance");
-        Assert.That(itemInstance.UserAccount, Is.EqualTo(testItemInstance.UserAccount));
+        Assert.That(itemInstance.UserAccount.AccountId, Is.EqualTo(testItemInstance.AccountId_FK));
     }
 
     private ItemInstance CreateTestItemInstance()
     {
         var itemInstance = new ItemInstance
         {
-            ItemInstanceId = 35,
-            Status = true,
-            UserAccount = userAccountDao.GetUserAccountById(1),
-            Listings = new List<Listing>(),
-            ItemInstancePropertyLines = new List<ItemInstancePropertyLine>(),
-            ItemDefinition = null
+            AccountId_FK = 1,
+            ItemDefinitionId_FK = 1,
         };
-
-        var id = itemInstanceDao.InsertItemInstance(itemInstance);
-        _cleanupTestItemInstancesById.Add(id);
 
         return itemInstance;
     }

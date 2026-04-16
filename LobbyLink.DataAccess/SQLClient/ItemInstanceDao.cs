@@ -8,7 +8,12 @@ using System.Text;
 namespace LobbyLink.DataAccess.SQLClient;
 public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 {
-    public ItemInstanceDao(string connectionString) : base(connectionString) { }
+    public IFUserAccountDao userAccountDao { get; set; }
+
+    public ItemInstanceDao(string connectionString) : base(connectionString) 
+    {
+        userAccountDao = new UserAccountDao(connectionString);
+    }
  
     public bool DeleteItemInstanceById(int id)
     {
@@ -44,9 +49,23 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
     {
         try
         {
-            var query = "SELECT * FROM ItemInstance WHERE Id=@Id";
+            var query = @"
+            SELECT
+                itemInstanceId,
+                accountId AS AccountId_FK,
+                itemDefinitionId AS ItemDefinitionId_FK
+            FROM ItemInstance
+            WHERE itemInstanceId = @id";
+
             using var connection = CreateConnection();
-            return connection.QuerySingleOrDefault<ItemInstance>(query, new { id });
+            var itemInstance = connection.QuerySingleOrDefault<ItemInstance>(query, new { id });
+
+            if (itemInstance != null)
+            {
+                itemInstance.UserAccount = userAccountDao.GetUserAccountById(itemInstance.AccountId_FK);
+            }
+
+            return itemInstance;
         }
         catch (Exception ex)
         {
@@ -56,10 +75,9 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 
     public int InsertItemInstance(ItemInstance itemInstance)
     {
-        //INSERT INTO Author (Email, BlogTitle, PasswordHash) OUTPUT INSERTED.Id  VALUES (@Email, @BlogTitle, @PasswordHash)
         try
         {
-            var query = "INSERT INTO ItemInstance (itemDefinitonId, accountId) OUTPUT INSERTED.Id  VALUES (@ItemDefinitionId_FK, @AccountId_FK); ";
+            var query = "INSERT INTO ItemInstance (itemDefinitionId, accountId) OUTPUT INSERTED.itemInstanceId  VALUES (@ItemDefinitionId_FK, @AccountId_FK); ";
             using var connection = CreateConnection();
             var newId = connection.QuerySingle<int>(query, itemInstance);
             return newId;
