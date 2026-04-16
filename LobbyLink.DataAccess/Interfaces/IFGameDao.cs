@@ -11,3 +11,4 @@ namespace LobbyLink.DataAccess.Interfaces
         IEnumerable<Game> GetAllGames (int id);    
     }
 }
+ 

@@ -1,9 +1,11 @@
 ﻿using LobbyLink.DataAccess.Model;
+using LobbyLink.DataAccess.Interfaces; 
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
+using LobbyLink.DataAccess.SQLClient;
 
 namespace LinkLobby.Test.DaoTests;
 public class ItemInstanceOwnershipTest
@@ -54,12 +56,7 @@ public class ItemInstanceOwnershipTest
     {
         var itemInstance = new ItemInstance
         {
-            ItemInstanceId = 35,
-            Status = true,
             UserAccount = userAccountDao.GetUserAccountById(1),
-            Listings = new List<Listing>(),
-            ItemInstancePropertyLines = new List<ItemInstancePropertyLine>(),
-            ItemDefinition = null
         };
 
         var id = itemInstanceDao.InsertItemInstance(itemInstance);

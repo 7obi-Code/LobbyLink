@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="SQLScripts\ConnectionString.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.72" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
   </ItemGroup>
 
