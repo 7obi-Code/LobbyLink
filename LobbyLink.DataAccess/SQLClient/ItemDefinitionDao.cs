@@ -14,13 +14,24 @@ namespace LobbyLink.DataAccess.SQLClient
             try
             {
                 var query = @"SELECT
-                                itemDefinitionId AS ItemDefinitionId,
-                                itemName AS ItemName,
-                                itemImageUrl AS ItemImageUrl,
-                                itemDescription AS ItemDescription,
-                                gameId_FK AS GameId_FK
-                              FROM ItemDefinition
-                              WHERE itemDefinitionId = @Id";
+                idf.itemDefinitionId AS ItemDefinitionId,
+                idf.itemName AS ItemName,
+                idf.itemImageUrl AS ItemImageUrl,
+                idf.itemDescription AS ItemDescription,
+                idf.itemTags AS ItemTags,
+                idf.gameId AS GameId_FK,
+
+                g.gameId AS GameId,
+                g.gameTitle AS GameTitle,
+                g.gameStudio AS GameStudio,
+
+                ipl.itemPropertyLineId AS ItemPropertyLineId,
+                ipl.itemDefinitionId AS ItemDefinitionId_FK,
+                ipl.propertyId AS ItemPropertyId_FK
+                FROM ItemDefinition idf
+                JOIN Game g ON idf.gameId = g.gameId
+                LEFT JOIN ItemPropertyLine ipl ON idf.itemDefinitionId = ipl.itemDefinitionId
+                WHERE idf.itemDefinitionId = @id";
                 using var connection = CreateConnection();
                 return connection.QuerySingleOrDefault<ItemDefinition>(query, new { Id = id });
             }
