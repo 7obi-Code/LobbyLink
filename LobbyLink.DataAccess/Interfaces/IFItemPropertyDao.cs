@@ -10,8 +10,8 @@ namespace LobbyLink.DataAccess.Interfaces
         ItemProperty? GetItemPropertyById(int id);
         IEnumerable<ItemProperty> GetAllItemProperties();
 
-        void InsertItemProperty(ItemProperty itemProperty);
-        void UpdateItemProperty(ItemProperty itemProperty);
-        void DeleteItemProperty(int id);
+        bool InsertItemProperty(ItemProperty itemProperty);
+        bool UpdateItemProperty(ItemProperty itemProperty);
+        bool DeleteItemProperty(int id);
     }
 }
