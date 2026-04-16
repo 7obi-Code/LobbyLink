@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LobbyLink.DataAccess.Interfaces
 {
-    internal interface IFInstancePropertyLineDao
+    internal interface IFItemInstancePropertyLineDao
     {
         ItemInstancePropertyLine? GetItemInstancePropertyLineById(int id);
         IEnumerable<ItemInstancePropertyLine> GetAllItemInstancePropertyLines();
