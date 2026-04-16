@@ -46,6 +46,70 @@ namespace LobbyLink.Test.DaoTests
                 catch { }
             }
             _cleanupItemDefinitionIds.Clear();
+
+        }
+
+        [Test]
+        public void GetItemInstanceById_ShouldReturnNull_WhenItDoesNotExist()
+        {
+            // Arrange
+            int nonExistentId = 999999;
+
+            // Act
+            var result = _itemInstanceDao.GetItemInstanceById(nonExistentId);
+
+            // Assert
+            Assert.That(result, Is.Null, "ItemInstance should not be found");
+        }
+
+        [Test]
+        public void DeleteItemInstance_ShouldReturnFalse_WhenItemInstanceDoesNotExist()
+        {
+            // Arrange
+            int nonExistentId = 999999;
+
+            // Act
+            bool result = _itemInstanceDao.DeleteItemInstanceById(nonExistentId);
+
+            // Assert
+            Assert.That(result, Is.False, "Delete should return false for non-existent item");
+        }
+
+        [Test]
+        public void GetAllItemInstances_ShouldReturnItems_WhenTheyExist()
+        {
+            // Arrange
+            var itemDef = CreateTestItemDefinition();
+            CreateTestItemInstance(itemDef.ItemDefinitionId);
+            CreateTestItemInstance(itemDef.ItemDefinitionId);
+
+            // Act
+            var result = _itemInstanceDao.GetAllItemInstance();
+
+            // Assert
+            Assert.That(result, Is.Not.Null, "Collection should not be null");
+            Assert.That(result.Count(), Is.GreaterThanOrEqualTo(2));
+        }
+
+        [Test]
+        public void UpdateItemInstance_ShouldReturnTrue_WhenUpdated()
+        {
+            // Arrange
+            var itemDef = CreateTestItemDefinition();
+            var itemInstance = CreateTestItemInstance(itemDef.ItemDefinitionId);
+
+            var newItemDef = CreateTestItemDefinition();
+            itemInstance.ItemDefinitionId_FK = newItemDef.ItemDefinitionId;
+
+            // Act
+            bool result = _itemInstanceDao.UpdateItemInstance(itemInstance);
+
+            // Assert
+            Assert.That(result, Is.True, "Update should return true");
+
+            var updated = _itemInstanceDao.GetItemInstanceById(itemInstance.ItemInstanceId);
+            Assert.That(updated, Is.Not.Null, "Updated item should exist");
+            Assert.That(updated.ItemDefinitionId_FK, Is.EqualTo(newItemDef.ItemDefinitionId));
         }
 
         [Test]
@@ -56,13 +120,56 @@ namespace LobbyLink.Test.DaoTests
             var itemInstance = CreateTestItemInstance(itemDef.ItemDefinitionId);
 
             // Act
-            var result = _itemInstanceDao.GetItemInstanceById(itemInstance.Id);
+            var result = _itemInstanceDao.GetItemInstanceById(itemInstance.ItemInstanceId);
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Id, Is.EqualTo(itemInstance.Id));
+            Assert.That(result, Is.Not.Null, "ItemInstance was not found");
+            Assert.That(result.ItemInstanceId, Is.EqualTo(itemInstance.ItemInstanceId));
             Assert.That(result.ItemDefinitionId_FK, Is.EqualTo(itemDef.ItemDefinitionId));
         }
+
+        [Test]
+        public void InsertItemInstance_ShouldReturnId_WhenInserted()
+        {
+            // Arrange
+            var itemDef = CreateTestItemDefinition();
+
+            var itemInstance = new ItemInstance
+            {
+                ItemDefinitionId_FK = itemDef.ItemDefinitionId
+            };
+
+            // Act
+            int newId = _itemInstanceDao.InsertItemInstance(itemInstance);
+            _cleanupItemInstanceIds.Add(newId);
+
+            var inserted = _itemInstanceDao.GetItemInstanceById(newId);
+
+            // Assert
+            Assert.That(newId, Is.GreaterThan(0), "Insert did not return a valid ID");
+            Assert.That(inserted, Is.Not.Null, "Inserted ItemInstance was not found");
+            Assert.That(inserted.ItemDefinitionId_FK, Is.EqualTo(itemDef.ItemDefinitionId));
+        }
+
+        [Test]
+        public void DeleteItemInstance_ShouldReturnTrue_WhenDeleted()
+        {
+            // Arrange
+            var itemDef = CreateTestItemDefinition();
+            var itemInstance = CreateTestItemInstance(itemDef.ItemDefinitionId);
+
+            _cleanupItemInstanceIds.Remove(itemInstance.ItemInstanceId);
+
+            // Act
+            bool result = _itemInstanceDao.DeleteItemInstanceById(itemInstance.ItemInstanceId);
+            var deleted = _itemInstanceDao.GetItemInstanceById(itemInstance.ItemInstanceId);
+
+            // Assert
+            Assert.That(result, Is.True, "Delete should return true");
+            Assert.That(deleted, Is.Null, "Deleted ItemInstance should not be found");
+        }
+
+
 
         #region Helper Methods
 
@@ -73,16 +180,14 @@ namespace LobbyLink.Test.DaoTests
 
         private ItemDefinition CreateTestItemDefinition()
         {
-            var testGame = new Game(
-                "Test Game",
-                "TEst Studio",
-                new List<ItemProperty>(),
-                new List<ItemInstanceProperty>(),
-                new List<ItemDefinition>()
-            );
-
-            var itemDef = new ItemDefinition(0, $"Test ItemDefinition + {Guid.NewGuid()}", "test.png", "test", 1, testGame, new List<ItemPropertyLine>());
-            
+            var itemDef = new ItemDefinition
+            {
+                ItemName = $"Test ItemDefinition {Guid.NewGuid()}",
+                ItemImageUrl = "test.png",
+                ItemDescription = "test",
+                ItemTags = "test",
+                GameId = 1  
+            };
 
             int newId = _itemDefinitionDao.InsertItemDefinition(itemDef);
             _cleanupItemDefinitionIds.Add(newId);
@@ -93,22 +198,16 @@ namespace LobbyLink.Test.DaoTests
 
         private ItemInstance CreateTestItemInstance(int itemDefinitionId)
         {
-            var testUserAccount = new UserAccount(
-                0,
-                "TestAccount",
-                1, // level
-                new Wallet(), // adjust if Wallet constructor differs
-                new List<Game>(),
-                new List<Listing>(),
-                new List<ItemInstance>()
-            );
-
-            var itemInstance = new ItemInstance(true, testUserAccount, 0, new List<Listing>(), new List<ItemInstancePropertyLine>(), itemDef, 0);
+            var itemInstance = new ItemInstance
+            {
+                ItemDefinitionId_FK = itemDefinitionId,
+                AccountId_FK = 1
+            };
 
             int newId = _itemInstanceDao.InsertItemInstance(itemInstance);
             _cleanupItemInstanceIds.Add(newId);
 
-            itemInstance.Id = newId;
+            itemInstance.ItemInstanceId = newId;
             return itemInstance;
         }
 

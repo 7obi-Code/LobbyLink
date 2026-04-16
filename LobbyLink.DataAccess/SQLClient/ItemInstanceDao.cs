@@ -19,7 +19,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
     {
         try
         {
-            var query = "DELETE FROM ItemInstance WHERE Id=@Id";
+            var query = "DELETE FROM ItemInstance WHERE ItemInstanceId=@Id";
             using var connection = CreateConnection();
             var rowsAffected = connection.Execute(query, new { id });
             return rowsAffected > 0;
@@ -92,7 +92,9 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
     {
         try
         {
-            var query = "UPDATE ItemInstance SET attributes WHERE Id=@Id";
+            var query = @"UPDATE ItemInstance 
+              SET itemDefinitionId = @ItemDefinitionId_FK
+              WHERE itemInstanceId = @Id";
             using var connection = CreateConnection();
             var rowsAffected = connection.Execute(query, itemInstance);
             return rowsAffected > 0;

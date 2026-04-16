@@ -18,7 +18,7 @@ namespace LobbyLink.DataAccess.SQLClient
                                 itemName AS ItemName,
                                 itemImageUrl AS ItemImageUrl,
                                 itemDescription AS ItemDescription,
-                                gameId_FK AS GameId_FK
+                                gameId AS GameId
                               FROM ItemDefinition
                               WHERE itemDefinitionId = @Id";
                 using var connection = CreateConnection();
@@ -38,7 +38,7 @@ namespace LobbyLink.DataAccess.SQLClient
                                 itemName       AS ItemName,
                                 itemImageUrl   AS ItemImageUrl,
                                 itemDescription AS ItemDescription,
-                                gameId_FK      AS GameId_FK
+                                gameId      AS GameId
                               FROM ItemDefinition";
 
                 using var connection = CreateConnection();
@@ -54,9 +54,10 @@ namespace LobbyLink.DataAccess.SQLClient
         {
             try
             {
-                var query = @"INSERT INTO ItemDefinition (itemName, itemImageUrl, itemDescription, gameId_FK)
-                              OUTPUT INSERTED.itemDefinitionId
-                              VALUES (@ItemName, @ItemImageUrl, @ItemDescription, @GameId_FK)";
+                var query = @"INSERT INTO ItemDefinition 
+                (itemName, itemImageUrl, itemDescription, itemTags, gameId)
+                OUTPUT INSERTED.itemDefinitionId
+                VALUES (@ItemName, @ItemImageUrl, @ItemDescription, @ItemTags, @GameId)";
 
                 using var connection = CreateConnection();
                 return connection.QuerySingle<int>(query, itemDefinition);
@@ -75,7 +76,7 @@ namespace LobbyLink.DataAccess.SQLClient
                               SET itemName = @ItemName,
                                   itemImageUrl = @ItemImageUrl,
                                   itemDescription = @ItemDescription,
-                                  gameId_FK = @GameId_FK
+                                  gameId = @GameId
                               WHERE itemDefinitionId = @ItemDefinitionId";
 
                 using var connection = CreateConnection();
@@ -88,7 +89,7 @@ namespace LobbyLink.DataAccess.SQLClient
             }
         }
 
-        public bool DeleteItemDefiniton(int id)
+        public bool DeleteItemDefinition(int id)
         {
             try
             {

@@ -65,7 +65,7 @@ namespace LobbyLink.DataAccess.SQLClient
             throw new NotImplementedException();
         }
 
-        bool IFItemPropertyDao.InsertItemProperty(ItemProperty itemProperty)
+        int IFItemPropertyDao.InsertItemProperty(ItemProperty itemProperty)
         {
             throw new NotImplementedException();
         }

@@ -11,6 +11,6 @@ namespace LobbyLink.DataAccess.Interfaces
         IEnumerable<ItemDefinition> GetAllItemDefinitions();
         int InsertItemDefinition(ItemDefinition itemDefinition);
         bool UpdateItemDefiniton(ItemDefinition itemDefinition);
-        bool DeleteItemDefiniton(int id);
+        bool DeleteItemDefinition(int id);
     }
 }
