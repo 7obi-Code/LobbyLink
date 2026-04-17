@@ -8,7 +8,7 @@ namespace LobbyLink.DataAccess.Interfaces
 {
     public interface IFItemInstanceDao
     {
-        IEnumerable<ItemInstance> GetAllItemInstancesByUserId();
+        IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId);
         IEnumerable<ItemInstance> GetAllItemInstances();
     }
 }

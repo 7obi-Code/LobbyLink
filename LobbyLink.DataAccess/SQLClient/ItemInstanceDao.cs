@@ -34,6 +34,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
     }
 
     public IEnumerable<ItemInstance> GetAllItemInstances()
+<<<<<<< Updated upstream
     {
         try
         {
@@ -48,63 +49,115 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
     }
 
     public ItemInstance? GetItemInstanceById(int id)
+=======
+>>>>>>> Stashed changes
     {
         try
         {
             var query = @"
             SELECT
-                itemInstanceId,
-                accountId AS AccountId_FK,
-                itemDefinitionId AS ItemDefinitionId_FK
-            FROM ItemInstance
-            WHERE itemInstanceId = @id";
+                ii.itemInstanceId,
+                ii.accountId_fk,
+                ii.itemDefinitionId_fk
+                a.accountId,
+                a.userName,
+                a.firstName,
+                a.surName,
+                a.email,
+                a.phoneNo,
+                a.level,
+                a.type,
+                a.walletId_fk,
+                idf.itemDefinitionId,
+                idf.itemName,
+                idf.itemImageUrl,
+                idf.itemDescription,
+                idf.gameId_fk
+            FROM ItemInstance ii
+            INNER JOIN Account a
+                ON a.accountId = ii.accountId_fk
+            INNER JOIN ItemDefinition idf
+                ON idf.itemDefinitionId = ii.itemDefinitionId_fk
+            WHERE ii.accountId_fk = @accountId;";
 
             using var connection = CreateConnection();
-            var itemInstance = connection.QuerySingleOrDefault<ItemInstance>(query, new { id });
 
-            if (itemInstance != null)
-            {
-                itemInstance.UserAccount = userAccountDao.GetUserAccountById(itemInstance.AccountId_FK);
-                itemInstance.ItemDefinition = itemDefinitionDao.GetItemDefinitionById(itemInstance.ItemDefinitionId_FK);
-            }
+            List<ItemInstance> itemInstances = connection.Query<ItemInstance, Account, ItemDefinition, ItemInstance>
+                (query, (instance, account, definition) =>
+                {
+                    instance.Account = account;
+                    instance.ItemDefinition = definition;
+                    return instance;
+                },
+                new { accountId },
+                splitOn: "accountId,itemDefinitionId"
+                ).ToList();
 
-            return itemInstance;
+            return itemInstances;
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error while trying to get ItemInstance with id='{id}'. Error was: '{ex.Message}'", ex);
+            throw new Exception(
+                $"Error while trying to get all ItemInstances for accountId='{accountId}'. Error was: '{ex.Message}'", ex);
+        }
+        new Exception($"Error while trying to get all ItemInstances. Error was: '{ex.Message}'", ex);
         }
     }
 
-    public int InsertItemInstance(ItemInstance itemInstance)
+    public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
     {
         try
         {
-            var query = "INSERT INTO ItemInstance (itemDefinitionId, accountId) OUTPUT INSERTED.itemInstanceId  VALUES (@ItemDefinitionId_FK, @AccountId_FK); ";
-            using var connection = CreateConnection();
-            var newId = connection.QuerySingle<int>(query, itemInstance);
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.ItemInstanceId}'. Error was: '{ex.Message}'", ex);
-        }
-    }
+            var query = @"
+            SELECT
+                ii.itemInstanceId,
+                ii.accountId_fk,
+                ii.itemDefinitionId_fk
+                af.accountId,
+                af.userName,
+                af.firstName,
+                af.surName,
+                af.email,
+                af.phoneNo,
+                af.level,
+                af.type,
+                af.walletId_fk,
+                idf.itemDefinitionId,
+                idf.itemName,
+                idf.itemImageUrl,
+                idf.itemDescription,
+                idf.gameId_fk
+                gf.gameId,
+                gf.gameTitle,
+                gf.gameStudio
 
-    public bool UpdateItemInstance(ItemInstance itemInstance)
-    {
-        try
-        {
-            var query = @"UPDATE ItemInstance 
-              SET itemDefinitionId = @ItemDefinitionId_FK
-              WHERE itemInstanceId = @Id";
+            FROM ItemInstance ii
+            INNER JOIN Account af ON af.accountId = ii.accountId_fk
+            INNER JOIN ItemDefinition idf ON idf.itemDefinitionId = ii.itemDefinitionId_fk
+            INNER JOIN Game gf ON gf.gameId = idf.gameId_fk
+
+            WHERE ii.accountId_fk = @accountId;";
+
             using var connection = CreateConnection();
-            var rowsAffected = connection.Execute(query, itemInstance);
-            return rowsAffected > 0;
+
+            List<ItemInstance> itemInstances = connection.Query<ItemInstance, Account, ItemDefinition, Game, ItemInstance>
+                (query, (instance, account, definition, game) =>
+                {
+                    instance.Account = account;
+                    instance.ItemDefinition = definition;
+                    instance.ItemDefinition.Game = game;
+                    return instance;
+                },
+                new { accountId },
+                splitOn: "accountId, itemDefinitionId, gameId"
+                ).ToList();
+
+            return itemInstances;
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.ItemInstanceId}'. Error was: '{ex.Message}'", ex);
+            throw new Exception(
+                $"Error while trying to get all ItemInstances for accountId='{accountId}'. Error was: '{ex.Message}'", ex);
         }
     }
 
