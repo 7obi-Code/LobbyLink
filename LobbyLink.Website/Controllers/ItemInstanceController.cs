@@ -6,10 +6,10 @@ using System.Diagnostics;
 
 namespace LobbyLink.Website.Controllers
 {
-    public class HomeController : Controller
+    public class ItemInstanceController : Controller
     {
 
-        readonly ItemInstanceApiClient _itemInstanceApiClient = new ("https://localhost:7148/api/v1/itemInstance");
+        IFItemInstanceDao _itemInstanceApiClient = new ItemInstanceApiClient("https://localhost:7148/api/v1/iteminstances");
 
         //shows the inventory with all items
         public IActionResult Index()
