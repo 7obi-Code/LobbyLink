@@ -1,15 +1,15 @@
-using LinkLobby.Web.Models;
+using LobbyLink.Website.Models;
 using LobbyLink.APIClient;
 using LobbyLink.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace LinkLobby.Web.Controllers
+namespace LobbyLink.Website.Controllers
 {
     public class HomeController : Controller
     {
 
-        IFItemInstanceDao _itemInstanceApiClient = new ItemInstanceApiClient("https://localhost:7148/api/v1/itemInstance");
+        ItemInstanceApiClient _itemInstanceApiClient = new ("https://localhost:7148/api/v1/itemInstance");
 
         //shows the inventory with all items
         public IActionResult Index()

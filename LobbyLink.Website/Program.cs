@@ -1,4 +1,4 @@
-namespace LinkLobby.Web
+namespace LobbyLink.Website
 {
     public class Program
     {

@@ -33,7 +33,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
-    public IEnumerable<ItemInstance> GetAllItemInstance()
+    public IEnumerable<ItemInstance> GetAllItemInstances()
     {
         try
         {
@@ -106,5 +106,10 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         {
             throw new Exception($"Error while trying to insert Item Instance with id='{itemInstance.ItemInstanceId}'. Error was: '{ex.Message}'", ex);
         }
+    }
+
+    public IEnumerable<ItemInstance> GetAllItemInstancesByUserId()
+    {
+        throw new NotImplementedException();
     }
 }

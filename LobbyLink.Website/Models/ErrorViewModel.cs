@@ -1,4 +1,4 @@
-namespace LinkLobby.Web.Models
+namespace LobbyLink.Website.Models
 {
     public class ErrorViewModel
     {

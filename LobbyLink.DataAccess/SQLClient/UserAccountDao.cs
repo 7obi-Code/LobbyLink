@@ -4,14 +4,12 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Dapper;
 
 namespace LobbyLink.DataAccess.SQLClient
 {
-    public class UserAccountDao : BaseDao, IFUserAccountDao
+    public class UserAccountDao(string connectionString) : BaseDao(connectionString), IFUserAccountDao
     {
-       public UserAccountDao(string connectionString) : base(connectionString) {}
-        
+
         public UserAccount? GetUserAccountById(int id)
         {
             try
