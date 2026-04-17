@@ -9,7 +9,8 @@ namespace LobbyLink.Website.Controllers
     public class ItemInstanceController : Controller
     {
 
-        IFItemInstanceDao _itemInstanceApiClient = new ItemInstanceApiClient("https://localhost:7148/api/v1/iteminstances");
+        readonly ItemInstanceApiClient _itemInstanceApiClient =
+            new("https://localhost:7094/api/v1/iteminstance");
 
         //shows the inventory with all items
         public IActionResult Index()
