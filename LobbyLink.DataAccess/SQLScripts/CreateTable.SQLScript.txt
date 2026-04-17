@@ -1,15 +1,6 @@
 USE [DMA-CSD-V252_10666018];
 GO
 
-CREATE TABLE Account (
-    accountId INT IDENTITY(1,1) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    surname VARCHAR(100) NOT NULL,
-    birthday DATE,
-    email VARCHAR(255) NOT NULL,
-    phoneno VARCHAR(20)
-);
-
 CREATE TABLE Wallet (
     walletId INT IDENTITY(1,1) PRIMARY KEY,
     saldo DECIMAL (10,2) NOT NULL
@@ -17,170 +8,145 @@ CREATE TABLE Wallet (
 
 CREATE TABLE Game (
     gameId INT IDENTITY(1,1) PRIMARY KEY,
-    gameTitle VARCHAR(100),
-    gameStudio VARCHAR(100)
+    gameTitle VARCHAR(100) NOT NULL,
+    gameStudio VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE UserAccount (
-    accountId INT PRIMARY KEY,
-    username VARCHAR(100) NOT NULL,
+CREATE TABLE Account (
+    accountId INT IDENTITY(1,1) PRIMARY KEY,
+    userName VARCHAR(100) NOT NULL,
+    firstName VARCHAR(100) NOT NULL,
+    surName VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phoneNo VARCHAR(20),
     level INT,
-    walletId INT,
+    type VARCHAR(30) NOT NULL,
+    walletId_fk INT,
 
-    CONSTRAINT fk_user_account_wallet
-        FOREIGN KEY (walletId)
-        REFERENCES Wallet(walletId),
-
-    CONSTRAINT fk_user_account
-        FOREIGN KEY (accountId)
-        REFERENCES Account(accountId)
-);
-
-CREATE TABLE AdminAccount (
-    accountId INT PRIMARY KEY,
-    role VARCHAR(50),
-
-    CONSTRAINT fk_admin_account
-        FOREIGN KEY (accountId)
-        REFERENCES Account(accountId)
+    CONSTRAINT fk_account_wallet
+        FOREIGN KEY (walletId_fk)
+        REFERENCES Wallet(walletId)
 );
 
 CREATE TABLE ItemDefinition (
     itemDefinitionId INT IDENTITY(1,1) PRIMARY KEY,
     itemName VARCHAR (40) NOT NULL,
-    itemImageUrl VARCHAR(255) NOT NULL,
+    itemImageUrl VARCHAR(255),
     itemDescription VARCHAR (400),
-    itemTags VARCHAR (40),
-    gameId INT,
+    gameId_fk INT,
 
     CONSTRAINT fk_itemdefinition_gameid
-        FOREIGN KEY (gameId)
+        FOREIGN KEY (gameId_fk)
         REFERENCES Game(gameId)
 );
 
 CREATE TABLE ItemInstance (
     itemInstanceId INT IDENTITY(1,1) PRIMARY KEY,
-    itemDefinitionId INT,
-    accountId INT,
+    itemDefinitionId_fk INT,
+    accountId_fk INT,
 
     CONSTRAINT fk_iteminstance_accountId
-        FOREIGN KEY (accountId)
+        FOREIGN KEY (accountId_fk)
         REFERENCES Account(accountId),
 
     CONSTRAINT fk_iteminstance_itemdefinitionId
-        FOREIGN KEY (itemdefinitionId)
-        REFERENCES ItemDefinition(itemdefinitionId)
+        FOREIGN KEY (itemDefinitionId_fk)
+        REFERENCES ItemDefinition(itemDefinitionId)
 );
 
 CREATE TABLE Listing (
     listingId INT IDENTITY(1,1) PRIMARY KEY,
-    itemInstanceId INT,
-    accountId INT,
     price DECIMAL (10,2),
     creationTimeStamp DATETIME2 NOT NULL,
-    status VARCHAR (40),
+    status VARCHAR (40) NOT NULL,
+    itemInstanceId_fk INT,
+    accountId_fk INT,
 
     CONSTRAINT fk_listing_iteminstance
-        FOREIGN KEY (itemInstanceId)
+        FOREIGN KEY (itemInstanceId_fk)
         REFERENCES ItemInstance(itemInstanceId),
 
     CONSTRAINT fk_listing_accountid
-        FOREIGN KEY (accountId)
+        FOREIGN KEY (accountId_fk)
         REFERENCES Account(accountId)
 );
 
-CREATE TABLE UserAccountItem (
-    itemInstanceId INT, 
-    accountId INT,
-    PRIMARY KEY (itemInstanceId, accountId),
+CREATE TABLE AccountGame (
+    accountId_fk INT,
+    gameId_fk INT,
+    PRIMARY KEY (accountId_fk, gameId_fk),
 
-    CONSTRAINT fk_useraccountitem_accountid
-        FOREIGN KEY (accountId)
+    CONSTRAINT fk_accgame_accountId
+        FOREIGN KEY (accountId_fk)
         REFERENCES Account(accountId),
 
-    CONSTRAINT fk_useraccountitem_iteminstanceid
-        FOREIGN KEY (itemInstanceId)
-        REFERENCES ItemInstance(itemInstanceId)
-);
-
-CREATE TABLE UserGame (
-    accountId INT,
-    gameId INT,
-    PRIMARY KEY (accountId, gameId),
-
-    CONSTRAINT fk_usergame_accountId
-        FOREIGN KEY (accountId)
-        REFERENCES Account(accountId),
-
-    CONSTRAINT fk_usergame_gameid
-        FOREIGN KEY (gameId)
+    CONSTRAINT fk_accgame_gameid
+        FOREIGN KEY (gameId_fk)
         REFERENCES Game(gameId)
 );
 
 CREATE TABLE ItemProperty (
     itemPropertyId INT IDENTITY(1,1) PRIMARY KEY,
     propertyName VARCHAR(40),
-    propertyLabel VARCHAR(40),
     filterType VARCHAR(40),
     isFilterable BIT NOT NULL DEFAULT 1,
-    gameId INT,
+    gameId_fk INT,
 
     CONSTRAINT fk_itemproperty_gameid
-        FOREIGN KEY (gameId)
+        FOREIGN KEY (gameId_fk)
         REFERENCES Game(gameId)
 );
 
 CREATE TABLE ItemPropertyValue (
     itemPropertyValueId INT IDENTITY(1,1) PRIMARY KEY,
     value VARCHAR (40),
-    itemPropertyId INT,
+    itemPropertyId_fk INT,
 
     CONSTRAINT fk_itempropertyvalue_itempropertyid
-        FOREIGN KEY (itempropertyid)
-        REFERENCES ItemProperty(itempropertyid)
+        FOREIGN KEY (itemPropertyId_fk)
+        REFERENCES ItemProperty(itemPropertyId)
 );
 
-CREATE TABLE InstanceProperty (
-    instancePropertyId INT IDENTITY(1,1) PRIMARY KEY,
-    instancePropertyName VARCHAR (40),
-    instancePropertyLabel VARCHAR (40),
-    gameId INT,
+CREATE TABLE ItemInstanceProperty (
+    itemInstancePropertyId INT IDENTITY(1,1) PRIMARY KEY,
+    itemInstancePropertyName VARCHAR (40),
+    gameId_fk INT,
 
     CONSTRAINT fk_instanceproperty_gameid
-        FOREIGN KEY (gameId)
+        FOREIGN KEY (gameId_fk)
         REFERENCES Game(gameId)
 );
 
 CREATE TABLE ItemInstancePropertyLine (
     itemInstancePropertyLineId INT IDENTITY(1,1) PRIMARY KEY,
     value VARCHAR (40),
-    itemInstanceId INT,
-    instancePropertyId INT,
+    itemInstanceId_fk INT,
+    itemInstancePropertyId_fk INT,
 
     CONSTRAINT fk_iteminstancepropertyline_itemInstanceId
-        FOREIGN KEY (itemInstanceId)
+        FOREIGN KEY (itemInstanceId_fk)
         REFERENCES ItemInstance(itemInstanceId),
 
     CONSTRAINT fk_iteminstancepropertyline_instancepropertyid
-        FOREIGN KEY (instancePropertyId)
-        REFERENCES InstanceProperty(instancePropertyId)
+        FOREIGN KEY (itemInstancePropertyId_fk)
+        REFERENCES ItemInstanceProperty(itemInstancePropertyId)
 );
 
 CREATE TABLE ItemPropertyLine (
-    itemPropertyLine INT IDENTITY(1,1) PRIMARY KEY,
-    itemDefinitionId INT,
-    itemPropertyId INT,
-    itemPropertyValueId INT,
+    itemPropertyLineId INT IDENTITY(1,1) PRIMARY KEY,
+    itemDefinitionId_fk INT,
+    itemPropertyId_fk INT,
+    itemPropertyValueId_fk INT,
 
     CONSTRAINT fk_itempropertyline_itemidentificationid
-        FOREIGN KEY (itemdefinitionId)
-        REFERENCES ItemDefinition(itemdefinitionId),
+        FOREIGN KEY (itemDefinitionId_fk)
+        REFERENCES ItemDefinition(itemDefinitionId),
 
     CONSTRAINT fk_itempropertyline_itempropertyid
-        FOREIGN KEY (itempropertyid)
-        REFERENCES ItemProperty(itempropertyid),
+        FOREIGN KEY (itemPropertyId_fk)
+        REFERENCES ItemProperty(itemPropertyId),
 
     CONSTRAINT fk_itempropertyline_itempropertyvalueid
-        FOREIGN KEY (itempropertyvalueid)
-        REFERENCES ItemPropertyValue(itempropertyvalueid)
+        FOREIGN KEY (itemPropertyValueId_fk)
+        REFERENCES ItemPropertyValue(itemPropertyValueId)
 );
