@@ -7,14 +7,9 @@ using System.Text;
 
 namespace LobbyLink.APIClient
 {
-    public class ItemInstanceApiClient : IFItemInstanceDao
+    public class ItemInstanceApiClient(string restUrl) : IFItemInstanceDao
     {
-        RestClient _client;
-
-        public ItemInstanceApiClient(string restUrl)
-        {
-            _client = new RestClient(restUrl);
-        }
+        RestClient _client = new RestClient(restUrl);
 
         public bool DeleteItemInstanceById(int id)
         {
