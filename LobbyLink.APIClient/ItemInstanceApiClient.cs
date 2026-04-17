@@ -27,6 +27,11 @@ namespace LobbyLink.APIClient
             return response ?? [];
         }
 
+        public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<ItemInstance> GetAllItemInstancesByUserId()
         {
             throw new NotImplementedException();
