@@ -11,38 +11,13 @@ namespace LobbyLink.APIClient
     {
         RestClient _client = new RestClient(restUrl);
 
-        public bool DeleteItemInstanceById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<ItemInstance> GetAllItemInstances()
         {
             var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
-            return response ?? [];
+            return response ?? new List<ItemInstance>();
         }
 
         public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ItemInstance> GetAllItemInstancesByUserId()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ItemInstance? GetItemInstanceById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int InsertItemInstance(ItemInstance itemInstance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateItemInstance(ItemInstance itemInstance)
         {
             throw new NotImplementedException();
         }
