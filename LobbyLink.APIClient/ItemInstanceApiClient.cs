@@ -24,7 +24,7 @@ namespace LobbyLink.APIClient
         public IEnumerable<ItemInstance> GetAllItemInstances()
         {
             var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
-            return response ?? new List<ItemInstance>();
+            return response ?? [];
         }
 
         public IEnumerable<ItemInstance> GetAllItemInstancesByUserId()

@@ -18,7 +18,7 @@ namespace LobbyLink.API.Controllers
         { 
             try
             {
-                return Ok(_itemInstanceDao.GetAllItemInstance());
+                return Ok(_itemInstanceDao.GetAllItemInstances());
             }
             catch (Exception ex)
             {
