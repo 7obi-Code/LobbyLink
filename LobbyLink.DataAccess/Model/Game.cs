@@ -11,13 +11,5 @@ public class Game
     public List<ItemProperty> ItemProperties { get; set; }
     public List<ItemInstanceProperty> ItemInstanceProperties { get; set; }
     public List<ItemDefinition> ItemDefinitons { get; set; }
-    public Game(int gameId, string gameTitle, string gameStudio, List<ItemProperty> itemProperties, List<ItemInstanceProperty> itemInstanceProperties, List<ItemDefinition> itemDefinitons)
-    {
-        GameId = gameId;
-        GameTitle = gameTitle;
-        GameStudio = gameStudio;
-        ItemProperties = itemProperties;
-        ItemInstanceProperties = itemInstanceProperties;
-        ItemDefinitons = itemDefinitons;
-    }
+    public Game() { }
 }

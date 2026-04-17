@@ -5,15 +5,12 @@ using System.Text;
 namespace LobbyLink.DataAccess.Model;
 public class ItemInstanceProperty
 {
- 
+    public string ItemInstancePropertyId { get; set; }    
+    public string ItemInstancePropertyName { get; set; }
 
-    public string ItemInstancePropertyName { get; set; }    
-    public string ItemInstancePropertyValue { get; set; }
+    public Game Game { get; set; }
+    public int GameId { get; set; }
 
-    public ItemInstanceProperty(string itemInstancePropertyName, string itemInstancePropertyValue)
-    {
-        ItemInstancePropertyName = itemInstancePropertyName;
-        ItemInstancePropertyValue = itemInstancePropertyValue;
-    }
+    public ItemInstanceProperty() { }
 
 }

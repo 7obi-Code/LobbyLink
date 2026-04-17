@@ -9,11 +9,11 @@ namespace LobbyLink.DataAccess.Model
         public int ItemInstancePropertyLineId { get; set; }
         public string Value { get; set; }
 
-        public ItemInstancePropertyLine(int itemInstancePropertyLineId, string value)
-        {
-            ItemInstancePropertyLineId = itemInstancePropertyLineId;
-            Value = value;
-            
-        }
+        public ItemInstanceProperty ItemInstanceProperty { get; set; }
+        public int ItemInstancePropertyId { get; set; }
+        public ItemInstance ItemInstance { get; set; }
+        public int ItemInstanceId { get; set; }
+
+        public ItemInstancePropertyLine() { }
     }
 }
