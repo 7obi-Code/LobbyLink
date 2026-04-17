@@ -4,14 +4,16 @@
     ViewData["Title"] = "Inventory";
 }
 
-<h1>Inventory</h1>
+<h1>All Items In Database</h1>
 
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ItemInstance ID</th>
-            <th>ItemDefinition ID</th>
-            <th>Account ID</th>
+            <th>Item Name</th>
+            <th>Description</th>
+            <th>Account Owner</th>
+            <th>Game</th>
         </tr>
     </thead>
     <tbody>
@@ -19,8 +21,10 @@
         {
             <tr>
                 <td>@item.ItemInstanceId</td>
-                <td>@item.ItemDefinitionId</td>
-                <td>@item.AccountId</td>
+                <td>@item.ItemDefinition.ItemName</td>
+                <td>@item.ItemDefinition.ItemDescription</td>
+                <td>@item.Account.Username</td>
+                <td>@item.ItemDefinition.Game.GameTitle</td>
             </tr>
         }
     </tbody>
