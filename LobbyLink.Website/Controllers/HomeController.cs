@@ -14,7 +14,7 @@ namespace LinkLobby.Web.Controllers
         //shows the inventory with all items
         public IActionResult Index()
         {
-            var AllItemInstances = _itemInstanceApiClient.GetAllItemInstance();
+            var AllItemInstances = _itemInstanceApiClient.GetAllItemInstances();
             return View(AllItemInstances);
         }
 

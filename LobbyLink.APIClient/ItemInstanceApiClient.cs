@@ -21,10 +21,15 @@ namespace LobbyLink.APIClient
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ItemInstance> GetAllItemInstance()
+        public IEnumerable<ItemInstance> GetAllItemInstances()
         {
             var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
             return response ?? new List<ItemInstance>();
+        }
+
+        public IEnumerable<ItemInstance> GetAllItemInstancesByUserId()
+        {
+            throw new NotImplementedException();
         }
 
         public ItemInstance? GetItemInstanceById(int id)
