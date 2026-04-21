@@ -10,5 +10,6 @@ namespace LobbyLink.DataAccess.Interfaces
     {
         IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId);
         IEnumerable<ItemInstance> GetAllItemInstances();
+        ItemInstance GetItemInstanceById(int id);
     }
 }
