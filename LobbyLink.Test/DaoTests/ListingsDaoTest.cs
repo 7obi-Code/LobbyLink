@@ -23,7 +23,7 @@ public class ListingsDaoTest
         IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
 
         //Assert
-        Assert.That(listings, Is.Not.Null, "Listing collectionshould not be empty");
+        Assert.That(listings, Is.Not.Null, "Listing collection should not be empty");
         Assert.That(listings.Count(), Is.GreaterThanOrEqualTo(1), "Should return atleast 1 listing");
 
     }
@@ -42,8 +42,9 @@ public class ListingsDaoTest
 
         //Assert
         Assert.That(listings, Is.Not.Null, "Listing collectionshould not be empty");
-        Assert.That(listings.Count(), Is.GreaterThanOrEqualTo(1), "Should return atleast 1 listing");
-
+        foreach (var listing in listings) {
+            Assert.That(listing.Price > 0, "Item should include a price");
+        }
     }
 
     [Test]
@@ -60,8 +61,11 @@ public class ListingsDaoTest
         IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
 
         //Assert
-        Assert.That(listings, Is.Not.Null, "Listing collectionshould not be empty");
-        Assert.That(listings.Count(), Is.GreaterThanOrEqualTo(1), "Should return atleast 1 listing");
+        Assert.That(listings, Is.Not.Null, "Listing collection should not be empty");
+        foreach (var listing in listings)
+        {
+            Assert.That(listing.ItemInstance, Is.Not.Null, "Item should include an iteminstance");
+        }
     }
 
     [Test]
@@ -78,7 +82,10 @@ public class ListingsDaoTest
         IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
 
         //Assert
-        Assert.That(listings, Is.Not.Null, "Listing collectionshould not be empty");
-        Assert.That(listings.Count(), Is.GreaterThanOrEqualTo(1), "Should return atleast 1 listing");
+        Assert.That(listings, Is.Not.Null, "Listing collection should not be empty");
+        foreach (var listing in listings)
+        {
+            Assert.That(listing.Account, Is.Not.Null, "Item should include a seller account");
+        }
     }
 }
