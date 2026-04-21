@@ -9,10 +9,10 @@ public class InventoryController : Controller
     new("https://localhost:7094/api/v1/iteminstance");
 
     //shows the inventory with all items
-    public IActionResult Index()
+    public IActionResult Index(int id)
     {
-        var allItemInstances = _itemInstanceApiClient.GetAllItemInstances();
-        return View(allItemInstances);
+        var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(id);
+        return View(allItemInstancesForAccount);
     }
 
     // Inventory/Account/1
