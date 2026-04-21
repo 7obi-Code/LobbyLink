@@ -14,6 +14,7 @@
             <th>Description</th>
             <th>Account Owner</th>
             <th>Game</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,14 @@
                 <td>@item.ItemDefinition.ItemDescription</td>
                 <td>@item.Account.Username</td>
                 <td>@item.ItemDefinition.Game.GameTitle</td>
+                <td>
+                   <a asp-controller="Inventory"
+                   asp-action="Sell"
+                   asp-route-id="@item.ItemInstanceId"
+                   class="btn btn-info btn-sm">
+                   Details/Sell
+                   </a>
+                <td>
             </tr>
         }
     </tbody>
