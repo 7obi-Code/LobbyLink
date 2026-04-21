@@ -19,11 +19,6 @@ namespace LobbyLink.Website.Controllers
             return View(allItemInstances);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
