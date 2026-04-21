@@ -35,6 +35,7 @@ public class ItemInstanceDaoTest
         Assert.That(testItemInstances.Count(), Is.EqualTo(6), "Should return exactly 6 Item Instances for this User");
     }
 
+    [Test]
     public void GetItemInstanceDefinitionNameByItemInstance_ShouldReturnDefinitionName()
     {
         //Arrange

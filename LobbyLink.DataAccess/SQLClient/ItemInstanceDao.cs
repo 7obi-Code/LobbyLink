@@ -80,7 +80,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             SELECT
                 ii.itemInstanceId,
                 ii.accountId_fk,
-                ii.itemDefinitionId_fk
+                ii.itemDefinitionId_fk,
                 af.accountId,
                 af.userName,
                 af.firstName,
@@ -94,7 +94,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                 idf.itemName,
                 idf.itemImageUrl,
                 idf.itemDescription,
-                idf.gameId_fk
+                idf.gameId_fk,
                 gf.gameId,
                 gf.gameTitle,
                 gf.gameStudio
@@ -137,7 +137,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             SELECT
                 ii.itemInstanceId,
                 ii.accountId_fk,
-                ii.itemDefinitionId_fk
+                ii.itemDefinitionId_fk,
                 af.accountId,
                 af.userName,
                 af.firstName,
@@ -151,7 +151,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                 idf.itemName,
                 idf.itemImageUrl,
                 idf.itemDescription,
-                idf.gameId_fk
+                idf.gameId_fk,
                 gf.gameId,
                 gf.gameTitle,
                 gf.gameStudio
