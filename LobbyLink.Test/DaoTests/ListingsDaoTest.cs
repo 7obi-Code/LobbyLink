@@ -88,4 +88,33 @@ public class ListingsDaoTest
             Assert.That(listing.Account, Is.Not.Null, "Item should include a seller account");
         }
     }
+
+    [Test]
+    public void HasActiveListingForItemInstance_ShouldReturnTrue_WhenItemAlreadyHasAnActiveListing()
+    {
+        //Arrange
+        //Vi benytter os af vores testdata der er oprettet i databasen.
+        //Og derfor ikke brug for en arrange. 
+        //Vi bruger ItemInstanceId 1, som allerede har en ACTIVE listing
+
+        //Act
+        bool result = _listingsDao.HasActiveListingForItemInstance(1);
+
+        //Assert
+        Assert.That(result, Is.True, "Should return true when item instance already has an active listing");
+    }
+
+    public void HasActiveListingForItemInstance_ShouldReturnFalse_WhenItemAlreadyHasNoActiveListing()
+    {
+        //Arrange
+        //Vi benytter os af vores testdata der er oprettet i databasen
+        //Og derfor ikke brug for en arrange
+        //Vi bruger ItemInstanceId 2, som ikke har en ACTIVE listing. 
+
+        //Act
+        bool result = _listingsDao.HasActiveListingForItemInstance(2);
+
+        //Assert
+        Assert.That(result, Is.False, "Should return false when item instance does not have an active listing");
+    }
 }
