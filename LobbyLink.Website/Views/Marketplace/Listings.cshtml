@@ -1,0 +1,34 @@
+﻿@model IEnumerable<LobbyLink.DataAccess.Model.Listing>
+
+@{
+    ViewData["Title"] = "Marketplace";
+}
+
+<h1>Marketplace</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Description</th>
+            <th>Seller</th>
+            <th>Game</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var listing in Model)
+        {
+            <tr>
+                <td>@listing.ItemInstanceId</td>
+                <td>@listing.ItemInstance.ItemDefinition?.ItemName</td>
+                <td>@listing.ItemInstance.ItemDefinition?.ItemDescription</td>
+                <td>@listing.Account?.Username</td>
+                <td>@listing.ItemInstance.ItemDefinition?.Game?.GameTitle</td>
+                <td>@listing.Price</td>
+                <td><button class="btn btn-success">Details / Buy</button></td>
+            </tr>
+        }
+    </tbody>
+</table>

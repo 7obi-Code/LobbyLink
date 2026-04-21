@@ -19,44 +19,62 @@ namespace LobbyLink.DataAccess.SQLClient
         {
             using var connection = CreateConnection();
 
-            try {   var query =
-                @"SELECT 
-                    li.listingId,
-                    li.price,
-                    li.creationTimeStamp,
-                    li.status,
-                    li.itemInstanceId_fk,
-                    li.accountId_fk,
+            try {   var query = @"SELECT 
+                                li.listingId,
+                                li.price,
+                                li.creationTimeStamp,
+                                li.status,
+                                li.itemInstanceId_fk AS ItemInstanceId,
+                                li.accountId_fk AS AccountId,
 
-                    af.accountId,
-                    af.userName,
-                    af.surName,
-                    af.email,
-                    af.phoneno,
+                                af.accountId,
+                                af.userName,
+                                af.surName,
+                                af.email,
+                                af.phoneNo,
 
-                    ii.itemInstanceId,
-                    ii.itemDefinitionId_fk,
-                    ii.accountId_fk AS ItemInstanceAccountId
+                                ii.itemInstanceId,
+                                ii.itemDefinitionId_fk,
+                                ii.accountId_fk AS ItemInstanceAccountId,
 
-                FROM Listing li
-                    INNER JOIN Account af 
-                        ON af.accountId = li.accountId_fk
+                                id.itemDefinitionId,
+                                id.itemName,
+                                id.itemDescription,
+                                id.gameId_fk,
 
-                    INNER JOIN ItemInstance ii 
-                        ON ii.itemInstanceId = li.itemInstanceId_fk
+                                g.gameId,
+                                g.gameTitle
 
-                WHERE li.status = @Active";
+                            FROM Listing li
 
-                return connection.Query<Listing, Account, ItemInstance, Listing>(
-                        query,
-                        (listing, account, itemInstance) =>
-                        {
-                            listing.Account = account;
-                            listing.ItemInstance = itemInstance;
-                            return listing;
-                        },
-                        new { Active = "ACTIVE" },
-                        splitOn: "accountId,itemInstanceId"
+                            LEFT JOIN Account af 
+                                ON af.accountId = li.accountId_fk
+
+                            LEFT JOIN ItemInstance ii 
+                                ON ii.itemInstanceId = li.itemInstanceId_fk
+
+                            LEFT JOIN ItemDefinition id 
+                                ON id.itemDefinitionId = ii.itemDefinitionId_fk
+
+                            LEFT JOIN Game g 
+                                ON g.gameId = id.gameId_fk
+
+                            WHERE li.status = @Active";
+
+                return connection.Query<Listing, Account, ItemInstance, ItemDefinition, Game, Listing>(
+                    query,
+                    (listing, account, itemInstance, itemDef, game) =>
+                    {
+                        itemDef.Game = game;
+                        itemInstance.ItemDefinition = itemDef;
+
+                        listing.Account = account;
+                        listing.ItemInstance = itemInstance;
+
+                        return listing;
+                    },
+                    new { Active = "ACTIVE" },
+                    splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
                 );
 
             } catch (Exception ex) {
