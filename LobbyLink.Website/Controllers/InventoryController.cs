@@ -15,7 +15,7 @@ public class InventoryController : Controller
         return View(allItemInstances);
     }
 
-    //ItemInstance/Account
+    // Inventory/Account/1
     public IActionResult Account(int accountId)
     {
         var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(accountId);
