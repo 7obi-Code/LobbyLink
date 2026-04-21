@@ -6,17 +6,17 @@ using System.Diagnostics;
 
 namespace LobbyLink.Website.Controllers
 {
-    public class ItemInstanceController : Controller
+    public class HomeController : Controller
     {
 
         readonly ItemInstanceApiClient _itemInstanceApiClient =
             new("https://localhost:7094/api/v1/iteminstance");
 
         //shows the inventory with all items
-        public IActionResult Index(int accountId)
+        public IActionResult Index()
         {
-            var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(accountId);
-            return View(allItemInstancesForAccount);
+            var allItemInstances = _itemInstanceApiClient.GetAllItemInstances();
+            return View(allItemInstances);
         }
 
         public IActionResult Privacy()
