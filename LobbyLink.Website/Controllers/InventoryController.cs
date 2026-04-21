@@ -9,16 +9,16 @@ public class InventoryController : Controller
     new("https://localhost:7094/api/v1/iteminstance");
 
     //shows the inventory with all items
-    public IActionResult Index(int accountId)
+    public IActionResult Index()
     {
         var allItemInstances = _itemInstanceApiClient.GetAllItemInstances();
         return View(allItemInstances);
     }
 
     // Inventory/Account/1
-    public IActionResult Account(int accountId)
+    public IActionResult Account(int id)
     {
-        var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(accountId);
+        var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(id);
         return View(allItemInstancesForAccount);
     }
 }
