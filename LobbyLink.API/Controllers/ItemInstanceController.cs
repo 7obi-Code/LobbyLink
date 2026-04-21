@@ -25,5 +25,18 @@ namespace LobbyLink.API.Controllers
                 return StatusCode(500, new { message = "Error retrieving item instances", error = ex.Message });
             }
         }
+
+        [HttpGet("{accountId}")]
+        public ActionResult<IEnumerable<ItemInstance>> Get(int accountId)
+        {
+            try
+            {
+                return Ok(_itemInstanceDao.GetAllItemInstancesByAccountId(accountId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error retrieving item instances for accountId: {accountId}", error = ex.Message });
+            }
+        }
     }
 }

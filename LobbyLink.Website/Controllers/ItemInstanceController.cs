@@ -13,10 +13,10 @@ namespace LobbyLink.Website.Controllers
             new("https://localhost:7094/api/v1/iteminstance");
 
         //shows the inventory with all items
-        public IActionResult Index()
+        public IActionResult Index(int accountId)
         {
-            var AllItemInstances = _itemInstanceApiClient.GetAllItemInstances();
-            return View(AllItemInstances);
+            var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(accountId);
+            return View(allItemInstancesForAccount);
         }
 
         public IActionResult Privacy()
