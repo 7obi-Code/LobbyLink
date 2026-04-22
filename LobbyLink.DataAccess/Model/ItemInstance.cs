@@ -13,6 +13,9 @@ namespace LobbyLink.DataAccess.Model
         public List<ItemInstancePropertyLine> ItemInstancePropertyLines { get; set; } 
         public ItemDefinition ItemDefinition { get; set; }
         public int ItemDefinitionId { get; set; }
+        public int? ListingId { get; set; }
+        public int? StatusId { get; set; }
+        public string? StatusName { get; set; }
 
         public ItemInstance() { }
     }
