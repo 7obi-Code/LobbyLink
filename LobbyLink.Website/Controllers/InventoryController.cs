@@ -19,12 +19,12 @@ public class InventoryController : Controller
         var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(id);
         return View(allItemInstancesForAccount);
     }
-<<<<<<< Updated upstream
+
     public IActionResult InventoryInspect(int itemInstanceId)
     {
         var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
         return View(item);
-=======
+    }
 
     // Inventory/Sell/{id}
     public IActionResult Sell(int id)
@@ -50,6 +50,5 @@ public class InventoryController : Controller
         _listingApiClient.InsertListing(listing);
 
         return Content("Listing created successfully.");
->>>>>>> Stashed changes
     }
 }

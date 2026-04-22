@@ -40,5 +40,10 @@ namespace LobbyLink.APIClient
             throw new Exception(
                 $"Failed to insert listing. Status code: {response.StatusCode}, Error:{response.ErrorMessage}");
         }
+
+        public int ValidateAndInsertListing(Listing listing)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

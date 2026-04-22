@@ -10,7 +10,7 @@ namespace LobbyLink.DataAccess.Interfaces
         IEnumerable<Listing> GetAllActiveListings();
 
         //Oprettelse af en listing. 
-        int ValidateAndInsertListing(Listing listing, int itemInstanceId);
+        int ValidateAndInsertListing(Listing listing);
 
     }
 }
