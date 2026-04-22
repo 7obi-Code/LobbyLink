@@ -12,9 +12,24 @@ public class MarketplaceController : Controller
     readonly ListingApiClient _listingApiClient =
         new("https://localhost:7094/api/v1/listing");
 
+    readonly ItemInstanceApiClient _itemInstanceApiClient =
+        new("https://localhost:7094/api/v1/iteminstance");
+
     public IActionResult Listings()
     {
         var allListings = _listingApiClient.GetAllActiveListings();
+
+        Console.WriteLine($"Listings count: {allListings.Count()}");
+
         return View(allListings);
     }
+
+    public IActionResult Inspect(int itemInstanceId, string mode)
+    {
+        var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
+
+        ViewBag.Mode = mode;
+        return View(item);
+    }
+
 }

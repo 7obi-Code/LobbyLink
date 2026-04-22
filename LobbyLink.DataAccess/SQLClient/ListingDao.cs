@@ -19,47 +19,47 @@ namespace LobbyLink.DataAccess.SQLClient
         {
             using var connection = CreateConnection();
 
-            try {   var query = @"SELECT 
-                                li.listingId,
-                                li.price,
-                                li.creationTimeStamp,
-                                li.status,
-                                li.itemInstanceId_fk AS ItemInstanceId,
-                                li.accountId_fk AS AccountId,
+            try {
+                var query = @"SELECT 
+                                    li.listingId,
+                                    li.price,
+                                    li.creationTimeStamp,
+                                    li.itemInstanceId_fk AS ItemInstanceId,
+                                    li.accountId_fk AS AccountId,
 
-                                af.accountId,
-                                af.userName,
-                                af.surName,
-                                af.email,
-                                af.phoneNo,
+                                    af.accountId,
+                                    af.userName,
+                                    af.surName,
+                                    af.email,
+                                    af.phoneNo,
 
-                                ii.itemInstanceId,
-                                ii.itemDefinitionId_fk,
-                                ii.accountId_fk AS ItemInstanceAccountId,
+                                    ii.itemInstanceId,
+                                    ii.itemDefinitionId_fk,
+                                    ii.accountId_fk AS ItemInstanceAccountId,
 
-                                id.itemDefinitionId,
-                                id.itemName,
-                                id.itemDescription,
-                                id.gameId_fk,
+                                    id.itemDefinitionId,
+                                    id.itemName,
+                                    id.itemDescription,
+                                    id.gameId_fk,
 
-                                g.gameId,
-                                g.gameTitle
+                                    g.gameId,
+                                    g.gameTitle
 
-                            FROM Listing li
+                                FROM Listing li
 
-                            LEFT JOIN Account af 
-                                ON af.accountId = li.accountId_fk
+                                LEFT JOIN Account af 
+                                    ON af.accountId = li.accountId_fk
 
-                            LEFT JOIN ItemInstance ii 
-                                ON ii.itemInstanceId = li.itemInstanceId_fk
+                                LEFT JOIN ItemInstance ii 
+                                    ON ii.itemInstanceId = li.itemInstanceId_fk
 
-                            LEFT JOIN ItemDefinition id 
-                                ON id.itemDefinitionId = ii.itemDefinitionId_fk
+                                LEFT JOIN ItemDefinition id 
+                                    ON id.itemDefinitionId = ii.itemDefinitionId_fk
 
-                            LEFT JOIN Game g 
-                                ON g.gameId = id.gameId_fk
+                                LEFT JOIN Game g 
+                                    ON g.gameId = id.gameId_fk
 
-                            WHERE li.status = @Active";
+                                WHERE li.statusId_fk = 1;";
 
                 return connection.Query<Listing, Account, ItemInstance, ItemDefinition, Game, Listing>(
                     query,
@@ -73,7 +73,6 @@ namespace LobbyLink.DataAccess.SQLClient
 
                         return listing;
                     },
-                    new { Active = "ACTIVE" },
                     splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
                 );
 

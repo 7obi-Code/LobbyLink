@@ -19,13 +19,14 @@ namespace LobbyLink.APIClient
 
         public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
         {
-            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest($"{accountId}"));
+            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest($"account/{accountId}"));
             return response ?? new List<ItemInstance>();
         }
 
         public ItemInstance GetItemInstanceById(int id)
         {
-            throw new NotImplementedException();
+            var request = new RestRequest($"item/{id}");
+            return _client.Get<ItemInstance>(request);
         }
     }
 }

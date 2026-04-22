@@ -14,8 +14,15 @@ namespace LobbyLink.APIClient
         public IEnumerable<Listing> GetAllActiveListings()
         {
             var request = new RestRequest("active");
-            var response = _client.Get<IEnumerable<Listing>>(request);
-            return response ?? new List<Listing>();
+            var response = _client.Execute<List<Listing>>(request);
+
+            if (!response.IsSuccessful || response.Data == null)
+            {
+                Console.WriteLine(response.Content); // 🔥 critical for debugging
+                return new List<Listing>();
+            }
+
+            return response.Data;
         }
     }
 }
