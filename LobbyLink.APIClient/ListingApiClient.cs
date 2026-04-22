@@ -18,7 +18,7 @@ namespace LobbyLink.APIClient
 
             if (!response.IsSuccessful || response.Data == null)
             {
-                Console.WriteLine(response.Content); // 🔥 critical for debugging
+                Console.WriteLine(response.Content);
                 return new List<Listing>();
             }
 
