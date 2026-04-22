@@ -9,9 +9,8 @@ namespace LobbyLink.DataAccess.Interfaces
     {
         IEnumerable<Listing> GetAllActiveListings();
 
-        Listing GetLatestListingByItemInstanceId();
         //Oprettelse af en listing. 
-        int InsertListing(Listing listing);
+        int ValidateAndInsertListing(Listing listing, int itemInstanceId);
 
     }
 }
