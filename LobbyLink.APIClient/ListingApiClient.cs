@@ -24,5 +24,21 @@ namespace LobbyLink.APIClient
 
             return response.Data;
         }
+
+        public int InsertListing(Listing listing)
+        {
+
+            var request = new RestRequest("", Method.Post);
+            request.AddJsonBody(listing);
+            var response = _client.Execute<int>(request);
+
+            if (response.IsSuccessful && response.Data != 0)
+            {
+                return response.Data;
+
+            }
+            throw new Exception(
+                $"Failed to insert listing. Status code: {response.StatusCode}, Error:{response.ErrorMessage}");
+        }
     }
 }

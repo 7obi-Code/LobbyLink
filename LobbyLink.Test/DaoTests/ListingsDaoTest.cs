@@ -117,4 +117,30 @@ public class ListingsDaoTest
         //Assert
         Assert.That(result, Is.False, "Should return false when item instance does not have an active listing");
     }
+
+    [Test]
+    public void CreateListing_ShouldCreateListing_WhenItemInstanceIsNotAlreadyListed()
+    {
+        //Arrange
+        //Vi benytter os af vores testdata der er oprettet i databasen.
+        //Vi bruger ItemInstanceId 2, som ikke har en ACTIVE listing
+        //Vi bruger AccountId 4, som findes i testdata
+
+        Listing listing = new Listing
+        {
+            Price = 150,
+            CreationTimeStamp = DateTime.Now,
+            Status = "ACTIVE",
+            ItemInstance = new ItemInstance { ItemInstanceId = 2 },
+            Account = new Account { AccountId = 4 }
+        };
+
+        //Act
+        Listing createdListing = _listingsDao.CreateListing(listing);
+
+        //Assert
+        Assert.That(createdListing, Is.Not.Null, "Created listing should not be null");
+        Assert.That(createdListing.ListingId, Is.GreaterThan(0), "Created listing should have an id");
+        Assert.That(createdListing.Status, Is.EqualTo("ACTIVE"), "Created listing should have ACTIVE status");
+    }
 }
