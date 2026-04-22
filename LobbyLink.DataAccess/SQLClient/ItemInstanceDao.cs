@@ -12,6 +12,11 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
     {
     }
 
+    public int CreateItemInstance(ItemInstance itemInstance)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<ItemInstance> GetAllItemInstances()
     {
         try

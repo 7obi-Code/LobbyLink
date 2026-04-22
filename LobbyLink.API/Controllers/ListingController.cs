@@ -1,5 +1,4 @@
-﻿using LobbyLink.API.Models;
-using LobbyLink.DataAccess.Interfaces;
+﻿using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SQLClient;
 using Microsoft.AspNetCore.Mvc;
@@ -37,25 +36,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
-        // GET: api/v1/listing/has-active/5
-        [HttpGet("has-active/{itemInstanceId}")]
-        public ActionResult<bool> HasActiveListingForItemInstance(int itemInstanceId)
-        {
-            try
-            {
-                bool result = _listingDao.HasActiveListingForItemInstance(itemInstanceId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    message = "Error checking active listing for item instance",
-                    error = ex.Message
-                });
-            }
-        }
-        
+        /*
         // POST: api/v1/listing
         [HttpPost]
         public ActionResult<int> InsertListing([FromBody] Listing listing)
@@ -86,5 +67,6 @@ namespace LobbyLink.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        */
     }
 }
