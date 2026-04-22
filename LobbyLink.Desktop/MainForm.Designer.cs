@@ -1,4 +1,4 @@
-﻿namespace LinkLobby.Desktop
+﻿namespace LobbyLink.Desktop
 {
     partial class MainForm
     {

@@ -60,5 +60,31 @@ namespace LobbyLink.API.Controllers
                 });
             }
         }
+        [HttpPost]
+        public ActionResult<int> Post([FromBody] ItemInstance itemInstance)
+        {
+            try
+            {
+                if (itemInstance == null)
+                    return BadRequest("ItemInstance was null.");
+
+                if (itemInstance.ItemDefinitionId <= 0)
+                    return BadRequest("ItemDefinitionId must be greater than 0.");
+
+                if (itemInstance.AccountId <= 0)
+                    return BadRequest("AccountId must be greater than 0.");
+
+                int newId = _itemInstanceDao.CreateItemInstance(itemInstance);
+                return Ok(newId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error creating item instance",
+                    error = ex.Message
+                });
+            }
+        }
     }
 }
