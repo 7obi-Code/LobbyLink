@@ -4,6 +4,7 @@ GO
 DROP TABLE IF EXISTS ItemInstancePropertyLine;
 DROP TABLE IF EXISTS ItemPropertyLine;
 DROP TABLE IF EXISTS Listing;
+DROP TABLE IF EXISTS ListingStatusEnum;
 DROP TABLE IF EXISTS ItemInstance;
 DROP TABLE IF EXISTS ItemInstanceProperty;
 DROP TABLE IF EXISTS ItemPropertyValue;
