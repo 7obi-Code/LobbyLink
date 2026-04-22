@@ -1,0 +1,45 @@
+﻿@model LobbyLink.DataAccess.Model.ItemInstance
+
+@{
+    ViewData["Title"] = "Inspect Item";
+}
+
+<h2 class="text-center my-4">Item Details</h2>
+
+<div class="container d-flex justify-content-center">
+    <div class="card bg-secondary text-light p-4 shadow-lg" style="width: 600px;">
+
+        <!-- ITEM TITLE -->
+        <h3 class="text-center">@Model.ItemDefinition?.ItemName</h3>
+
+        <hr />
+
+        <!-- IMAGE -->
+        @if (!string.IsNullOrEmpty(Model.ItemDefinition?.ItemImageUrl))
+        {
+            <div class="text-center mb-3">
+                <img src="@Model.ItemDefinition.ItemImageUrl"
+                     class="img-fluid rounded"
+                     style="max-height: 200px;" />
+            </div>
+        }
+
+        <!-- DESCRIPTION -->
+        <p><strong>Description:</strong><br /> @Model.ItemDefinition?.ItemDescription</p>
+
+        <!-- GAME -->
+        <p><strong>Game:</strong> @Model.ItemDefinition?.Game?.GameTitle</p>
+
+        <!-- INSTANCE INFO -->
+        <p><strong>Item ID:</strong> @Model.ItemInstanceId</p>
+        <p><strong>Owner:</strong> @Model.Account?.Username</p>
+
+        <hr />
+
+        <!-- ACTION BUTTON -->
+        <div class="text-center mt-4">
+                <button class="btn btn-warning btn-lg">Sell Item</button>
+        </div>
+
+    </div>
+</div>

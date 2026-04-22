@@ -24,7 +24,7 @@ public class MarketplaceController : Controller
         return View(allListings);
     }
 
-    public IActionResult Inspect(int itemInstanceId, string mode)
+    public IActionResult MarketInspect(int itemInstanceId, string mode)
     {
         var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
 
