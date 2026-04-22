@@ -82,19 +82,24 @@ VALUES
 -- ItemDefinition 10
 (10,3), (10,4), (10,5);
 
-
-INSERT INTO Listing (price, creationTimeStamp, status, itemInstanceId_fk, accountId_fk)
+INSERT INTO ListingStatusEnum (statusId, name)
 VALUES
-(250.00, GETDATE(), 'ACTIVE',  1, 1),
-(500.00, GETDATE(), 'ACTIVE',  4, 4),
-(120.00, GETDATE(), 'SOLD',    7, 2),
-(900.00, GETDATE(), 'ACTIVE', 10, 5),
-(300.00, GETDATE(), 'ACTIVE', 13, 3),
-(750.00, GETDATE(), 'ACTIVE', 16, 1),
-(1100.00,GETDATE(), 'SOLD',   19, 4),
-(450.00, GETDATE(), 'ACTIVE', 22, 2),
-(999.00, GETDATE(), 'ACTIVE', 25, 5),
-(150.00, GETDATE(), 'ACTIVE', 28, 3);
+(1, 'ACTIVE'),
+(2, 'SOLD'),
+(3, 'CANCELLED');
+
+INSERT INTO Listing (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, accountId_fk)
+VALUES
+(250.00, GETDATE(), 1,  1, 1),
+(500.00, GETDATE(), 1,  4, 4),
+(120.00, GETDATE(), 2,  7, 2),
+(900.00, GETDATE(), 1, 10, 5),
+(300.00, GETDATE(), 1, 13, 3),
+(750.00, GETDATE(), 1, 16, 1),
+(1100.00,GETDATE(), 2, 19, 4),
+(450.00, GETDATE(), 1, 22, 2),
+(999.00, GETDATE(), 1, 25, 5),
+(150.00, GETDATE(), 1, 28, 3);
 
 
 INSERT INTO ItemProperty (propertyName, filterType, isFilterable, gameId_fk)

@@ -54,11 +54,17 @@ CREATE TABLE ItemInstance (
         REFERENCES ItemDefinition(itemDefinitionId)
 );
 
+
+CREATE TABLE ListingStatusEnum (
+    statusId INT PRIMARY KEY,
+    name VARCHAR (20) NOT NULL
+);
+
 CREATE TABLE Listing (
     listingId INT IDENTITY(1,1) PRIMARY KEY,
     price DECIMAL (10,2),
     creationTimeStamp DATETIME2 NOT NULL,
-    status VARCHAR (40) NOT NULL,
+    statusId_fk INT NOT NULL,
     itemInstanceId_fk INT,
     accountId_fk INT,
 
@@ -68,7 +74,10 @@ CREATE TABLE Listing (
 
     CONSTRAINT fk_listing_accountid
         FOREIGN KEY (accountId_fk)
-        REFERENCES Account(accountId)
+        REFERENCES Account(accountId),
+
+		FOREIGN KEY (statusId_fk)
+        REFERENCES ListingStatusEnum(statusId)
 );
 
 CREATE TABLE AccountGame (

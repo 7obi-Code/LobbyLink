@@ -26,7 +26,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
-        [HttpGet("{accountId}")]
+        [HttpGet("account/{accountId}")]
         public ActionResult<IEnumerable<ItemInstance>> Get(int accountId)
         {
             try
@@ -36,6 +36,28 @@ namespace LobbyLink.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = $"Error retrieving item instances for accountId: {accountId}", error = ex.Message });
+            }
+        }
+
+        [HttpGet("item/{itemInstanceId}")]
+        public ActionResult<ItemInstance> GetById(int itemInstanceId)
+        {
+            try
+            {
+                var item = _itemInstanceDao.GetItemInstanceById(itemInstanceId);
+
+                if (item == null)
+                    return NotFound();
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = $"Error retrieving item instance {itemInstanceId}",
+                    error = ex.Message
+                });
             }
         }
     }
