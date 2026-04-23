@@ -38,7 +38,12 @@
 
         <!-- ACTION BUTTON -->
         <div class="text-center mt-4">
-                <button class="btn btn-warning btn-lg">Sell Item</button>
+            <a asp-controller="Inventory"
+               asp-action="Sell"
+               asp-route-id="@Model.ItemInstanceId"
+               class="btn btn-warning btn-lg">
+                Sell Item
+            </a>
         </div>
 
     </div>

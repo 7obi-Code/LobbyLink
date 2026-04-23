@@ -7,10 +7,10 @@ namespace LobbyLink.Website.Controllers;
 public class InventoryController : Controller
 {
     readonly ItemInstanceApiClient _itemInstanceApiClient =
-    new("https://localhost:7094/api/v1/iteminstance");
+    new("https://localhost:7148/api/v1/iteminstance");
 
     readonly ListingApiClient _listingApiClient =
-        new ListingApiClient("https://localhost:7094/api/v1/listing");
+        new ListingApiClient("https://localhost:7148/api/v1/listing");
 
     //shows the inventory with all items
     // Inventory/Account/{id}
@@ -29,26 +29,32 @@ public class InventoryController : Controller
     // Inventory/Sell/{id}
     public IActionResult Sell(int id)
     {
-        /*bool alreadyListed = _listingApiClient.HasActiveListingForItemInstance(id);
-
-        if (alreadyListed)
+        try
         {
-            return Content("Item is already listed.");
-        }*/
+            ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(id);
 
-        ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(id);
+            if (itemInstance == null)
+            {
+                return Content("ItemInstance was not found.");
+            }
 
-        Listing listing = new Listing
+            Listing listing = new Listing
+            {
+                Price = 100.00m,
+                StatusId = 1,
+                ItemInstanceId = itemInstance.ItemInstanceId,
+                SellerAccountId = itemInstance.Account.AccountId,
+                CreationTimeStamp = DateTime.Now
+            };
+
+            _listingApiClient.ValidateAndInsertListing(listing);
+
+            return Content("Listing created successfully.");
+        }
+        catch (Exception ex)
         {
-            Price = 100.00m,
-            Status = ListingStatus.ACTIVE,
-            ItemInstanceId = id,
-            SellerAccountId = itemInstance.AccountId,
-            CreationTimeStamp = DateTime.Now
-        };
-
-        _listingApiClient.InsertListing(listing);
-
-        return Content("Listing created successfully.");
+            throw new Exception($"Couldnt create listing { ex.Message }");
+            return Content("Listing was not created");
+        }
     }
 }
