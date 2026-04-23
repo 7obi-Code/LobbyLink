@@ -13,22 +13,27 @@ namespace LobbyLink.APIClient
 
         public int CreateItemInstance(ItemInstance itemInstance)
         {
-            var request = new RestRequest("api/ItemInstance", Method.Post);
+            var request = new RestRequest("api/v1/iteminstance", Method.Post);
             request.AddJsonBody(itemInstance);
-            var response = _client.Execute<int>(request);
 
-            if (response.IsSuccessful && response.Data != 0)
+            var response = _client.Execute(request);
+
+            if (response.IsSuccessful)
             {
-                return response.Data;
+                return int.Parse(response.Content);
             }
 
-            throw new Exception($"Failed to insert ItemInstance. Status: {response.StatusCode}, Error: {response.ErrorMessage}");
+            throw new Exception(
+                $"Failed to insert ItemInstance.\n" +
+                $"Status: {response.StatusCode}\n" +
+                $"Response: {response.Content}"
+            );
         }
-       
+
 
         public IEnumerable<ItemInstance> GetAllItemInstances()
         {
-            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
+            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest("api/v1/ItemInstance"));
             return response ?? new List<ItemInstance>();
         }
 
