@@ -10,4 +10,8 @@
     <ProjectReference Include="..\LobbyLink.DataAccess\LobbyLink.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BusinessLogic\" />
+  </ItemGroup>
+
 </Project>

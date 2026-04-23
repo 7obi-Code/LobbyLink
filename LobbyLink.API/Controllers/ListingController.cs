@@ -13,8 +13,9 @@ namespace LobbyLink.API.Controllers
 
         public ListingController()
         {
-            _listingDao = new ListingDao(
-                "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
+
+            _listingDao = new BusinessLogic(new ListingDao(
+                "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;"));
         }
 
         // GET: api/v1/listing/active
@@ -35,38 +36,5 @@ namespace LobbyLink.API.Controllers
                 });
             }
         }
-
-        /*
-        // POST: api/v1/listing
-        [HttpPost]
-        public ActionResult<int> InsertListing([FromBody] Listing listing)
-        {
-            try
-            {
-                if (_listingDao.HasActiveListingForItemInstance(listing.ItemInstanceId))
-                {
-                    return BadRequest("Item is already listed.");
-                }
-
-                Listing listing = new Listing
-                {
-                    Price = request.Price,
-                    Status = "ACTIVE",
-                    CreationTimeStamp = DateTime.Now,
-                    ItemInstanceId = request.ItemInstanceId,
-                    AccountId = request.AccountId,
-                    ItemInstance = new ItemInstance { ItemInstanceId = request.ItemInstanceId },
-                    Account = new Account { AccountId = request.AccountId }
-                };
-
-                Listing createdListing = _listingDao.CreateListing(listing);
-                return Ok(createdListing);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        */
     }
 }
