@@ -2,15 +2,10 @@
 {
     partial class MainForm
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        private Button btnOpenCreateForm;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,20 +15,21 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
+            //Control Panel Window
             components = new System.ComponentModel.Container();
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Text = "Form1";
-        }
+            Text = "Admin Panel";
 
-        #endregion
+            //Create ItemInstance Button
+            btnOpenCreateForm = new Button();
+            btnOpenCreateForm.Text = "Create Item Instance";
+            btnOpenCreateForm.Location = new Point(50, 50);
+            btnOpenCreateForm.Click += btnOpenCreateForm_Click;
+
+            Controls.Add(btnOpenCreateForm);
+        }
     }
 }
