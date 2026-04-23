@@ -14,8 +14,8 @@ namespace LobbyLink.API.Controllers
         public ListingController()
         {
 
-            _listingDao = new BusinessLogic(new ListingDao(
-                "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;"));
+            _listingDao = new ListingDao(
+                "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
         }
 
         // GET: api/v1/listing/active
