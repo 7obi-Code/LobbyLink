@@ -13,7 +13,7 @@ namespace LobbyLink.APIClient
 
         public int CreateItemInstance(ItemInstance itemInstance)
         {
-            var request = new RestRequest("api/v1/iteminstance", Method.Post);
+            var request = new RestRequest("", Method.Post);
             request.AddJsonBody(itemInstance);
 
             var response = _client.Execute(request);
@@ -33,7 +33,7 @@ namespace LobbyLink.APIClient
 
         public IEnumerable<ItemInstance> GetAllItemInstances()
         {
-            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest("api/v1/ItemInstance"));
+            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
             return response ?? new List<ItemInstance>();
         }
 

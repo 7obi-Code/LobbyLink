@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LobbyLink.DataAccess\LobbyLink.DataAccess.csproj" />
+    <Compile Remove="BusinessLogic\**" />
+    <Content Remove="BusinessLogic\**" />
+    <EmbeddedResource Remove="BusinessLogic\**" />
+    <None Remove="BusinessLogic\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessLogic\" />
+    <ProjectReference Include="..\LobbyLink.DataAccess\LobbyLink.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
