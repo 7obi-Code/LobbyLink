@@ -1,0 +1,198 @@
+USE [DMA-CSD-V252_10666018];
+GO
+
+INSERT INTO Wallet (saldo)
+VALUES
+(1000.00),
+(750.00),
+(500.00),
+(300.00),
+(1200.00);
+
+INSERT INTO Account (userName, firstName, surName, email, phoneNo, level, type, walletId_fk)
+VALUES
+('TobiGamer',   'Tobias', 'Jensen',      'tobias@gmail.com', '12345678', 10, 'User', 1),
+('LauraGamer',  'Laura',  'Berthelsen',  'laura@gmail.com',  '22222222',  7, 'User', 2),
+('JonasPro',    'Jonas',  'Larsen',      'jonas@gmail.com',  '33333333', 12, 'User', 3),
+('NoahPlayz',   'Noah',   'Quito',       'noah@gmail.com',   '44444444',  3, 'User', 4),
+('MikkelDK',    'Mikkel', 'Andersen',    'mikkel@gmail.com', '55555555', 15, 'User', 5);
+
+INSERT INTO Game (gameTitle, gameStudio)
+VALUES
+('Dota 2', 'Valve'),
+('CS2', 'Valve');
+
+INSERT INTO AccountGame (accountId_fk, gameId_fk)
+VALUES
+(1, 1), (1, 2),
+(2, 1), (2, 2),
+(3, 1), (3, 2),
+(4, 1), (4, 2),
+(5, 1), (5, 2);
+
+-- =========================
+-- Item Definitions
+-- 10 total = 5 for Dota 2, 5 for CS2
+-- =========================
+INSERT INTO ItemDefinition (itemName, itemImageUrl, itemDescription, gameId_fk)
+VALUES
+-- Dota 2 (gameId = 1)
+('Dragonclaw Hook',        'url_dota_1', 'Rare Pudge hook cosmetic', 1),
+('Arcana Phantom Assassin','url_dota_2', 'Phantom Assassin arcana', 1),
+('Axe of Phractos',        'url_dota_3', 'Axe cosmetic weapon', 1),
+('Invoker Set',            'url_dota_4', 'Invoker cosmetic set', 1),
+('Juggernaut Blade',       'url_dota_5', 'Juggernaut sword cosmetic', 1),
+
+-- CS2 (gameId = 2)
+('AK-47 Redline',          'url_cs2_1',  'Popular rifle skin', 2),
+('AWP Asiimov',            'url_cs2_2',  'High value sniper skin', 2),
+('Karambit Fade',          'url_cs2_3',  'Rare knife skin', 2),
+('M4A4 Howl',              'url_cs2_4',  'Legendary rifle skin', 2),
+('USP-S Kill Confirmed',   'url_cs2_5',  'Pistol skin', 2);
+
+INSERT INTO ItemInstance (itemDefinitionId_fk, accountId_fk)
+VALUES
+-- ItemDefinition 1
+(1,1), (1,2), (1,3),
+
+-- ItemDefinition 2
+(2,4), (2,5), (2,1),
+
+-- ItemDefinition 3
+(3,2), (3,3), (3,4),
+
+-- ItemDefinition 4
+(4,5), (4,1), (4,2),
+
+-- ItemDefinition 5
+(5,3), (5,4), (5,5),
+
+-- ItemDefinition 6
+(6,1), (6,2), (6,3),
+
+-- ItemDefinition 7
+(7,4), (7,5), (7,1),
+
+-- ItemDefinition 8
+(8,2), (8,3), (8,4),
+
+-- ItemDefinition 9
+(9,5), (9,1), (9,2),
+
+-- ItemDefinition 10
+(10,3), (10,4), (10,5);
+
+INSERT INTO ListingStatusEnum (statusId, name)
+VALUES
+(1, 'ACTIVE'),
+(2, 'SOLD'),
+(3, 'CANCELLED');
+
+INSERT INTO Listing (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, accountId_fk)
+VALUES
+(250.00, GETDATE(), 1,  1, 1),
+(500.00, GETDATE(), 1,  4, 4),
+(120.00, GETDATE(), 2,  7, 2),
+(900.00, GETDATE(), 1, 10, 5),
+(300.00, GETDATE(), 1, 13, 3),
+(750.00, GETDATE(), 1, 16, 1),
+(1100.00,GETDATE(), 2, 19, 4),
+(450.00, GETDATE(), 1, 22, 2),
+(999.00, GETDATE(), 1, 25, 5),
+(150.00, GETDATE(), 1, 28, 3);
+
+
+INSERT INTO ItemProperty (propertyName, filterType, isFilterable, gameId_fk)
+VALUES
+('Rarity', 'dropdown', 1, 1),
+('Slot',   'dropdown', 1, 1),
+('WeaponType',    'dropdown', 1, 2),
+('Condition', 'dropdown', 1, 2);
+
+-- =========================
+-- Item Property Values
+-- =========================
+INSERT INTO ItemPropertyValue (value, itemPropertyId_fk)
+VALUES
+-- Dota 2 Rarity (itemPropertyId = 1)
+('Common', 1),
+('Rare', 1),
+('Immortal', 1),
+('Arcana', 1),
+
+-- Dota 2 Slot (itemPropertyId = 2)
+('Weapon', 2),
+('Head', 2),
+('Back', 2),
+
+-- CS2 Weapon (itemPropertyId = 3)
+('Rifle', 3),
+('Pistol', 3),
+('Knife', 3),
+('Snipers', 3),
+
+-- CS2 Condition (itemPropertyId = 4)
+('Factory New', 4),
+('Minimal Wear', 4),
+('Field-Tested', 4);
+
+
+INSERT INTO ItemPropertyLine (itemDefinitionId_fk, itemPropertyId_fk, itemPropertyValueId_fk)
+VALUES
+-- Dota 2 items
+(1, 1, 3),  -- Dragonclaw Hook -> Immortal
+(1, 2, 5),  -- Weapon
+
+(2, 1, 4),  -- PA Arcana -> Arcana
+(2, 2, 5),  -- Weapon
+
+(3, 1, 2),  -- Axe of Phractos -> Rare
+(3, 2, 5),  -- Weapon
+
+(4, 1, 2),  -- Invoker Set -> Rare
+(4, 2, 6),  -- Head
+
+(5, 1, 3),  -- Juggernaut Blade -> Immortal
+(5, 2, 5),  -- Weapon
+
+-- CS2 items
+(6, 3, 8), -- AK-47 Redline -> Rifle
+(6, 4, 13), -- Field-Tested
+
+(7, 3, 11), -- AWP Asiimov -> Sniper
+(7, 4, 12), -- Minimal Wear
+
+(8, 3, 10), -- Karambit Fade -> Knife
+(8, 4, 11), -- Factory New
+
+(9, 3, 8), -- M4A4 Howl -> Rifle
+(9, 4, 11), -- Factory New
+
+(10, 3, 9), -- USP-S Kill Confirmed -> Classified
+(10, 4, 12);-- Minimal Wear
+
+-- =========================
+-- Item Instance Properties
+-- Example: FloatValue for CS2
+-- =========================
+INSERT INTO ItemInstanceProperty (itemInstancePropertyName, gameId_fk)
+VALUES
+('FloatValue', 2);
+
+INSERT INTO ItemInstancePropertyLine (value, itemInstanceId_fk, itemInstancePropertyId_fk)
+VALUES
+('0.15', 16, 1),
+('0.08', 17, 1),
+('0.32', 18, 1),
+('0.11', 19, 1),
+('0.05', 20, 1),
+('0.27', 21, 1),
+('0.01', 22, 1),
+('0.03', 23, 1),
+('0.18', 24, 1),
+('0.07', 25, 1),
+('0.09', 26, 1),
+('0.21', 27, 1),
+('0.14', 28, 1),
+('0.06', 29, 1),
+('0.19', 30, 1);
