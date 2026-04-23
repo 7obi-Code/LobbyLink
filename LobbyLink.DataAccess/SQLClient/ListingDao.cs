@@ -18,7 +18,6 @@ public class ListingDao : BaseDao, IFListingDao
                         li.listingId,
                         li.price,
                         li.creationTimeStamp,
-                        li.status,
                         li.itemInstanceId_fk AS ItemInstanceId,
                         li.accountId_fk AS AccountId,
 
