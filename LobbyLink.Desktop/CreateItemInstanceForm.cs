@@ -21,13 +21,17 @@ namespace LobbyLink.Desktop
             {
                 if (!int.TryParse(txtItemDefinitionId.Text, out int itemDefinitionId))
                 {
-                    MessageBox.Show("ItemDefinitionId must be a valid number.");
+                    MessageBox.Show("ItemDefinitionId must be a valid number.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtItemDefinitionId.Focus();
                     return;
                 }
 
                 if (!int.TryParse(txtAccountId.Text, out int accountId))
                 {
-                    MessageBox.Show("AccountId must be a valid number.");
+                    MessageBox.Show("AccountId must be a valid number.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtAccountId.Focus();
                     return;
                 }
 
@@ -39,14 +43,17 @@ namespace LobbyLink.Desktop
 
                 int newId = apiClient.CreateItemInstance(itemInstance);
 
-                MessageBox.Show($"ItemInstance created successfully. New ID: {newId}");
+                MessageBox.Show($"ItemInstance created successfully.\nNew ID: {newId}",
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 txtItemDefinitionId.Clear();
                 txtAccountId.Clear();
+                txtItemDefinitionId.Focus();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                MessageBox.Show($"Error while creating ItemInstance:\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
