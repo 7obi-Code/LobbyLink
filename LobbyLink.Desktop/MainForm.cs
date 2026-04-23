@@ -1,20 +1,21 @@
 using LobbyLink.APIClient;
-using System.Net.Http;
 
-namespace LinkLobby.Desktop
+namespace LobbyLink.Desktop
 {
     public partial class MainForm : Form
     {
-        private ItemInstanceApiClient apiClient;
+        private readonly ItemInstanceApiClient apiClient;
+
         public MainForm()
         {
             InitializeComponent();
+            apiClient = new ItemInstanceApiClient("https://localhost:7094/");
+        }
 
-            var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7094/")
-            };
-            apiClient = new ItemInstanceApiClient(httpClient);
+        private void btnOpenCreateForm_Click(object sender, EventArgs e)
+        {
+            var form = new CreateItemInstanceForm(apiClient);
+            form.ShowDialog();
         }
     }
 }

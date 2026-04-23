@@ -1,8 +1,8 @@
 <Solution>
-  <Project Path="LobbyLink.API/LobbyLink.API.csproj" />
-  <Project Path="LobbyLink.APIClient/LobbyLink.APIClient.csproj" />
-  <Project Path="LobbyLink.DataAccess/LobbyLink.DataAccess.csproj" />
-  <Project Path="LobbyLink.Desktop/LobbyLink.Desktop.csproj" />
-  <Project Path="LobbyLink.Test/LobbyLink.Test.csproj" />
-  <Project Path="LobbyLink.Website/LobbyLink.Website.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LobbyLink.API/LobbyLink.API.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LobbyLink.APIClient/LobbyLink.APIClient.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LobbyLink.DataAccess/LobbyLink.DataAccess.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LobbyLink.Desktop/LobbyLink.Desktop.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LobbyLink.Test/LobbyLink.Test.csproj" />
+  <Project Path="../../../../../../../../MYWORLD/3SemProjekt/LinkLobby/LobbyLink.Website/LobbyLink.Website.csproj" />
 </Solution>
