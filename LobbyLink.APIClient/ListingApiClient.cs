@@ -25,7 +25,7 @@ namespace LobbyLink.APIClient
             return response.Data;
         }
 
-        public int InsertListing(Listing listing)
+        public int ValidateAndInsertListing(Listing listing)
         {
 
             var request = new RestRequest("", Method.Post);
@@ -38,12 +38,10 @@ namespace LobbyLink.APIClient
 
             }
             throw new Exception(
-                $"Failed to insert listing. Status code: {response.StatusCode}, Error:{response.ErrorMessage}");
-        }
-
-        public int ValidateAndInsertListing(Listing listing)
-        {
-            throw new NotImplementedException();
+            $"Failed to insert listing. " +
+            $"Status code: {response.StatusCode}, " +
+            $"Error: {response.ErrorMessage}, " +
+            $"Content: {response.Content}");
         }
     }
 }

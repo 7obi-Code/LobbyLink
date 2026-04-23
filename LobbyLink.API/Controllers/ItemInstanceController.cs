@@ -39,7 +39,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
-        [HttpGet("item/{itemInstanceId}")]
+        [HttpGet("{itemInstanceId}")]
         public ActionResult<ItemInstance> GetById(int itemInstanceId)
         {
             try

@@ -36,5 +36,24 @@ namespace LobbyLink.API.Controllers
                 });
             }
         }
+
+        [HttpPost]
+        public ActionResult<int> Post([FromBody] Listing listing)
+        {
+            try
+            {
+                if (listing.SellerAccountId <= 0 || listing.ItemInstanceId <= 0)
+                {
+                    return BadRequest(new { message = "A seller and a item instance are required" });
+                }
+
+                var newListingId = _listingDao.ValidateAndInsertListing(listing);
+                return Ok(newListingId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error inserting item instance", error = ex.Message });
+            }
+        }
     }
 }

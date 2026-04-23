@@ -162,8 +162,8 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             var query = @"
             SELECT
                 ii.itemInstanceId,
-                ii.accountId_fk,
-                ii.itemDefinitionId_fk,
+                ii.accountId_fk AS AccountId, 
+                ii.itemDefinitionId_fk AS ItemDefinitionId,
                 af.accountId,
                 af.userName,
                 af.firstName,

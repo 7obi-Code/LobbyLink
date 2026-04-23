@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LobbyLink.DataAccess.SQLClient;
 
@@ -86,22 +87,20 @@ public class ListingDao : BaseDao, IFListingDao
         using var connection = CreateConnection();
         try
         {
-            var queryLatestStatus = @"SELECT TOP 1 statusId_fk
-                            FROM Listing
-                            WHERE itemInstanceId_fk = @itemInstanceId
-                            ORDER BY creationTimeStamp DESC";
+            var queryActiveStatusForItem = @"SELECT COUNT(*)
+                                            FROM Listing
+                                            WHERE itemInstanceId_fk = @itemInstanceId
+                                            AND statusId_fk = 1";
 
-            int? latestStatusId = connection.QueryFirstOrDefault<int>(queryLatestStatus, new { itemInstanceId = listing.ItemInstanceId });
+            int rowCount = connection.ExecuteScalar<int>(queryActiveStatusForItem, new { itemInstanceId = listing.ItemInstanceId });
 
-            ListingStatus latestStatus = (ListingStatus)latestStatusId;
-
-            if (latestStatus == ListingStatus.ACTIVE)
+            if (rowCount > 0)
             {
                 throw new Exception($"Cant create listing with ItemInstance with id {listing.ItemInstanceId} - Already Active");
             }
 
             var queryInsertListing = @"INSERT INTO Listing
-            (price, creationTimeStamp, statusId,fk, itemInstanceId_fk, accountId_fk)
+            (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, accountId_fk)
             OUTPUT INSERTED.listingId
             VALUES
             (@Price, @CreationTimeStamp, @StatusId, @ItemInstanceId, @SellerAccountId)";
