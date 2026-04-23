@@ -14,7 +14,7 @@ namespace LobbyLink.Desktop
 
         private void btnOpenCreateForm_Click(object sender, EventArgs e)
         {
-            var form = new CreateItemInstanceForm(apiClient);
+            var form = new CreateItemInstanceForm();
             form.ShowDialog();
         }
     }

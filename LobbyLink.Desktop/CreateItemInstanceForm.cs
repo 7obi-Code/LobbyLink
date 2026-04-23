@@ -9,10 +9,10 @@ namespace LobbyLink.Desktop
     {
         private readonly ItemInstanceApiClient apiClient;
 
-        public CreateItemInstanceForm(ItemInstanceApiClient apiClient)
+        public CreateItemInstanceForm()
         {
             InitializeComponent();
-            this.apiClient = apiClient;
+            apiClient = new ItemInstanceApiClient("https://localhost:7148/api/v1/iteminstance");
         }
 
         private void btnCreate_Click(object sender, EventArgs e)

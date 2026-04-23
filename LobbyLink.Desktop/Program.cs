@@ -15,7 +15,6 @@ namespace LobbyLink.Desktop
             Application.SetCompatibleTextRenderingDefault(false);
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
-            ItemInstanceApiClient apiClient = new ItemInstanceApiClient("https://localhost:7094/");
             Application.Run(new MainForm());
         }
     }
