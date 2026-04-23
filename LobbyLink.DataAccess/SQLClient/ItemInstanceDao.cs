@@ -14,7 +14,28 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 
     public int CreateItemInstance(ItemInstance itemInstance)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var query = @"
+            INSERT INTO ItemInstance (accountId_fk, itemDefinitionId_fk)
+            OUTPUT INSERTED.itemInstanceId
+            VALUES (@AccountId, @ItemDefinitionId);";
+
+            using var connection = CreateConnection();
+
+            int newId = connection.ExecuteScalar<int>(query, new
+            {
+                itemInstance.AccountId,
+                itemInstance.ItemDefinitionId
+            });
+
+            return newId;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error while creating ItemInstance. Error was: '{ex.Message}'", ex);
+        }
     }
 
     public IEnumerable<ItemInstance> GetAllItemInstances()

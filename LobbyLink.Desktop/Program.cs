@@ -1,22 +1,22 @@
 using LobbyLink.APIClient;
 using LobbyLink.Desktop;
 
-namespace LinkLobby.Desktop
+namespace LobbyLink.Desktop
 {
     internal static class Program
     {
-        private static string restUrl;
-
         /// <summary>
-        ///  The main entry point for the application.
+        /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new CreateItemInstanceForm(new ItemInstanceApiClient(restUrl)));
+            ItemInstanceApiClient apiClient = new ItemInstanceApiClient("https://localhost:7094/");
+            Application.Run(new MainForm());
         }
     }
 }
