@@ -1,0 +1,161 @@
+USE [DMA-CSD-V252_10666018];
+GO
+
+CREATE TABLE Wallet (
+    walletId INT IDENTITY(1,1) PRIMARY KEY,
+    saldo DECIMAL (10,2) NOT NULL
+);
+
+CREATE TABLE Game (
+    gameId INT IDENTITY(1,1) PRIMARY KEY,
+    gameTitle VARCHAR(100) NOT NULL,
+    gameStudio VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Account (
+    accountId INT IDENTITY(1,1) PRIMARY KEY,
+    userName VARCHAR(100) NOT NULL,
+    firstName VARCHAR(100) NOT NULL,
+    surName VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phoneNo VARCHAR(20),
+    level INT,
+    type VARCHAR(30) NOT NULL,
+    walletId_fk INT,
+
+    CONSTRAINT fk_account_wallet
+        FOREIGN KEY (walletId_fk)
+        REFERENCES Wallet(walletId)
+);
+
+CREATE TABLE ItemDefinition (
+    itemDefinitionId INT IDENTITY(1,1) PRIMARY KEY,
+    itemName VARCHAR (40) NOT NULL,
+    itemImageUrl VARCHAR(255),
+    itemDescription VARCHAR (400),
+    gameId_fk INT,
+
+    CONSTRAINT fk_itemdefinition_gameid
+        FOREIGN KEY (gameId_fk)
+        REFERENCES Game(gameId)
+);
+
+CREATE TABLE ItemInstance (
+    itemInstanceId INT IDENTITY(1,1) PRIMARY KEY,
+    itemDefinitionId_fk INT,
+    accountId_fk INT,
+
+    CONSTRAINT fk_iteminstance_accountId
+        FOREIGN KEY (accountId_fk)
+        REFERENCES Account(accountId),
+
+    CONSTRAINT fk_iteminstance_itemdefinitionId
+        FOREIGN KEY (itemDefinitionId_fk)
+        REFERENCES ItemDefinition(itemDefinitionId)
+);
+
+
+CREATE TABLE ListingStatusEnum (
+    statusId INT PRIMARY KEY,
+    name VARCHAR (20) NOT NULL
+);
+
+CREATE TABLE Listing (
+    listingId INT IDENTITY(1,1) PRIMARY KEY,
+    price DECIMAL (10,2),
+    creationTimeStamp DATETIME2 NOT NULL,
+    statusId_fk INT NOT NULL,
+    itemInstanceId_fk INT,
+    accountId_fk INT,
+
+    CONSTRAINT fk_listing_iteminstance
+        FOREIGN KEY (itemInstanceId_fk)
+        REFERENCES ItemInstance(itemInstanceId),
+
+    CONSTRAINT fk_listing_accountid
+        FOREIGN KEY (accountId_fk)
+        REFERENCES Account(accountId),
+
+		FOREIGN KEY (statusId_fk)
+        REFERENCES ListingStatusEnum(statusId)
+);
+
+CREATE TABLE AccountGame (
+    accountId_fk INT,
+    gameId_fk INT,
+    PRIMARY KEY (accountId_fk, gameId_fk),
+
+    CONSTRAINT fk_accgame_accountId
+        FOREIGN KEY (accountId_fk)
+        REFERENCES Account(accountId),
+
+    CONSTRAINT fk_accgame_gameid
+        FOREIGN KEY (gameId_fk)
+        REFERENCES Game(gameId)
+);
+
+CREATE TABLE ItemProperty (
+    itemPropertyId INT IDENTITY(1,1) PRIMARY KEY,
+    propertyName VARCHAR(40),
+    filterType VARCHAR(40),
+    isFilterable BIT NOT NULL DEFAULT 1,
+    gameId_fk INT,
+
+    CONSTRAINT fk_itemproperty_gameid
+        FOREIGN KEY (gameId_fk)
+        REFERENCES Game(gameId)
+);
+
+CREATE TABLE ItemPropertyValue (
+    itemPropertyValueId INT IDENTITY(1,1) PRIMARY KEY,
+    value VARCHAR (40),
+    itemPropertyId_fk INT,
+
+    CONSTRAINT fk_itempropertyvalue_itempropertyid
+        FOREIGN KEY (itemPropertyId_fk)
+        REFERENCES ItemProperty(itemPropertyId)
+);
+
+CREATE TABLE ItemInstanceProperty (
+    itemInstancePropertyId INT IDENTITY(1,1) PRIMARY KEY,
+    itemInstancePropertyName VARCHAR (40),
+    gameId_fk INT,
+
+    CONSTRAINT fk_instanceproperty_gameid
+        FOREIGN KEY (gameId_fk)
+        REFERENCES Game(gameId)
+);
+
+CREATE TABLE ItemInstancePropertyLine (
+    itemInstancePropertyLineId INT IDENTITY(1,1) PRIMARY KEY,
+    value VARCHAR (40),
+    itemInstanceId_fk INT,
+    itemInstancePropertyId_fk INT,
+
+    CONSTRAINT fk_iteminstancepropertyline_itemInstanceId
+        FOREIGN KEY (itemInstanceId_fk)
+        REFERENCES ItemInstance(itemInstanceId),
+
+    CONSTRAINT fk_iteminstancepropertyline_instancepropertyid
+        FOREIGN KEY (itemInstancePropertyId_fk)
+        REFERENCES ItemInstanceProperty(itemInstancePropertyId)
+);
+
+CREATE TABLE ItemPropertyLine (
+    itemPropertyLineId INT IDENTITY(1,1) PRIMARY KEY,
+    itemDefinitionId_fk INT,
+    itemPropertyId_fk INT,
+    itemPropertyValueId_fk INT,
+
+    CONSTRAINT fk_itempropertyline_itemidentificationid
+        FOREIGN KEY (itemDefinitionId_fk)
+        REFERENCES ItemDefinition(itemDefinitionId),
+
+    CONSTRAINT fk_itempropertyline_itempropertyid
+        FOREIGN KEY (itemPropertyId_fk)
+        REFERENCES ItemProperty(itemPropertyId),
+
+    CONSTRAINT fk_itempropertyline_itempropertyvalueid
+        FOREIGN KEY (itemPropertyValueId_fk)
+        REFERENCES ItemPropertyValue(itemPropertyValueId)
+);

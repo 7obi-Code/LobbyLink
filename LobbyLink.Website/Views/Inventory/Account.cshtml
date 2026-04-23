@@ -1,0 +1,47 @@
+﻿@model IEnumerable<LobbyLink.DataAccess.Model.ItemInstance>
+
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<h1 class="text-center my-4">Inventory</h1>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <h3 class="text-center my-4">Ingen items for denne bruger</h3>
+}
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ItemInstance ID</th>
+            <th>Item Name</th>
+            <th>Description</th>
+            <th>Account Owner</th>
+            <th>Game</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ItemInstanceId</td>
+                <td>@item.ItemDefinition.ItemName</td>
+                <td>@item.ItemDefinition.ItemDescription</td>
+                <td>@item.Account.Username</td>
+                <td>@item.ItemDefinition.Game.GameTitle</td>
+                <td>
+                        <a asp-controller="Inventory"
+                               asp-action="InventoryInspect"
+                               asp-route-itemInstanceId="@item.ItemInstanceId"
+                               class="btn btn-warning btn-sm">
+                            Details / Sell
+                        </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}

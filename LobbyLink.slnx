@@ -1,12 +1,8 @@
 <Solution>
-  <Folder Name="/SQLScripts/">
-    <File Path="Table.SQLScript.txt" />
-  </Folder>
-  <Project Path="LinkLobby.API/LobbyLink.API.csproj" />
-  <Project Path="LinkLobby.APIClient/LobbyLink.APIClient.csproj" />
-  <Project Path="LinkLobby.Data/LobbyLink.Data.csproj" />
-  <Project Path="LinkLobby.Desktop/LobbyLink.Desktop.csproj" />
-  <Project Path="LinkLobby.Models/LobbyLink.Models.csproj" />
-  <Project Path="LinkLobby.Tests/LobbyLink.Tests.csproj" />
-  <Project Path="LinkLobby.Web/LobbyLink.Web.csproj" />
+  <Project Path="LobbyLink.API/LobbyLink.API.csproj" />
+  <Project Path="LobbyLink.APIClient/LobbyLink.APIClient.csproj" />
+  <Project Path="LobbyLink.DataAccess/LobbyLink.DataAccess.csproj" />
+  <Project Path="LobbyLink.Desktop/LobbyLink.Desktop.csproj" />
+  <Project Path="LobbyLink.Test/LobbyLink.Test.csproj" />
+  <Project Path="LobbyLink.Website/LobbyLink.Website.csproj" />
 </Solution>
