@@ -51,9 +51,8 @@ public class InventoryController : Controller
 
             return Content("Listing created successfully.");
         }
-        catch (Exception ex)
+        catch 
         {
-            throw new Exception($"Couldnt create listing { ex.Message }");
             return Content("Listing was not created");
         }
     }
