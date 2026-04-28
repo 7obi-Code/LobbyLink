@@ -15,7 +15,7 @@ namespace LobbyLink.Desktop
             Application.SetCompatibleTextRenderingDefault(false);
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
-            Application.Run(new MainForm());
+            Application.Run(new AdminMenu());
         }
     }
 }

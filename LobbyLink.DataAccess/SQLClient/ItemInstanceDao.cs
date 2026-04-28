@@ -38,12 +38,9 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
-    public IEnumerable<ItemInstance> GetAllItemInstances()
-    {
-        try
-        {
-            var query = @"
-            SELECT
+    public IEnumerable<ItemInstance> GetAllItemInstances() {
+        try {
+            var query = @"SELECT
                 ii.itemInstanceId,
                 ii.accountId_fk,
                 ii.itemDefinitionId_fk,
@@ -74,8 +71,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             using var connection = CreateConnection();
 
             List<ItemInstance> itemInstances = connection.Query<ItemInstance, Account, ItemDefinition, Game, ItemInstance>
-                (
-                query, 
+                (query, 
                 
                 (instance, account, definition, game) =>
                 {
@@ -85,16 +81,12 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                     return instance;
                 },
 
-                splitOn: "accountId, itemDefinitionId, gameId"
-                )
-                .ToList();
-
+                splitOn: "accountId, itemDefinitionId, gameId").ToList();
+            
             return itemInstances;
         }
-        catch (Exception ex)
-        {
-            throw new Exception(
-                $"Error while trying to get all ItemInstances. Error was: '{ex.Message}'", ex);
+        catch (Exception ex) {
+            throw new Exception($"Error while trying to get all ItemInstances. Error was: '{ex.Message}'", ex);
         }
     }
 
