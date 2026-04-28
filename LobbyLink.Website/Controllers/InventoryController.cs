@@ -39,11 +39,17 @@ public class InventoryController : Controller
                 return Content("ItemInstance was not found.");
             }
 
-            if (price <= 0)
-                return Content("Price must be a positive number.");
+            //Pris skal være positiv og mindst 0.01 dollars! 
+            if (price < 0.01m)
+            {
+                return Content("Price must be at least $0.01.");
+            }
 
+            //Max 2 decimaler
             if (decimal.Round(price, 2) != price)
+            {
                 return Content("Price can only have two decimal numbers.");
+            }
 
             Listing listing = new Listing
             {
@@ -58,7 +64,7 @@ public class InventoryController : Controller
 
             return Content("Listing created successfully.");
         }
-        catch 
+        catch
         {
             return Content("Listing was not created");
         }
