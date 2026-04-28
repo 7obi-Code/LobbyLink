@@ -35,16 +35,39 @@
         <p><strong>Owner:</strong> @Model.Account?.Username</p>
 
         <hr />
+      
 
         <!-- ACTION BUTTON -->
-        <div class="text-center mt-4">
-            <a asp-controller="Inventory"
-               asp-action="Sell"
-               asp-route-id="@Model.ItemInstanceId"
-               class="btn btn-warning btn-lg">
-                Sell Item
-            </a>
-        </div>
+        <form asp-controller="Inventory" asp-action="Sell" method="post">
 
+            <input type="hidden" name="itemInstanceId" value="@Model.ItemInstanceId" />
+
+            <div class="d-flex justify-content-between align-items-end mt-4">
+
+                <div>
+                    <label class="mb-1">Set price:</label>
+
+                    <div class="input-group" style="width:160px; height:48px;">
+                        <span class="input-group-text">$</span>
+
+                        <input type="number"
+                               name="price"
+                               min="1"
+                               placeholder="Enter price"
+                               class="form-control"
+                               onkeydown="return !['e','E','+','-'].includes(event.key)" />
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-warning"
+                        style="height:48px;">
+                    Sell Item
+                </button>
+
+            </div>
+
+        </form>
+        
     </div>
 </div>

@@ -27,11 +27,12 @@ public class InventoryController : Controller
     }
 
     // Inventory/Sell/{id}
-    public IActionResult Sell(int id)
+    [HttpPost]
+    public IActionResult Sell(int itemInstanceId, decimal price)
     {
         try
         {
-            ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(id);
+            ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
 
             if (itemInstance == null)
             {
@@ -40,7 +41,7 @@ public class InventoryController : Controller
 
             Listing listing = new Listing
             {
-                Price = 100.00m,
+                Price = price,
                 StatusId = 1,
                 ItemInstanceId = itemInstance.ItemInstanceId,
                 SellerAccountId = itemInstance.Account.AccountId,
