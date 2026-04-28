@@ -39,6 +39,12 @@ public class InventoryController : Controller
                 return Content("ItemInstance was not found.");
             }
 
+            if (price <= 0)
+                return Content("Price must be a positive number.");
+
+            if (decimal.Round(price, 2) != price)
+                return Content("Price can only have two decimal numbers.");
+
             Listing listing = new Listing
             {
                 Price = price,
