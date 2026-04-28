@@ -1,11 +1,6 @@
 USE [DMA-CSD-V252_10666018];
 GO
 
-CREATE TABLE Wallet (
-    walletId INT IDENTITY(1,1) PRIMARY KEY,
-    saldo DECIMAL (10,2) NOT NULL
-);
-
 CREATE TABLE Game (
     gameId INT IDENTITY(1,1) PRIMARY KEY,
     gameTitle VARCHAR(100) NOT NULL,
@@ -20,12 +15,18 @@ CREATE TABLE Account (
     email VARCHAR(255) NOT NULL,
     phoneNo VARCHAR(20),
     level INT,
-    type VARCHAR(30) NOT NULL,
-    walletId_fk INT,
+    type VARCHAR(30) NOT NULL
+);
 
-    CONSTRAINT fk_account_wallet
-        FOREIGN KEY (walletId_fk)
-        REFERENCES Wallet(walletId)
+CREATE TABLE Wallet (
+    walletId INT IDENTITY(1,1) PRIMARY KEY,
+    balance DECIMAL (10,2) NOT NULL,
+    accountId_fk INT NOT NULL UNIQUE,
+
+    CONSTRAINT fk_wallet_account
+        FOREIGN KEY (accountId_fk)
+        REFERENCES Account(accountId)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE ItemDefinition (
@@ -62,18 +63,23 @@ CREATE TABLE ListingStatusEnum (
 
 CREATE TABLE Listing (
     listingId INT IDENTITY(1,1) PRIMARY KEY,
-    price DECIMAL (10,2),
+    price DECIMAL (10,2) NOT NULL,
     creationTimeStamp DATETIME2 NOT NULL,
+    boughtTimeStamp DATETIME2,
     statusId_fk INT NOT NULL,
-    itemInstanceId_fk INT,
-    accountId_fk INT,
+    itemInstanceId_fk INT NOT NULL,
+    sellerAccountId_fk INT NOT NULL,
+    buyerAccountId_fk INT,
 
-    CONSTRAINT fk_listing_iteminstance
+    CONSTRAINT fk_listing_itemInstanceId
         FOREIGN KEY (itemInstanceId_fk)
         REFERENCES ItemInstance(itemInstanceId),
 
-    CONSTRAINT fk_listing_accountid
-        FOREIGN KEY (accountId_fk)
+    CONSTRAINT fk_listing_sellerAccountId
+        FOREIGN KEY (sellerAccountId_fk)
+        REFERENCES Account(accountId),
+        
+		FOREIGN KEY (buyerAccountId_fk)
         REFERENCES Account(accountId),
 
 		FOREIGN KEY (statusId_fk)

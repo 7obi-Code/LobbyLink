@@ -24,12 +24,38 @@ public class MarketplaceController : Controller
         return View(allListings);
     }
 
-    public IActionResult MarketInspect(int itemInstanceId, string mode)
+    public IActionResult MarketInspect(int listingId)
     {
-        var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
+        var listing = _listingApiClient.GetListingById(listingId);
 
-        ViewBag.Mode = mode;
-        return View(item);
+        return View(listing);
     }
 
+    public IActionResult Buy(int buyerAccountId, int listingId)
+    {
+        try
+        {
+            //apiClient.GetListingById();
+            //Account account = accountApiClient.GetAccountById(buyerAccountId);
+            if (buyerAccountId <= 0) //Tilføj || account != NULL (MIDLERTIDIG LØSNING)
+            {
+                return Content("not valid buyerAccountId.");
+            }
+
+            if (listing == null)
+            {
+                return Content("listing was null.");
+            }
+
+            listing.BuyerAccountId = buyerAccountId;
+
+            _listingApiClient.BuyListing(listing);
+
+            return Content("Item Was Bought.");
+        }
+        catch
+        {
+            return Content("Item was not bought");
+        }
+    }
 }

@@ -11,6 +11,7 @@ namespace LobbyLink.APIClient
     {
         RestClient _client = new RestClient(restUrl);
 
+
         public IEnumerable<Listing> GetAllActiveListings()
         {
             var request = new RestRequest("active");
@@ -27,7 +28,6 @@ namespace LobbyLink.APIClient
 
         public int ValidateAndInsertListing(Listing listing)
         {
-
             var request = new RestRequest("", Method.Post);
             request.AddJsonBody(listing);
             var response = _client.Execute<int>(request);
@@ -42,6 +42,19 @@ namespace LobbyLink.APIClient
             $"Status code: {response.StatusCode}, " +
             $"Error: {response.ErrorMessage}, " +
             $"Content: {response.Content}");
+        }
+        public bool BuyListing(Listing listing)
+        {
+            var request = new RestRequest("", Method.Put);
+            request.AddJsonBody(listing);
+            var response = _client.Execute(request);
+
+            if (response.IsSuccessful)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -55,5 +55,34 @@ namespace LobbyLink.API.Controllers
                 return StatusCode(500, new { message = "Error inserting item instance", error = ex.Message });
             }
         }
+
+        [HttpPut]
+        public ActionResult Put([FromBody] Listing listingToUpdate)
+        {
+            try
+            {
+                if (listingToUpdate == null)
+                {
+                    return BadRequest(new { message = "No listing was found" });
+                }
+
+                if (listingToUpdate.BuyerAccountId <= 0)
+                {
+                    return BadRequest(new { message = "BuyerAccountId is required" });
+                }
+
+                bool result = _listingDao.BuyListing(listingToUpdate);
+                if (result == false)
+                {
+                    return NotFound(new { message = $"Could not buy item" });
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error buying listing with id {listingToUpdate.ListingId}", error = ex.Message });
+            }
+        }
     }
 }

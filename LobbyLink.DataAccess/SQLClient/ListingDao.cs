@@ -20,7 +20,7 @@ public class ListingDao : BaseDao, IFListingDao
                         li.price,
                         li.creationTimeStamp,
                         li.itemInstanceId_fk AS ItemInstanceId,
-                        li.accountId_fk AS AccountId,
+                        li.sellerAccountId_fk AS SellerAccountId,
 
                         af.accountId,
                         af.userName,
@@ -43,7 +43,7 @@ public class ListingDao : BaseDao, IFListingDao
                         FROM Listing li
 
                         LEFT JOIN Account af
-                        ON af.accountId = li.accountId_fk
+                        ON af.accountId = li.sellerAccountId_fk
 
                         LEFT JOIN ItemInstance ii
                         ON ii.itemInstanceId = li.itemInstanceId_fk
@@ -118,6 +118,89 @@ public class ListingDao : BaseDao, IFListingDao
         catch (Exception ex)
         {
             throw new Exception($"Error while trying to create listing. Error was: '{ex.Message}'", ex);
+        }
+    }
+
+
+    //Skal vi lave metoder i ItemInstance og Wallet DAO istedet for at gøre det hele her???
+    public bool BuyListing(Listing listing)
+    {
+        //Opretter en forbindelse ud fra BaseDao
+        using var connection = CreateConnection();
+
+        //Åbner forbindelse
+        connection.Open();
+
+        //Starter Transaction
+        using var transaction = connection.BeginTransaction();
+        
+        //UPDATE Listing
+        //STATUS til 2 (Sold) og buyerAccountId til "buyerAccountId"
+        //Hvor ListingId = listing.ListingId og STATUS = 1 (Active) og buyerAccoundId_fk = NULL
+        //Rollback hvis rowsAffected = 0
+        try
+        {
+            var queryUpdateListing = @"UPDATE Listing 
+                        SET statusId_fk = 2, buyerAccountId_fk = @BuyerAccountId
+                        WHERE listingId = @ListingId
+                        AND statusId_fk = 1
+                        AND buyerAccountId_fk IS NULL";
+
+            int rowsAffectedListing = connection.Execute(queryUpdateListing, 
+            new { listing.BuyerAccountId, listing.ListingId }, transaction);
+
+            if (rowsAffectedListing == 0)
+            {
+                transaction.Rollback();
+                return false;
+            }
+
+        //UPDATE ItemInstance
+        //accountId_fk til buyerAccountId
+        //Hvor ItemInstanceId = listing.ItemInstanceId
+            var queryUpdateItemInstance = @"UPDATE ItemInstance 
+                        SET accountId_fk = @AccountId
+                        WHERE itemInstanceId = @ItemInstanceId
+                        AND accountId_fk = @SellerAccountId";
+
+            int rowsAffectedItemInstance = connection.Execute(queryUpdateItemInstance,
+            new { AccountId = listing.BuyerAccountId, listing.ItemInstanceId, listing.SellerAccountId }, transaction);
+
+            if (rowsAffectedItemInstance == 0)
+            {
+                transaction.Rollback();
+                return false;
+            }
+
+        //UPDATE Wallet
+        //Til at balance trækker pris fra listing fra
+        //Hvor accountId_fk = buyeraccountid
+        //Og hvor balance er højere en listings pris
+            var queryUpdateWallet = @"UPDATE Wallet
+                        SET balance = balance - 
+                        (SELECT price FROM Listing WHERE listingId = @ListingId)
+                        WHERE accountId_fk = @BuyerAccountId
+                        AND balance >= 
+                        (SELECT price FROM Listing WHERE listingId = @ListingId)";
+
+            int rowsAffectedWallet = connection.Execute(queryUpdateWallet,
+            new { listing.BuyerAccountId, listing.ListingId }, transaction);
+
+            if (rowsAffectedWallet == 0)
+            {
+                transaction.Rollback();
+                return false;
+            }
+
+        //Commit transaction
+            transaction.Commit();
+        //Returner true
+            return true;
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            throw new Exception($"Error while trying to buy listing. Error was: '{ex.Message}'", ex);
         }
     }
 }
