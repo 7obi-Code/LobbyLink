@@ -28,7 +28,7 @@ namespace LobbyLink.Desktop
             var games = gameApiClient.GetAllGames();
 
             cmbGame.DataSource = games.ToList();
-            cmbGame.DisplayMember = "GameTitle"; // matches your model
+            cmbGame.DisplayMember = "GameTitle";
             cmbGame.ValueMember = "GameId";
             cmbGame.SelectedIndex = -1;
         }
@@ -63,7 +63,7 @@ namespace LobbyLink.Desktop
                 // Call API
                 int newId = apiClient.InsertItemDefinition(itemDefinition);
 
-                MessageBox.Show($"✔ ItemDefinition created!\nID: {newId}",
+                MessageBox.Show($"ItemDefinition created\nID: {newId}",
                     "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.None);

@@ -56,7 +56,7 @@ namespace LobbyLink.Desktop
                 {
                     apiClient.DeleteAccount(selectedAccount.AccountId);
 
-                    MessageBox.Show("✔ Account deleted",
+                    MessageBox.Show("Account deleted",
                         "Success",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.None);
