@@ -12,7 +12,7 @@ public class MarketplaceController : Controller
     readonly ListingApiClient _listingApiClient =
         new("https://localhost:7094/api/v1/listings");
 
-    readonly ItemInstanceApiClient _itemInstanceApiClient =
+    readonly ItemInstancesApiClient _itemInstanceApiClient =
         new("https://localhost:7094/api/v1/iteminstances");
 
     public IActionResult Listings()
