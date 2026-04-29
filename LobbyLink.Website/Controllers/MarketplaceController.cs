@@ -10,10 +10,10 @@ namespace LobbyLink.Website.Controllers;
 public class MarketplaceController : Controller
 {
     readonly ListingApiClient _listingApiClient =
-        new("https://localhost:7094/api/v1/listing");
+        new("https://localhost:7094/api/v1/listings");
 
     readonly ItemInstanceApiClient _itemInstanceApiClient =
-        new("https://localhost:7094/api/v1/iteminstance");
+        new("https://localhost:7094/api/v1/iteminstances");
 
     public IActionResult Listings()
     {
@@ -24,32 +24,33 @@ public class MarketplaceController : Controller
         return View(allListings);
     }
 
+    //Marketplace/MarketInspect/"listingId"
     public IActionResult MarketInspect(int listingId)
     {
-        var listing = _listingApiClient.GetListingById(listingId);
+        Listing? listing = _listingApiClient.GetActiveListingById(listingId);
 
         return View(listing);
     }
 
+
+    //Marketplace/Buy
+    [HttpPost]
     public IActionResult Buy(int buyerAccountId, int listingId)
     {
         try
         {
-            //apiClient.GetListingById();
-            //Account account = accountApiClient.GetAccountById(buyerAccountId);
-            if (buyerAccountId <= 0) //Tilføj || account != NULL (MIDLERTIDIG LØSNING)
+            if (buyerAccountId <= 0) 
             {
                 return Content("not valid buyerAccountId.");
             }
 
-            if (listing == null)
+
+            bool result = _listingApiClient.BuyListing(buyerAccountId, listingId);
+            
+            if (!result)
             {
-                return Content("listing was null.");
+                return Content("Item was not bought");
             }
-
-            listing.BuyerAccountId = buyerAccountId;
-
-            _listingApiClient.BuyListing(listing);
 
             return Content("Item Was Bought.");
         }

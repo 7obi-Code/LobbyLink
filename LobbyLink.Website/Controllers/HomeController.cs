@@ -10,7 +10,7 @@ namespace LobbyLink.Website.Controllers
     {
 
         readonly ItemInstanceApiClient _itemInstanceApiClient =
-            new("https://localhost:7094/api/v1/iteminstance");
+            new("https://localhost:7094/api/v1/iteminstances");
 
         //shows the inventory with all items
         public IActionResult Index()

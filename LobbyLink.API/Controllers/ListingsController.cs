@@ -1,4 +1,5 @@
-﻿using LobbyLink.DataAccess.Interfaces;
+﻿using LobbyLink.API.DTOs;
+using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SQLClient;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +8,11 @@ namespace LobbyLink.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ListingController : ControllerBase
+    public class ListingsController : ControllerBase
     {
         private readonly ListingDao _listingDao;
 
-        public ListingController()
+        public ListingsController()
         {
 
             _listingDao = new ListingDao(
@@ -37,6 +38,24 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        [HttpGet("active/{listingId}")]
+        public ActionResult<IEnumerable<Listing>> GetById(int listingId)
+        {
+            try
+            {
+                var listing = _listingDao.GetActiveListingById(listingId);
+                return Ok(listing);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = $"Error retrieving listing with id: {listingId}",
+                    error = ex.Message
+                });
+            }
+        }
+
         [HttpPost]
         public ActionResult<int> Post([FromBody] Listing listing)
         {
@@ -57,21 +76,22 @@ namespace LobbyLink.API.Controllers
         }
 
         [HttpPut]
-        public ActionResult Put([FromBody] Listing listingToUpdate)
+        public ActionResult Put([FromBody] BuyListingRequest buyRequest)
         {
             try
             {
-                if (listingToUpdate == null)
+                if (buyRequest == null)
                 {
-                    return BadRequest(new { message = "No listing was found" });
+                    return BadRequest(new { message = "No request was found" });
                 }
 
-                if (listingToUpdate.BuyerAccountId <= 0)
+                if (buyRequest.BuyerAccountId <= 0)
                 {
                     return BadRequest(new { message = "BuyerAccountId is required" });
                 }
 
-                bool result = _listingDao.BuyListing(listingToUpdate);
+                bool result = _listingDao.BuyListing(buyRequest.BuyerAccountId, buyRequest.ListingId);
+
                 if (result == false)
                 {
                     return NotFound(new { message = $"Could not buy item" });
@@ -81,7 +101,7 @@ namespace LobbyLink.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = $"Error buying listing with id {listingToUpdate.ListingId}", error = ex.Message });
+                return StatusCode(500, new { message = $"Error buying listing with id {buyRequest.ListingId}", error = ex.Message });
             }
         }
     }

@@ -14,7 +14,7 @@
 
         <hr />
 
-        <!-- IMAGE (if you have URL) -->
+        <!-- IMAGE -->
         @if (!string.IsNullOrEmpty(Model.ItemInstance.ItemDefinition?.ItemImageUrl))
         {
             <div class="text-center mb-3">
@@ -36,7 +36,7 @@
 
         <hr />
 
-        <form asp-controller="Marketplace" asp-action="Buy" method="post">
+        <form asp-controller="Marketplace" asp-action="Buy" asp-route-listingId="@Model.ListingId" method="post">
             <!-- buyerAccountId input -->
             <input type="number" name="buyerAccountId"
                    placeholder="Buyer Account ID"
