@@ -10,10 +10,10 @@ namespace LobbyLink.Website.Controllers;
 public class MarketplaceController : Controller
 {
     readonly ListingApiClient _listingApiClient =
-        new("https://localhost:7094/api/v1/listing");
+        new("https://localhost:7094/api/v1/listings");
 
-    readonly ItemInstancesApiClient _itemInstanceApiClient =
-        new("https://localhost:7094/api/v1/iteminstance");
+    readonly ItemInstanceApiClient _itemInstanceApiClient =
+        new("https://localhost:7094/api/v1/iteminstances");
 
     public IActionResult Listings()
     {
@@ -24,12 +24,39 @@ public class MarketplaceController : Controller
         return View(allListings);
     }
 
-    public IActionResult MarketInspect(int itemInstanceId, string mode)
+    //Marketplace/MarketInspect/"listingId"
+    public IActionResult MarketInspect(int listingId)
     {
-        var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
+        Listing? listing = _listingApiClient.GetActiveListingById(listingId);
 
-        ViewBag.Mode = mode;
-        return View(item);
+        return View(listing);
     }
 
+
+    //Marketplace/Buy
+    [HttpPost]
+    public IActionResult Buy(int buyerAccountId, int listingId)
+    {
+        try
+        {
+            if (buyerAccountId <= 0) 
+            {
+                return Content("not valid buyerAccountId.");
+            }
+
+
+            bool result = _listingApiClient.BuyListing(buyerAccountId, listingId);
+            
+            if (!result)
+            {
+                return Content("Item was not bought");
+            }
+
+            return Content("Item Was Bought.");
+        }
+        catch
+        {
+            return Content("Item was not bought");
+        }
+    }
 }

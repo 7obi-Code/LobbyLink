@@ -20,7 +20,7 @@ public class ListingDao : BaseDao, IFListingDao
                         li.price,
                         li.creationTimeStamp,
                         li.itemInstanceId_fk AS ItemInstanceId,
-                        li.accountId_fk AS AccountId,
+                        li.sellerAccountId_fk AS SellerAccountId,
 
                         af.accountId,
                         af.userName,
@@ -43,7 +43,7 @@ public class ListingDao : BaseDao, IFListingDao
                         FROM Listing li
 
                         LEFT JOIN Account af
-                        ON af.accountId = li.accountId_fk
+                        ON af.accountId = li.sellerAccountId_fk
 
                         LEFT JOIN ItemInstance ii
                         ON ii.itemInstanceId = li.itemInstanceId_fk
@@ -120,4 +120,175 @@ public class ListingDao : BaseDao, IFListingDao
             throw new Exception($"Error while trying to create listing. Error was: '{ex.Message}'", ex);
         }
     }
+
+
+    //Skal vi lave metoder i ItemInstance og Wallet DAO istedet for at gøre det hele her???
+    public bool BuyListing(int buyerAccountId, int listingId)
+    {
+        //Opretter en forbindelse ud fra BaseDao
+        using var connection = CreateConnection();
+
+        //Åbner forbindelse
+        connection.Open();
+
+        //Starter Transaction
+        using var transaction = connection.BeginTransaction();
+
+        //UPDATE Listing
+        //STATUS til 2 (Sold) og buyerAccountId til "buyerAccountId"
+        //Hvor ListingId = listing.ListingId og STATUS = 1 (Active) og buyerAccoundId_fk = NULL
+        //Rollback hvis rowsAffected = 0
+        try
+        {
+            var queryUpdateListing = @"UPDATE Listing 
+                        SET statusId_fk = 2, buyerAccountId_fk = @BuyerAccountId
+                        WHERE listingId = @ListingId
+                        AND statusId_fk = 1
+                        AND buyerAccountId_fk IS NULL";
+
+            int rowsAffectedListing = connection.Execute(queryUpdateListing, 
+            new { BuyerAccountId = buyerAccountId, ListingId = listingId }, transaction);
+
+            if (rowsAffectedListing == 0)
+            {
+                transaction.Rollback();
+                throw new Exception("Couldnt Update listing buyer and status");
+            }
+
+        //UPDATE ItemInstance
+        //accountId_fk til buyerAccountId
+        //Hvor ItemInstanceId = listing.ItemInstanceId
+            var queryUpdateItemInstance = @"UPDATE ItemInstance 
+                        SET accountId_fk = @AccountId
+                        WHERE itemInstanceId = 
+                        (SELECT itemInstanceId_fk FROM Listing WHERE listingId = @ListingId)";
+
+            int rowsAffectedItemInstance = connection.Execute(queryUpdateItemInstance,
+            new { AccountId = buyerAccountId, ListingId = listingId }, transaction);
+
+            if (rowsAffectedItemInstance == 0)
+            {
+                transaction.Rollback();
+                throw new Exception("Couldnt transfer iteminstance");
+            }
+
+        //UPDATE Wallet
+        //Til at balance trækker pris fra listing fra
+        //Hvor accountId_fk = buyeraccountid
+        //Og hvor balance er højere en listings pris
+            var queryUpdateWalletBuyer = @"UPDATE Wallet
+                        SET balance = balance - 
+                        (SELECT price FROM Listing WHERE listingId = @ListingId)
+                        WHERE accountId_fk = @BuyerAccountId
+                        AND balance >= 
+                        (SELECT price FROM Listing WHERE listingId = @ListingId)";
+
+            int rowsAffectedWalletBuyer = connection.Execute(queryUpdateWalletBuyer,
+            new { BuyerAccountId = buyerAccountId, ListingId = listingId }, transaction);
+
+            if (rowsAffectedWalletBuyer == 0)
+            {
+                transaction.Rollback();
+                throw new Exception("Couldnt withdraw money from buyer");
+            }
+
+            var queryUpdateWalletSeller = @"UPDATE Wallet
+                        SET balance = balance + 
+                        (SELECT price FROM Listing WHERE listingId = @ListingId)
+                        WHERE accountId_fk =
+                        (SELECT sellerAccountId_fk FROM Listing WHERE listingId = @ListingId)
+                        AND balance >= 
+                        (SELECT price FROM Listing WHERE listingId = @ListingId)";
+
+            int rowsAffectedWalletSeller = connection.Execute(queryUpdateWalletSeller,
+            new { ListingId = listingId }, transaction);
+
+            if (rowsAffectedWalletSeller == 0)
+            {
+                transaction.Rollback();
+                throw new Exception("Couldnt deposit money to seller");
+            }
+
+            //Commit transaction
+            transaction.Commit();
+        //Returner true
+            return true;
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            throw new Exception($"Error while trying to buy listing. Error was: '{ex.Message}'", ex);
+        }
+    }
+
+    public Listing GetActiveListingById(int listingId)
+    {
+        using var connection = CreateConnection();
+
+        try
+        {
+            var query = @"SELECT
+                        li.listingId,
+                        li.price,
+                        li.creationTimeStamp,
+                        li.itemInstanceId_fk AS ItemInstanceId,
+                        li.sellerAccountId_fk AS SellerAccountId,
+
+                        af.accountId,
+                        af.userName,
+                        af.surName,
+                        af.email,
+                        af.phoneNo,
+
+                        ii.itemInstanceId,
+                        ii.itemDefinitionId_fk,
+                        ii.accountId_fk AS ItemInstanceAccountId,
+
+                        id.itemDefinitionId,
+                        id.itemName,
+                        id.itemDescription,
+                        id.gameId_fk,
+
+                        g.gameId,
+                        g.gameTitle
+
+                        FROM Listing li
+
+                        LEFT JOIN Account af
+                        ON af.accountId = li.sellerAccountId_fk
+
+                        LEFT JOIN ItemInstance ii
+                        ON ii.itemInstanceId = li.itemInstanceId_fk
+
+                        LEFT JOIN ItemDefinition id
+                        ON id.itemDefinitionId = ii.itemDefinitionId_fk
+
+                        LEFT JOIN Game g
+                        ON g.gameId = id.gameId_fk
+
+                        WHERE li.listingId = @ListingId
+                        AND li.statusId_fk = 1";
+
+            Listing? listing = connection.Query<Listing, Account, ItemInstance, ItemDefinition, Game, Listing>(
+                query,
+                (list, account, itemInstance, itemDef, game) =>
+                {
+                    itemDef.Game = game;
+                    itemInstance.ItemDefinition = itemDef;
+                    list.SellerAccount = account;
+                    list.ItemInstance = itemInstance;
+                    return list;
+                },
+                new { listingId },
+                splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
+                ).SingleOrDefault();
+
+            return listing;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error while trying to get listing. Error was: '{ex.Message}'", ex);
+        }
+    }
+
 }

@@ -24,15 +24,15 @@
             {
                 <tr>
                     <td>@listing.ItemInstanceId</td>
-                    <td>@listing.ItemInstance.ItemDefinition?.ItemName</td>
-                    <td>@listing.ItemInstance.ItemDefinition?.ItemDescription</td>
-                    <td>@listing.SellerAccount?.Username</td>
+                    <td>@listing.ItemInstance.ItemDefinition.ItemName</td>
+                    <td>@listing.ItemInstance.ItemDefinition.ItemDescription</td>
+                    <td>@listing.SellerAccount.Username</td>
                     <td>@listing.ItemInstance.ItemDefinition?.Game?.GameTitle</td>
                     <td>@listing.Price</td>
                     <td>
                         <a asp-controller="Marketplace"
                                asp-action="MarketInspect"
-                               asp-route-itemInstanceId="@listing.ItemInstanceId"
+                               asp-route-listingId="@listing.ListingId"
                                asp-route-mode="buy"
                                class="btn btn-success">
                             Details / Buy

@@ -1,4 +1,4 @@
-﻿@model LobbyLink.DataAccess.Model.ItemInstance
+﻿@model LobbyLink.DataAccess.Model.Listing
 
 @{
     ViewData["Title"] = "Inspect Item";
@@ -10,36 +10,45 @@
     <div class="card bg-secondary text-light p-4 shadow-lg" style="width: 600px;">
 
         <!-- ITEM TITLE -->
-        <h3 class="text-center">@Model.ItemDefinition?.ItemName</h3>
+        <h3 class="text-center">@Model.ItemInstance.ItemDefinition?.ItemName</h3>
 
         <hr />
 
-        <!-- IMAGE (if you have URL) -->
-        @if (!string.IsNullOrEmpty(Model.ItemDefinition?.ItemImageUrl))
+        <!-- IMAGE -->
+        @if (!string.IsNullOrEmpty(Model.ItemInstance.ItemDefinition?.ItemImageUrl))
         {
             <div class="text-center mb-3">
-                <img src="@Model.ItemDefinition.ItemImageUrl"
+                <img src="@Model.ItemInstance.ItemDefinition.ItemImageUrl"
                      class="img-fluid rounded"
                      style="max-height: 200px;" />
             </div>
         }
 
         <!-- DESCRIPTION -->
-        <p><strong>Description:</strong><br /> @Model.ItemDefinition?.ItemDescription</p>
+        <p><strong>Description:</strong><br /> @Model.ItemInstance.ItemDefinition?.ItemDescription</p>
 
         <!-- GAME -->
-        <p><strong>Game:</strong> @Model.ItemDefinition?.Game?.GameTitle</p>
+        <p><strong>Game:</strong> @Model.ItemInstance.ItemDefinition?.Game?.GameTitle</p>
 
         <!-- INSTANCE INFO -->
         <p><strong>Item ID:</strong> @Model.ItemInstanceId</p>
-        <p><strong>Owner:</strong> @Model.Account?.Username</p>
+        <p><strong>Owner:</strong> @Model.ItemInstance.Account?.Username</p>
 
         <hr />
 
-        <!-- ACTION BUTTON -->
-        <div class="text-center mt-4">
-                <button class="btn btn-success btn-lg">Buy Item</button>
-        </div>
+        <form asp-controller="Marketplace" asp-action="Buy" asp-route-listingId="@Model.ListingId" method="post">
+            <!-- buyerAccountId input -->
+            <input type="number" name="buyerAccountId"
+                   placeholder="Buyer Account ID"
+                   class="form-control w-25 mx-auto" required />
 
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">
+                    Buy Item
+                </button>
+            </div>
+
+        </form>
     </div>
 </div>

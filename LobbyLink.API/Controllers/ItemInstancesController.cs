@@ -7,11 +7,11 @@ namespace LobbyLink.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ItemInstanceController : ControllerBase
+    public class ItemInstancesController : ControllerBase
     {
         ItemInstanceDao _itemInstanceDao;
 
-        public ItemInstanceController() => _itemInstanceDao = new ItemInstanceDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
+        public ItemInstancesController() => _itemInstanceDao = new ItemInstanceDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
 
         [HttpGet]
         public ActionResult<IEnumerable<ItemInstance>> Get()
