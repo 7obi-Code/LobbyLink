@@ -27,20 +27,33 @@ public class InventoryController : Controller
     }
 
     // Inventory/Sell/{id}
-    public IActionResult Sell(int id)
+    [HttpPost]
+    public IActionResult Sell(int itemInstanceId, decimal price)
     {
         try
         {
-            ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(id);
+            ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
 
             if (itemInstance == null)
             {
                 return Content("ItemInstance was not found.");
             }
 
+            //Pris skal være positiv og mindst 0.01 dollars! 
+            if (price < 0.01m)
+            {
+                return Content("Price must be at least $0.01.");
+            }
+
+            //Max 2 decimaler
+            if (decimal.Round(price, 2) != price)
+            {
+                return Content("Price can only have two decimal numbers.");
+            }
+
             Listing listing = new Listing
             {
-                Price = 100.00m,
+                Price = price,
                 StatusId = 1,
                 ItemInstanceId = itemInstance.ItemInstanceId,
                 SellerAccountId = itemInstance.Account.AccountId,
@@ -51,7 +64,7 @@ public class InventoryController : Controller
 
             return Content("Listing created successfully.");
         }
-        catch 
+        catch
         {
             return Content("Listing was not created");
         }
