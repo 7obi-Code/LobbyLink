@@ -44,7 +44,6 @@ public class MarketplaceController : Controller
                 return Content("not valid buyerAccountId.");
             }
 
-
             bool result = _listingApiClient.BuyListing(buyerAccountId, listingId);
             
             if (!result)

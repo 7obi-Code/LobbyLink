@@ -12,7 +12,6 @@ namespace LobbyLink.APIClient
     {
         RestClient _client = new RestClient(restUrl);
 
-
         public IEnumerable<Listing> GetAllActiveListings()
         {
             var request = new RestRequest("active");

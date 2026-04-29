@@ -151,7 +151,6 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedListing == 0)
             {
-                transaction.Rollback();
                 throw new Exception("Couldnt Update listing buyer and status");
             }
 
@@ -197,8 +196,7 @@ public class ListingDao : BaseDao, IFListingDao
                         (SELECT price FROM Listing WHERE listingId = @ListingId)
                         WHERE accountId_fk =
                         (SELECT sellerAccountId_fk FROM Listing WHERE listingId = @ListingId)
-                        AND balance >= 
-                        (SELECT price FROM Listing WHERE listingId = @ListingId)";
+                        ";
 
             int rowsAffectedWalletSeller = connection.Execute(queryUpdateWalletSeller,
             new { ListingId = listingId }, transaction);
@@ -216,7 +214,7 @@ public class ListingDao : BaseDao, IFListingDao
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
+            transaction.Rollback(); //fix exception try/catch
             throw new Exception($"Error while trying to buy listing. Error was: '{ex.Message}'", ex);
         }
     }
