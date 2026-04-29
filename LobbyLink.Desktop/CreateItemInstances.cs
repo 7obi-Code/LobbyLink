@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace LobbyLink.Desktop
 {
-    public partial class CreateItemInstanceForm : Form
+    public partial class CreateItemInstances : Form
     {
-        private readonly ItemInstanceApiClient apiClient;
+        private readonly ItemInstancesApiClient apiClient;
 
-        public CreateItemInstanceForm()
+        public CreateItemInstances(ItemInstancesApiClient apiClient)
         {
             InitializeComponent();
-            apiClient = new ItemInstanceApiClient("https://localhost:7148/api/v1/iteminstance");
+            this.apiClient = apiClient;
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
@@ -55,6 +55,11 @@ namespace LobbyLink.Desktop
                 MessageBox.Show($"Error while creating ItemInstance:\n{ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
