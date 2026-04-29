@@ -6,7 +6,7 @@ namespace LobbyLink.Website.Controllers;
 
 public class InventoryController : Controller
 {
-    readonly ItemInstanceApiClient _itemInstanceApiClient =
+    readonly ItemInstancesApiClient _itemInstanceApiClient =
     new("https://localhost:7148/api/v1/iteminstance");
 
     readonly ListingApiClient _listingApiClient =
