@@ -282,11 +282,27 @@ public class ListingDao : BaseDao, IFListingDao
                 ).SingleOrDefault();
 
             return listing;
-        }
+        } 
         catch (Exception ex)
         {
             throw new Exception($"Error while trying to get listing. Error was: '{ex.Message}'", ex);
         }
+    }
+    public bool IsItemInstanceListed(int itemInstanceId)
+    {
+        using var connection = CreateConnection();
+
+        var query = @"SELECT COUNT(*)
+                  FROM Listing
+                  WHERE itemInstanceId_fk = @ItemInstanceId
+                  AND statusId_fk = 1";
+
+        int count = connection.ExecuteScalar<int>(query, new
+        {
+            ItemInstanceId = itemInstanceId
+        });
+
+        return count > 0;
     }
 
 }

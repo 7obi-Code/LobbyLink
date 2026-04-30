@@ -56,6 +56,24 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        [HttpGet("active/iteminstance/{itemInstanceId}")]
+        public ActionResult<bool> IsItemInstanceListed(int itemInstanceId)
+        {
+            try
+            {
+                bool isListed = _listingDao.IsItemInstanceListed(itemInstanceId);
+                return Ok(isListed);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = $"Error checking listing status for item instance {itemInstanceId}",
+                    error = ex.Message
+                });
+            }
+        }
+
         [HttpPost]
         public ActionResult<int> Post([FromBody] Listing listing)
         {

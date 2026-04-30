@@ -1,6 +1,7 @@
 ﻿using LobbyLink.APIClient;
 using LobbyLink.DataAccess.Model;
 using Microsoft.AspNetCore.Mvc;
+using LobbyLink.Website.Models;
 
 namespace LobbyLink.Website.Controllers;
 
@@ -17,7 +18,18 @@ public class InventoryController : Controller
     public IActionResult Account(int id)
     {
         var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(id);
-        return View(allItemInstancesForAccount);
+
+        var model = allItemInstancesForAccount.Select(item => new InventoryItemViewModel
+        {
+            ItemInstanceId = item.ItemInstanceId,
+            ItemName = item.ItemDefinition?.ItemName,
+            Description = item.ItemDefinition?.ItemDescription,
+            AccountOwner = item.Account?.UserName,
+            GameTitle = item.ItemDefinition?.Game?.GameTitle,
+            IsListedForSale = _listingApiClient.IsItemInstanceListed(item.ItemInstanceId)
+        }).ToList();
+
+        return View(model);
     }
 
     public IActionResult InventoryInspect(int itemInstanceId)

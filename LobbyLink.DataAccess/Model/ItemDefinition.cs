@@ -11,7 +11,6 @@ public class ItemDefinition
     public string ItemDescription { get; set; }
     public Game? Game { get; set; }
     public int GameId { get; set; }
-    public List<ItemPropertyLine>? ItemPropertyLines { get; set; }
     public List<ItemInstance>? ItemInstances { get; set; }
 
     public ItemDefinition() { }
