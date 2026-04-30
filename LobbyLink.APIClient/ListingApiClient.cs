@@ -72,5 +72,18 @@ namespace LobbyLink.APIClient
 
             return null;
         }
+        public bool IsItemInstanceListed(int itemInstanceId)
+        {
+            var request = new RestRequest($"active/iteminstance/{itemInstanceId}");
+            var response = _client.Execute<bool>(request);
+
+            if (response.IsSuccessful)
+            {
+                return response.Data;
+            }
+
+            Console.WriteLine(response.Content);
+            return false;
+        }
     }
 }

@@ -15,5 +15,9 @@ namespace LobbyLink.DataAccess.Interfaces
 
         bool BuyListing(int buyerAccountId, int listingId);
 
+        //Checker om Iteminstance er på en listing, for at view kan displaye et item forskelligt alt efter om det er sellable eller er sat til salg.
+        bool IsItemInstanceListed(int itemInstanceId);
+
+
     }
 }
