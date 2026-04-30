@@ -55,9 +55,9 @@ namespace LobbyLink.APIClient
 
             if (response.IsSuccessful)
             {
-                return response.Data;
+                return true;
             }
-            throw new Exception("Failed to buy listing");
+            return false;
         }
 
         public Listing? GetActiveListingById(int listingId)

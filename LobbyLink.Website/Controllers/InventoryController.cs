@@ -38,29 +38,19 @@ public class InventoryController : Controller
         return View(item);
     }
 
-    // Inventory/Sell/{id}
+    // Inventory/Sell/
     [HttpPost]
     public IActionResult Sell(int itemInstanceId, decimal price)
     {
         try
-        {
-            ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
-
-            if (itemInstance == null)
-            {
-                return Content("ItemInstance was not found.");
-            }
+        { 
+        ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
 
             //Pris skal være positiv og mindst 0.01 dollars! 
             if (price < 0.01m)
             {
-                return Content("Price must be at least $0.01.");
-            }
-
-            //Max 2 decimaler
-            if (decimal.Round(price, 2) != price)
-            {
-                return Content("Price can only have two decimal numbers.");
+                TempData["ErrorMessage"] = "Something went wrong when setting the price, try again!.";
+                return RedirectToAction($"Account", new { id = itemInstance.AccountId });
             }
 
             Listing listing = new Listing
@@ -74,11 +64,13 @@ public class InventoryController : Controller
 
             _listingApiClient.ValidateAndInsertListing(listing);
 
-            return Content("Listing created successfully.");
+            TempData["SuccessMessage"] = "Listing created successfully.";
+            return RedirectToAction("Account", new { id = listing.SellerAccountId });
         }
         catch
         {
-            return Content("Listing was not created");
+            TempData["ErrorMessage"] = $"Something went wrong when trying to sell Item with id: {itemInstanceId}!";
+            return RedirectToAction("Account");
         }
     }
 }
