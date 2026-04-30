@@ -10,7 +10,6 @@ namespace LobbyLink.DataAccess.Model
         public int AccountId { get; set; }
         public Account? Account { get; set; }
         public List<Listing>? Listings { get; set; }
-        public List<ItemInstancePropertyLine>? ItemInstancePropertyLines { get; set; }
         public ItemDefinition? ItemDefinition { get; set; }
         public int ItemDefinitionId { get; set; }
         public int? ListingId { get; set; }

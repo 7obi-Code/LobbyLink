@@ -4,42 +4,53 @@
     ViewData["Title"] = "Marketplace";
 }
 
-<h1 class="text-center my-4">Marketplace</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<div class="table-responsive">
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th>Item ID</th>
-                <th>Item Name</th>
-                <th>Description</th>
-                <th>Seller</th>
-                <th>Game</th>
-                <th>Price</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var listing in Model)
+        <div class="col-md-3 border-end">
+            <div class="p-3">
+                <input class="form-control mb-3" placeholder="Søg input" />
+                <button class="btn btn-primary mt-3">Anvend filter</button>
+            </div>
+        </div>
+
+        <div class="col-md-9 p-4">
+
+            @if (TempData["SuccessMessage"] != null)
             {
-                <tr>
-                    <td>@listing.ItemInstanceId</td>
-                    <td>@listing.ItemInstance.ItemDefinition.ItemName</td>
-                    <td>@listing.ItemInstance.ItemDefinition.ItemDescription</td>
-                    <td>@listing.SellerAccount.UserName</td>
-                    <td>@listing.ItemInstance.ItemDefinition?.Game?.GameTitle</td>
-                    <td>@listing.Price</td>
-                    <td>
-                        <a asp-controller="Marketplace"
-                               asp-action="MarketInspect"
-                               asp-route-listingId="@listing.ListingId"
-                               asp-route-mode="buy"
-                               class="btn btn-success">
-                            Details / Buy
-                        </a>
-                    </td>
-                </tr>
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
             }
-        </tbody>
-    </table>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <div class="row">
+                @foreach (var listing in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card text-center">
+
+                            <div class="card-body">
+                                <p>@listing.ItemInstance.ItemDefinition.ItemName</p>
+                                <p>..Billede af skin..</p>
+                                <p>Seller: @listing.SellerAccount.UserName</p>
+                                <p class="fw-bold">PRICE: @listing.Price</p>
+                                <hr />
+                                <a asp-controller="Marketplace" 
+                                asp-action="MarketInspect" 
+                                asp-route-listingId="@listing.ListingId" 
+                                class="btn btn-outline-primary">BUY</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

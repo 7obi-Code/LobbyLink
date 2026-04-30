@@ -100,7 +100,7 @@ public class ListingDao : BaseDao, IFListingDao
             }
 
             var queryInsertListing = @"INSERT INTO Listing
-            (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, accountId_fk)
+            (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, sellerAccountId_fk)
             OUTPUT INSERTED.listingId
             VALUES
             (@Price, @CreationTimeStamp, @StatusId, @ItemInstanceId, @SellerAccountId)";

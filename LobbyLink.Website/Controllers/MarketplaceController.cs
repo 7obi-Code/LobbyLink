@@ -4,6 +4,7 @@ using LobbyLink.DataAccess.Model;
 using LobbyLink.Website.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace LobbyLink.Website.Controllers;
 
@@ -41,21 +42,25 @@ public class MarketplaceController : Controller
         {
             if (buyerAccountId <= 0) 
             {
-                return Content("not valid buyerAccountId.");
+                TempData["ErrorMessage"] = "Not a valid BuyerAccountId!.";
+                return RedirectToAction("MarketInspect", new { id = listingId});
             }
 
             bool result = _listingApiClient.BuyListing(buyerAccountId, listingId);
             
             if (!result)
             {
-                return Content("Item was not bought");
+                TempData["ErrorMessage"] = "Something went wrong when buying the Item!."; //Dette problem skal vi have løst så det er mere specifikt
+                return RedirectToAction("Listings");
             }
 
-            return Content("Item Was Bought.");
+            TempData["SuccessMessage"] = "Item was purchased successfully!"; 
+            return RedirectToAction("Listings");
         }
         catch
         {
-            return Content("Item was not bought");
+            TempData["ErrorMessage"] = "Something went wrong when buying the Item!."; //Dette problem skal vi have løst så det er mere specifikt
+            return RedirectToAction("Listings");
         }
     }
 }
