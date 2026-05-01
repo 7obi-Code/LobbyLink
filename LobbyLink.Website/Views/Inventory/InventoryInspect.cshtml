@@ -1,4 +1,4 @@
-﻿@model LobbyLink.DataAccess.Model.ItemInstance
+﻿@model LobbyLink.Website.Models.InventoryItemViewModel
 
 @{
     ViewData["Title"] = "Inspect Item";
@@ -10,33 +10,29 @@
     <div class="card bg-secondary text-light p-4 shadow-lg" style="width: 600px;">
 
         <!-- ITEM TITLE -->
-        <h3 class="text-center">@Model.ItemDefinition?.ItemName</h3>
+        <h3 class="text-center">@Model.ItemName</h3>
 
         <hr />
 
         <!-- IMAGE -->
-        @if (!string.IsNullOrEmpty(Model.ItemDefinition?.ItemImageUrl))
-        {
-            <div class="text-center mb-3">
-                <img src="@Model.ItemDefinition.ItemImageUrl"
-                     class="img-fluid rounded"
-                     style="max-height: 200px;" />
-            </div>
-        }
+        <div class="text-center mb-3">
+            <p>...Billede...</p>
+        </div>
+        
 
         <!-- DESCRIPTION -->
-        <p><strong>Description:</strong><br /> @Model.ItemDefinition?.ItemDescription</p>
+        <p><strong>Description:</strong><br /> @Model.Description</p>
 
         <!-- GAME -->
-        <p><strong>Game:</strong> @Model.ItemDefinition?.Game?.GameTitle</p>
+        <p><strong>Game:</strong> @Model.GameTitle</p>
 
         <!-- INSTANCE INFO -->
         <p><strong>Item ID:</strong> @Model.ItemInstanceId</p>
-        <p><strong>Owner:</strong> @Model.Account?.UserName</p>
+        <p><strong>Owner:</strong> @Model.AccountOwner</p>
 
+        @if (@Model.IsListedForSale == false)
+        {  
         <hr />
-      
-
         <!-- ACTION BUTTON -->
         @* Form der sender item og pris til controller *@
         <form asp-controller="Inventory" asp-action="Sell" method="post">
@@ -111,6 +107,6 @@
             </div>
 
         </form>
-        
+        }
     </div>
 </div>

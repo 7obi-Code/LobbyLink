@@ -45,11 +45,14 @@ namespace LobbyLink.APIClient
         public bool BuyListing(int buyerAccountId, int listingId)
         {
             var request = new RestRequest("", Method.Put);
-            request.AddJsonBody(new BuyListingRequest
+
+            BuyListingRequest rq = new BuyListingRequest
             {
                 BuyerAccountId = buyerAccountId,
                 ListingId = listingId
-            });
+            };
+
+            request.AddJsonBody(rq);
 
             var response = _client.Execute<bool>(request);
 

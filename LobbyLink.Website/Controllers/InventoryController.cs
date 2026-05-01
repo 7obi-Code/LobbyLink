@@ -35,7 +35,18 @@ public class InventoryController : Controller
     public IActionResult InventoryInspect(int itemInstanceId)
     {
         var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
-        return View(item);
+
+        var itemModel = new InventoryItemViewModel
+        {
+            ItemInstanceId = item.ItemInstanceId,
+            ItemName = item.ItemDefinition?.ItemName,
+            Description = item.ItemDefinition?.ItemDescription,
+            AccountOwner = item.Account?.UserName,
+            GameTitle = item.ItemDefinition?.Game?.GameTitle,
+            IsListedForSale = _listingApiClient.IsItemInstanceListed(item.ItemInstanceId)
+        };
+
+        return View(itemModel);
     }
 
     // Inventory/Sell/
