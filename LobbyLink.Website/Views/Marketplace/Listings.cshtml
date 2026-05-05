@@ -8,12 +8,29 @@
     <div class="row">
 
         <div class="col-md-3 border-end">
-            @* SØGE INPUT SKAL VÆRE HER
             <div class="p-3">
-                <input class="form-control mb-3" placeholder="Søg input" />
-                <button class="btn btn-primary mt-3">Anvend filter</button>
+                <form method="get" asp-action="Listings">
+
+                    <!-- Game filter -->
+                    <label>Game</label>
+                    <input name="game"
+                           value="@Context.Request.Query["game"]"
+                           class="form-control mb-3"
+                           placeholder="Game name" />
+
+                    <!-- Price filter -->
+                    <label>Max Price</label>
+                    <input name="maxPrice"
+                           value="@Context.Request.Query["maxPrice"]"
+                           type="number"
+                           class="form-control mb-3"
+                           placeholder="Max price" />
+
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+
+                    <a href="/Marketplace/Listings" class="btn btn-secondary mt-2">Clear</a>
+                </form>
             </div>
-            *@
         </div>
 
         <div class="col-md-9 p-4">
