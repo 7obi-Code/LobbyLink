@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
+using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LobbyLink.DataAccess.SQLClient;
@@ -219,6 +220,101 @@ public class ListingDao : BaseDao, IFListingDao
         }
     }
 
+    // Henter listen af items, hvor db har filteret dem til kun dem som skal bruges til marketplace filteret
+    public IEnumerable<Listing> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
+    {
+        using var connection = CreateConnection();
+
+        var sql = @"
+        SELECT
+            li.listingId,
+            li.price,
+            li.creationTimeStamp,
+            li.itemInstanceId_fk AS ItemInstanceId,
+            li.sellerAccountId_fk AS SellerAccountId,
+
+            af.accountId,
+            af.userName,
+            af.surName,
+            af.email,
+            af.phoneNo,
+
+            ii.itemInstanceId,
+            ii.itemDefinitionId_fk,
+            ii.accountId_fk AS ItemInstanceAccountId,
+
+            id.itemDefinitionId,
+            id.itemName,
+            id.itemDescription,
+            id.gameId_fk,
+
+            g.gameId,
+            g.gameTitle
+
+        FROM Listing li
+
+        LEFT JOIN Account af ON af.accountId = li.sellerAccountId_fk
+        LEFT JOIN ItemInstance ii ON ii.itemInstanceId = li.itemInstanceId_fk
+        LEFT JOIN ItemDefinition id ON id.itemDefinitionId = ii.itemDefinitionId_fk
+        LEFT JOIN Game g ON g.gameId = id.gameId_fk
+
+        WHERE li.statusId_fk = 1
+    ";
+
+        var parameters = new DynamicParameters();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            sql += " AND id.itemName LIKE @search";
+            parameters.Add("@search", $"%{search}%");
+        }
+
+        if (!string.IsNullOrEmpty(game))
+        {
+            sql += " AND g.gameTitle = @game";
+            parameters.Add("@game", game);
+        }
+
+        if (minPrice.HasValue)
+        {
+            sql += " AND li.price >= @minPrice";
+            parameters.Add("@minPrice", minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            sql += " AND li.price <= @maxPrice";
+            parameters.Add("@maxPrice", maxPrice.Value);
+        }
+
+        if (sort == "low")
+        {
+            sql += " ORDER BY li.price ASC";
+        }
+        else if (sort == "high")
+        {
+            sql += " ORDER BY li.price DESC";
+        }
+
+        var listings = connection.Query<Listing, Account, ItemInstance, ItemDefinition, Game, Listing>(
+            sql,
+            (listing, account, itemInstance, itemDef, gameObj) =>
+            {
+                itemDef.Game = gameObj;
+                itemInstance.ItemDefinition = itemDef;
+
+                listing.SellerAccount = account;
+                listing.ItemInstance = itemInstance;
+
+                return listing;
+            },
+            parameters,
+            splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
+        );
+
+        return listings.AsList();
+    }
+
     public Listing GetActiveListingById(int listingId)
     {
         using var connection = CreateConnection();
@@ -268,21 +364,21 @@ public class ListingDao : BaseDao, IFListingDao
                         AND li.statusId_fk = 1";
 
             Listing? listing = connection.Query<Listing, Account, ItemInstance, ItemDefinition, Game, Listing>(
-                query,
-                (list, account, itemInstance, itemDef, game) =>
-                {
-                    itemDef.Game = game;
-                    itemInstance.ItemDefinition = itemDef;
-                    list.SellerAccount = account;
-                    list.ItemInstance = itemInstance;
-                    return list;
-                },
-                new { listingId },
-                splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
-                ).SingleOrDefault();
+                        query,
+                        (list, account, itemInstance, itemDef, game) =>
+                        {
+                            itemDef.Game = game;
+                            itemInstance.ItemDefinition = itemDef;
+                            list.SellerAccount = account;
+                            list.ItemInstance = itemInstance;
+                            return list;
+                        },
+                        new { listingId },
+                        splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
+                    ).SingleOrDefault();
 
             return listing;
-        } 
+        }
         catch (Exception ex)
         {
             throw new Exception($"Error while trying to get listing. Error was: '{ex.Message}'", ex);
