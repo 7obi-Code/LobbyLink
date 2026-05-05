@@ -16,13 +16,19 @@ public class MarketplaceController : Controller
     readonly ItemInstancesApiClient _itemInstanceApiClient =
         new("https://localhost:7094/api/v1/iteminstances");
 
-    public IActionResult Listings()
+    public IActionResult Listings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
     {
-        var allListings = _listingApiClient.GetAllActiveListings();
+        var listings = _listingApiClient.GetFilteredListings(game, minPrice, maxPrice, sort, search);
 
-        Console.WriteLine($"Listings count: {allListings.Count()}");
+        var allListingsForGames = _listingApiClient.GetAllActiveListings();
 
-        return View(allListings);
+        ViewBag.Games = allListingsForGames
+            .Where(l => l.ItemInstance.ItemDefinition.Game != null)
+            .Select(l => l.ItemInstance.ItemDefinition.Game.GameTitle)
+            .Distinct()
+            .ToList();
+
+        return View(listings);
     }
 
     //Marketplace/MarketInspect/"listingId"
@@ -63,4 +69,25 @@ public class MarketplaceController : Controller
             return RedirectToAction("Listings");
         }
     }
+
+    //Marketplace/Searchbar
+    [HttpGet]
+    public IActionResult Search(string query)
+    {
+        var listings = _listingApiClient.GetAllActiveListings();
+
+        var results = listings
+            .Where(l => l.ItemInstance.ItemDefinition.ItemName
+                .Contains(query, StringComparison.OrdinalIgnoreCase))
+            .Select(l => new {
+                itemName = l.ItemInstance.ItemDefinition.ItemName
+            })
+            .Distinct()
+            .OrderBy(x => x.itemName)
+            .ToList();
+
+        return Json(results);
+    }
+
+
 }

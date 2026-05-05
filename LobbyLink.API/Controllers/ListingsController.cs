@@ -38,6 +38,26 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        [HttpGet("filtered")]
+        public ActionResult<IEnumerable<Listing>> GetFilteredListings(string? game, int? minPrice, int? maxPrice,
+    string? sort,
+    string? search)
+        {
+            try
+            {
+                var listings = _listingDao.GetFilteredListings(game, minPrice, maxPrice, sort, search);
+                return Ok(listings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error retrieving filtered listings",
+                    error = ex.Message
+                });
+            }
+        }
+
         [HttpGet("active/{listingId}")]
         public ActionResult<IEnumerable<Listing>> GetById(int listingId)
         {

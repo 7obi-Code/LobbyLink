@@ -88,5 +88,14 @@ namespace LobbyLink.APIClient
             Console.WriteLine(response.Content);
             return false;
         }
+        public IEnumerable<Listing> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
+        {
+            var queryParams = $"?game={game}&minPrice={minPrice}&maxPrice={maxPrice}&sort={sort}&search={search}";
+            var request = new RestRequest(queryParams, Method.Get);
+
+            var response = _client.Execute<List<Listing>>(request);
+
+            return response.Data ?? new List<Listing>();
+        }
     }
 }
