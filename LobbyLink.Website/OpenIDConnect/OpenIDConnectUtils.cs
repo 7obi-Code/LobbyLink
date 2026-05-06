@@ -120,8 +120,8 @@ public class OpenIDConnectUtils
                 new AuthenticationProperties { RedirectUri = "/" }))
             .AllowAnonymous();
         app.MapGet("/authentication/logout", ()
-            => TypedResults.Challenge(
-                new AuthenticationProperties { RedirectUri = "/?theaction=logout" }))
+            => TypedResults.SignOut(
+                new AuthenticationProperties { RedirectUri = "/" }))
             .AllowAnonymous();
 
         app.UseHttpsRedirection();

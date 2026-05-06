@@ -38,9 +38,18 @@
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
+                        @if (!User.Identity.IsAuthenticated)
+                            {
                             <a class="nav-link text-light" href="/authentication/login">
-                                Login
+                            Login
                             </a>
+                            }
+                            else
+                            {
+                            <a class="nav-link text-light" href="/authentication/logout">
+                            Logout
+                            </a>
+                            }
                         </li>
                     </ul>
                 </div>
