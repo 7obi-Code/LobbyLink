@@ -33,8 +33,17 @@ namespace LobbyLink.APIClient
 
         public IEnumerable<ItemInstance> GetAllItemInstances()
         {
-            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
-            return response ?? new List<ItemInstance>();
+            var request = new RestRequest("", Method.Get);
+            var response = _client.Execute<List<ItemInstance>>(request);
+
+            if (response.IsSuccessful && response.Data != null)
+                return response.Data;
+
+            throw new Exception(
+                $"Failed to get ItemInstances.\n" +
+                $"Status: {response.StatusCode}\n" +
+                $"Response: {response.Content}"
+            );
         }
 
         public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)

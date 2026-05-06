@@ -7,9 +7,9 @@ namespace LobbyLink.Desktop
 {
     public partial class AdminMenu : Form
     {
-        private readonly ItemInstancesApiClient itemInstancesApiClient;
-        private readonly AccountsApiClient accountsApiClient;
-        private readonly ItemDefinitionsApiClient itemDefinitionsApiClient;
+        private readonly ItemInstanceApiClient itemInstancesApiClient;
+        private readonly AccountApiClient accountsApiClient;
+        private readonly ItemDefinitionApiClient itemDefinitionsApiClient;
         private readonly GameApiClient gameApiClient;
         private readonly ListingApiClient listingApiClient;
 
@@ -17,11 +17,11 @@ namespace LobbyLink.Desktop
         {
             InitializeComponent();
 
-            itemInstancesApiClient = new ItemInstancesApiClient("https://localhost:7148/api/v1/iteminstances");
-            accountsApiClient = new AccountsApiClient("https://localhost:7148/api/v1/account");
-            itemDefinitionsApiClient = new ItemDefinitionsApiClient("https://localhost:7148/api/v1/itemdefinition");
-            gameApiClient = new GameApiClient("https://localhost:7148/api/v1/game");
-            listingApiClient = new ListingApiClient("https://localhost:7148/api/v1/listings");
+            itemInstancesApiClient = new ItemInstanceApiClient("https://localhost:8888/api/v1/iteminstances");
+            accountsApiClient = new AccountApiClient("https://localhost:8888/api/v1/accounts");
+            itemDefinitionsApiClient = new ItemDefinitionApiClient("https://localhost:8888/api/v1/itemdefinitions");
+            gameApiClient = new GameApiClient("https://localhost:8888/api/v1/games");
+            listingApiClient = new ListingApiClient("https://localhost:8888/api/v1/listings");
         }
 
         private void BtnCreateItemInstance_Click(object sender, EventArgs e)

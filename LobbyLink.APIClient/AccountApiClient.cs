@@ -65,7 +65,11 @@ namespace LobbyLink.APIClient
                 return response.Data;
             }
 
-            throw new Exception("Failed to get accounts");
+            throw new Exception(
+                $"Failed to get ItemInstances.\n" +
+                $"Status: {response.StatusCode}\n" +
+                $"Response: {response.Content}"
+            );
         }
 
         public int InsertAccount(Account account)
