@@ -11,6 +11,7 @@ namespace LobbyLink.DataAccess.Interfaces
         IEnumerable<Account> GetAllAccounts();
         int InsertAccount(Account account);
         bool UpdateAccount(Account account);
-        bool DeleteAccount(int id); 
+        bool DeleteAccount(int id);
+        int GetAccountIdByEmail(string email);
     }
 }

@@ -1,23 +1,37 @@
 ﻿using LobbyLink.APIClient;
 using LobbyLink.DataAccess.Model;
-using Microsoft.AspNetCore.Mvc;
 using LobbyLink.Website.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LobbyLink.Website.Controllers;
 
 public class InventoryController : Controller
 {
-    readonly ItemInstancesApiClient _itemInstanceApiClient =
-    new("https://localhost:7148/api/v1/iteminstances");
+    readonly ItemInstanceApiClient _itemInstanceApiClient =
+    new("https://localhost:8888/api/v1/iteminstances");
 
     readonly ListingApiClient _listingApiClient =
-        new ListingApiClient("https://localhost:7148/api/v1/listings");
+        new ListingApiClient("https://localhost:8888/api/v1/listings");
+
+    readonly AccountApiClient _accountApiClient =
+        new AccountApiClient("https://localhost:8888/api/v1/accounts");
 
     //shows the inventory with all items
-    // Inventory/Account/{id}
-    public IActionResult Account(int id)
+    // Inventory/Account/
+    [Authorize]
+    public IActionResult Account()
     {
-        var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(id);
+        var accountEmail = User.FindFirst("email")?.Value;
+
+        if (accountEmail == null)
+        {
+            throw new Exception("Couldnt find user email");
+        }
+
+        var accountId = _accountApiClient.GetAccountIdByEmail(accountEmail);
+
+        var allItemInstancesForAccount = _itemInstanceApiClient.GetAllItemInstancesByAccountId(accountId);
 
         var model = allItemInstancesForAccount.Select(item => new InventoryItemViewModel
         {

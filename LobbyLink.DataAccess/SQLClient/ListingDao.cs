@@ -155,13 +155,16 @@ public class ListingDao : BaseDao, IFListingDao
                 throw new Exception("Couldnt Update listing buyer and status");
             }
 
-        //UPDATE ItemInstance
-        //accountId_fk til buyerAccountId
-        //Hvor ItemInstanceId = listing.ItemInstanceId
+            //UPDATE ItemInstance
+            //accountId_fk til buyerAccountId
+            //Hvor ItemInstanceId = listing.ItemInstanceId
             var queryUpdateItemInstance = @"UPDATE ItemInstance 
                         SET accountId_fk = @AccountId
                         WHERE itemInstanceId = 
-                        (SELECT itemInstanceId_fk FROM Listing WHERE listingId = @ListingId)";
+                        (SELECT itemInstanceId_fk FROM Listing WHERE listingId = @ListingId)
+                        AND accountId_fk = 
+                        (SELECT accountId_fk FROM Listing WHERE listingId = @ListingId)";
+                     
 
             int rowsAffectedItemInstance = connection.Execute(queryUpdateItemInstance,
             new { AccountId = buyerAccountId, ListingId = listingId }, transaction);

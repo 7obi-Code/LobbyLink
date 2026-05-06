@@ -1,5 +1,6 @@
 ﻿using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
+using Microsoft.AspNetCore.Builder;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace LobbyLink.APIClient
 {
-    public class AccountsApiClient(string restUrl) : IFAccountDao
+    public class AccountApiClient(string restUrl) : IFAccountDao
     {
         RestClient _client = new RestClient(restUrl);
 
@@ -34,6 +35,25 @@ namespace LobbyLink.APIClient
             throw new NotImplementedException();
         }
 
+        public int GetAccountIdByEmail(string email)
+        {
+            var request = new RestRequest($"idByEmail", Method.Get);
+            request.AddQueryParameter("email", email);
+
+            var response = _client.Execute<int>(request);
+
+            if (response.IsSuccessful)
+            {
+                return response.Data;
+            }
+
+            throw new Exception(
+                $"Failed to get accountId from email: {email}.\n" +
+                $"Status: {response.StatusCode}\n" +
+                $"Response: {response.Content}"
+            );
+        }
+
         public IEnumerable<Account> GetAllAccounts()
         {
             var request = new RestRequest("", Method.Get);
@@ -41,7 +61,9 @@ namespace LobbyLink.APIClient
             var response = _client.Execute<List<Account>>(request);
 
             if (response.IsSuccessful && response.Data != null)
+            {
                 return response.Data;
+            }
 
             throw new Exception("Failed to get accounts");
         }

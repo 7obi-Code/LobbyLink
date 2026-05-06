@@ -8,9 +8,9 @@ namespace LobbyLink.Desktop
 {
     public partial class CreateAccounts : Form
     {
-        private readonly AccountsApiClient apiClient;
+        private readonly AccountApiClient apiClient;
 
-        public CreateAccounts(AccountsApiClient apiClient)
+        public CreateAccounts(AccountApiClient apiClient)
         {
             InitializeComponent();
             this.apiClient = apiClient;

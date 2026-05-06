@@ -12,9 +12,9 @@ namespace LobbyLink.Desktop
 {
     public partial class DeleteAccount : Form
     {
-        private readonly AccountsApiClient apiClient;
+        private readonly AccountApiClient apiClient;
 
-        public DeleteAccount(AccountsApiClient apiClient)
+        public DeleteAccount(AccountApiClient apiClient)
         {
             InitializeComponent();
             this.apiClient = apiClient;

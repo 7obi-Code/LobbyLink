@@ -7,11 +7,11 @@ namespace LobbyLink.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly AccountDao _accountDao;
 
-        public AccountController()
+        public AccountsController()
         {
             _accountDao = new AccountDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
         }
@@ -50,6 +50,30 @@ namespace LobbyLink.API.Controllers
                 });
             }
         }
+
+        [HttpGet("idByEmail")]
+        public ActionResult<int> GetAccountIdByEmail([FromQuery] string email)
+        {
+            try
+            {
+                int accountId = _accountDao.GetAccountIdByEmail(email);
+
+                if (accountId <= 0)
+                    return NotFound();
+
+                return Ok(accountId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = $"Error retrieving accountId from email: {email}",
+                    error = ex.Message
+                });
+            }
+        }
+
+
 
         [HttpPost]
         public ActionResult<int> Post([FromBody] Account account)
