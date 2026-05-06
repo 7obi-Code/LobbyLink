@@ -2,7 +2,6 @@
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using Microsoft.Data.SqlClient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LobbyLink.DataAccess.SQLClient;
 

@@ -39,9 +39,7 @@ namespace LobbyLink.API.Controllers
         }
 
         [HttpGet("filtered")]
-        public ActionResult<IEnumerable<Listing>> GetFilteredListings(string? game, int? minPrice, int? maxPrice,
-    string? sort,
-    string? search)
+        public ActionResult<IEnumerable<Listing>> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
         {
             try
             {

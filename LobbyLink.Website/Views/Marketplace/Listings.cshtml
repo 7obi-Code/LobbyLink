@@ -140,43 +140,6 @@
                     </div>
                 }
             </div>
-
-
-            <!-- Script til at auto finde items basert på havd der søges i søgebaren -->
-            <script>
-                            const input = document.getElementById("searchInput");
-                            const results = document.getElementById("searchResults");
-
-                            input.addEventListener("input", async () => {
-                                const query = input.value;
-
-                                if (query.length < 1) {
-                                    results.style.display = "none";
-                                    return;
-                                }
-
-                                const response = await fetch(`/Marketplace/Search?query=${query}`);
-                                const data = await response.json();
-
-                                results.innerHTML = "";
-                                results.style.display = "block";
-
-                                data.slice(0, 10).forEach(item => {
-                                    const div = document.createElement("a");
-                                    div.className = "btn bg-white text-dark border w-100 text-start";
-                                    div.textContent = item.itemName;
-
-                                    div.onclick = () => {
-                                        const params = new URLSearchParams(window.location.search);
-                                        params.set("search", item.itemName);
-
-                                        window.location.href = `/Marketplace/Listings?${params.toString()}`;
-                                    };
-
-                                    results.appendChild(div);
-                                });
-                            });
-            </script>
         </div>
     </div>
 </div>
