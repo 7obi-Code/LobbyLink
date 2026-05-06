@@ -7,11 +7,11 @@ namespace LobbyLink.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ItemDefinitionController : ControllerBase
+    public class ItemDefinitionsController : ControllerBase
     {
         private readonly ItemDefinitionDao _ItemDefinitionDao;
 
-        public ItemDefinitionController()
+        public ItemDefinitionsController()
         {
             _ItemDefinitionDao = new ItemDefinitionDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
         }

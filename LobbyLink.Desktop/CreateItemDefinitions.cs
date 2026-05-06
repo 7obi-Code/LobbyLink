@@ -12,9 +12,9 @@ namespace LobbyLink.Desktop
     public partial class CreateItemDefinitions : Form
     {
         private readonly GameApiClient gameApiClient;
-        private readonly ItemDefinitionsApiClient apiClient;
+        private readonly ItemDefinitionApiClient apiClient;
 
-        public CreateItemDefinitions(ItemDefinitionsApiClient apiClient, GameApiClient gameApiClient)
+        public CreateItemDefinitions(ItemDefinitionApiClient apiClient, GameApiClient gameApiClient)
         {
             InitializeComponent();
             this.apiClient = apiClient;

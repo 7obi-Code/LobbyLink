@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace LobbyLink.APIClient
 {
-    public class ItemDefinitionsApiClient(string restUrl) : IFItemDefinitionDao
+    public class ItemDefinitionApiClient(string restUrl) : IFItemDefinitionDao
     {
         private readonly RestClient _client = new RestClient(restUrl);
 

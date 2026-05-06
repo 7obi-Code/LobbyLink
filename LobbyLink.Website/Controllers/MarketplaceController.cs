@@ -2,6 +2,7 @@
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.Website.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection;
@@ -11,10 +12,13 @@ namespace LobbyLink.Website.Controllers;
 public class MarketplaceController : Controller
 {
     readonly ListingApiClient _listingApiClient =
-        new("https://localhost:7094/api/v1/listings");
+        new("https://localhost:8888/api/v1/listings");
 
-    readonly ItemInstancesApiClient _itemInstanceApiClient =
-        new("https://localhost:7094/api/v1/iteminstances");
+    readonly ItemInstanceApiClient _itemInstanceApiClient =
+        new("https://localhost:8888/api/v1/iteminstances");
+
+    readonly AccountApiClient _accountApiClient =
+    new AccountApiClient("https://localhost:8888/api/v1/accounts");
 
     public IActionResult Listings()
     {
@@ -35,16 +39,20 @@ public class MarketplaceController : Controller
 
 
     //Marketplace/Buy
+    [Authorize]
     [HttpPost]
-    public IActionResult Buy(int buyerAccountId, int listingId)
+    public IActionResult Buy(int listingId)
     {
         try
         {
-            if (buyerAccountId <= 0) 
+            var accountEmail = User.FindFirst("email")?.Value;
+
+            if (accountEmail == null)
             {
-                TempData["ErrorMessage"] = "Not a valid BuyerAccountId!.";
-                return RedirectToAction("MarketInspect", new { id = listingId});
+                throw new Exception("Couldnt find user email");
             }
+
+            var buyerAccountId = _accountApiClient.GetAccountIdByEmail(accountEmail);
 
             bool result = _listingApiClient.BuyListing(buyerAccountId, listingId);
             

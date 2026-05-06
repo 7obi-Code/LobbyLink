@@ -7,9 +7,9 @@ namespace LobbyLink.Desktop
 {
     public partial class CreateItemInstances : Form
     {
-        private readonly ItemInstancesApiClient apiClient;
+        private readonly ItemInstanceApiClient apiClient;
 
-        public CreateItemInstances(ItemInstancesApiClient apiClient)
+        public CreateItemInstances(ItemInstanceApiClient apiClient)
         {
             InitializeComponent();
             this.apiClient = apiClient;

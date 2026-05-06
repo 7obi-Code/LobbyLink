@@ -3,11 +3,11 @@ GO
 
 INSERT INTO Account (userName, firstName, surName, email, phoneNo, level, type)
 VALUES
-('TobiGamer',   'Tobias', 'Jensen',      'tobias@gmail.com', '12345678', 10, 'User'),
-('LauraGamer',  'Laura',  'Berthelsen',  'laura@gmail.com',  '22222222',  7, 'User'),
-('JonasPro',    'Jonas',  'Larsen',      'jonas@gmail.com',  '33333333', 12, 'User'),
-('NoahPlayz',   'Noah',   'Quito',       'noah@gmail.com',   '44444444',  3, 'User'),
-('MikkelDK',    'Mikkel', 'Andersen',    'mikkel@gmail.com', '55555555', 15, 'User');
+('TobiGamer',   'Tobias', 'Jensen',      'mads.jensen@wonderland', '12345678', 10, 'User'),
+('LauraGamer',  'Laura',  'Berthelsen',  'laura.pedersen@wonderland',  '22222222',  7, 'User'),
+('JonasPro',    'Jonas',  'Larsen',      'emil.nielsen@wonderland',  '33333333', 12, 'User'),
+('NoahPlayz',   'Noah',   'Quito',       'mette.vuns@wunderland',   '44444444',  3, 'User'),
+('MikkelDK',    'Mikkel', 'Andersen',    'anders.pedersen@wonderland', '55555555', 15, 'User');
 
 INSERT INTO Wallet (balance, accountId_fk)
 VALUES

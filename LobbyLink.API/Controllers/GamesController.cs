@@ -3,11 +3,11 @@ using LobbyLink.DataAccess.SQLClient;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/v1/[controller]")]
-public class GameController : ControllerBase
+public class GamesController : ControllerBase
 {
     private readonly GameDao _gameDao;
 
-    public GameController()
+    public GamesController()
     {
         _gameDao = new GameDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
     }

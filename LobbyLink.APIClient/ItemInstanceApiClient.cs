@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LobbyLink.APIClient
 {
-    public class ItemInstancesApiClient(string restUrl) : IFItemInstanceDao
+    public class ItemInstanceApiClient(string restUrl) : IFItemInstanceDao
     {
         RestClient _client = new RestClient(restUrl);
 
