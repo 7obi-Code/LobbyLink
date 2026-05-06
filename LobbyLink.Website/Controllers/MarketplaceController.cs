@@ -36,6 +36,7 @@ public class MarketplaceController : Controller
     }
 
     //Marketplace/MarketInspect/"listingId"
+    [Authorize]
     public IActionResult MarketInspect(int listingId)
     {
         Listing? listing = _listingApiClient.GetActiveListingById(listingId);
@@ -45,7 +46,6 @@ public class MarketplaceController : Controller
 
 
     //Marketplace/Buy
-    [Authorize]
     [HttpPost]
     public IActionResult Buy(int listingId)
     {
