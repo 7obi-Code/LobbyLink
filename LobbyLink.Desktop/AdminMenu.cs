@@ -5,18 +5,18 @@ namespace LobbyLink.Desktop
 {
     public partial class AdminMenu : Form
     {
-        private readonly ItemInstancesApiClient itemInstancesApiClient;
-        private readonly AccountsApiClient accountsApiClient;
-        private readonly ItemDefinitionsApiClient itemDefinitionsApiClient;
+        private readonly ItemInstanceApiClient itemInstancesApiClient;
+        private readonly AccountApiClient accountsApiClient;
+        private readonly ItemDefinitionApiClient itemDefinitionsApiClient;
         private readonly GameApiClient gameApiClient;
 
         public AdminMenu()
         {
             InitializeComponent();
 
-            itemInstancesApiClient = new ItemInstancesApiClient("https://localhost:7148/api/v1/iteminstance");
-            accountsApiClient = new AccountsApiClient("https://localhost:7148/api/v1/account");
-            itemDefinitionsApiClient = new ItemDefinitionsApiClient("https://localhost:7148/api/v1/itemdefinition");
+            itemInstancesApiClient = new ItemInstanceApiClient("https://localhost:7148/api/v1/iteminstance");
+            accountsApiClient = new AccountApiClient("https://localhost:7148/api/v1/account");
+            itemDefinitionsApiClient = new ItemDefinitionApiClient("https://localhost:7148/api/v1/itemdefinition");
             gameApiClient = new GameApiClient("https://localhost:7148/api/v1/game");
 
         }

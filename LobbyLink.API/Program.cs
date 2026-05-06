@@ -1,3 +1,5 @@
+using LobbyLink.API.OpenIDConnect;
+
 namespace LinkLobby.API
 {
     public class Program
@@ -6,20 +8,14 @@ namespace LinkLobby.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
+            // Configure for OpenID
+            OpenIDConnectUtils oidcConfig = new();
+            oidcConfig.ConfigureBuild(builder);
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
+            // Configure for OpenID
+            oidcConfig.ConfigureApp(app);
 
             app.Run();
         }

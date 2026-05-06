@@ -8,9 +8,9 @@ namespace LobbyLink.Desktop
 {
     public partial class DeleteItemDefinition : Form
     {
-        private readonly ItemDefinitionsApiClient apiClient;
+        private readonly ItemDefinitionApiClient apiClient;
 
-        public DeleteItemDefinition(ItemDefinitionsApiClient apiClient)
+        public DeleteItemDefinition(ItemDefinitionApiClient apiClient)
         {
             InitializeComponent();
             this.apiClient = apiClient;

@@ -2,36 +2,37 @@
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SQLClient;
+using System.Security.Principal;
 
-namespace LobbyLink.DataAccess.SqlClient
+namespace LobbyLink.DataAccess.SqlClient;
+
+public class AccountDao : BaseDao, IFAccountDao
 {
-    public class AccountDao : BaseDao, IFAccountDao
+    public AccountDao(string connectionString) : base(connectionString) { }
+
+    public bool DeleteAccount(int id)
     {
-        public AccountDao(string connectionString) : base(connectionString) { }
-
-        public bool DeleteAccount(int id)
+        try
         {
-            try
-            {
-                var query = "DELETE FROM Account WHERE accountId = @Id";
+            var query = "DELETE FROM Account WHERE accountId = @Id";
 
-                using var connection = CreateConnection();
-                var rowsAffected = connection.Execute(query, new { Id = id });
+            using var connection = CreateConnection();
+            var rowsAffected = connection.Execute(query, new { Id = id });
 
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error deleting account with id='{id}'. Error: '{ex.Message}'", ex);
-            }
+            return rowsAffected > 0;
         }
-
-        public IEnumerable<Account> GetAllAccounts()
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"SELECT 
+            throw new Exception(
+                $"Error deleting account with id='{id}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    public IEnumerable<Account> GetAllAccounts()
+    {
+        try
+        {
+            var query = @"SELECT 
                                 accountId AS AccountId,
                                 userName  AS UserName,
                                 firstName AS FirstName,
@@ -42,21 +43,21 @@ namespace LobbyLink.DataAccess.SqlClient
                                 type      AS Type
                               FROM Account";
 
-                using var connection = CreateConnection();
-                return connection.Query<Account>(query);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error getting all accounts. Error: '{ex.Message}'", ex);
-            }
+            using var connection = CreateConnection();
+            return connection.Query<Account>(query);
         }
-
-        public Account? GetAccountById(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"SELECT 
+            throw new Exception(
+                $"Error getting all accounts. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    public Account? GetAccountById(int id)
+    {
+        try
+        {
+            var query = @"SELECT 
                                 accountId AS AccountId,
                                 userName  AS UserName,
                                 firstName AS FirstName,
@@ -68,40 +69,40 @@ namespace LobbyLink.DataAccess.SqlClient
                               FROM Account
                               WHERE accountId = @Id";
 
-                using var connection = CreateConnection();
-                return connection.QuerySingleOrDefault<Account>(query, new { Id = id });
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error getting account with id='{id}'. Error: '{ex.Message}'", ex);
-            }
+            using var connection = CreateConnection();
+            return connection.QuerySingleOrDefault<Account>(query, new { Id = id });
         }
-
-        public int InsertAccount(Account account)
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"INSERT INTO Account 
+            throw new Exception(
+                $"Error getting account with id='{id}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    public int InsertAccount(Account account)
+    {
+        try
+        {
+            var query = @"INSERT INTO Account 
                               (userName, firstName, surName, email, phoneNo, level, type)
                               OUTPUT INSERTED.accountId
                               VALUES (@UserName, @FirstName, @SurName, @Email, @PhoneNo, @Level, @Type)";
 
-                using var connection = CreateConnection();
-                return connection.QuerySingle<int>(query, account);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error inserting account with email='{account.Email}'. Error: '{ex.Message}'", ex);
-            }
+            using var connection = CreateConnection();
+            return connection.QuerySingle<int>(query, account);
         }
-
-        public bool UpdateAccount(Account account)
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"UPDATE Account
+            throw new Exception(
+                $"Error inserting account with email='{account.Email}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    public bool UpdateAccount(Account account)
+    {
+        try
+        {
+            var query = @"UPDATE Account
                               SET userName  = @UserName,
                                   firstName = @FirstName,
                                   surName   = @SurName,
@@ -111,16 +112,35 @@ namespace LobbyLink.DataAccess.SqlClient
                                   type      = @Type
                               WHERE accountId = @AccountId";
 
-                using var connection = CreateConnection();
-                var rowsAffected = connection.Execute(query, account);
+            using var connection = CreateConnection();
+            var rowsAffected = connection.Execute(query, account);
 
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error updating account with id='{account.AccountId}'. Error: '{ex.Message}'", ex);
-            }
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error updating account with id='{account.AccountId}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    public int GetAccountIdByEmail(string email)
+    {
+        using var connection = CreateConnection();
+        try
+        {
+            var query = @"SELECT accountId 
+                          FROM Account 
+                          WHERE email = @Email";
+
+            int result = connection.ExecuteScalar<int>(query, new { Email = email });
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error getting accountId from email:{email}. Error: '{ex.Message}'", ex);
         }
     }
 }
