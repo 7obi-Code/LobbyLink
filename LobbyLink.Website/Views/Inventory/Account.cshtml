@@ -20,54 +20,43 @@
     </div>
 }
 
-@if (Model == null || Model.Count() == 0)
-{
-    <h3 class="text-center my-4">Ingen items for denne bruger</h3>
-}
-else
-{
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ItemInstance ID</th>
-            <th>Item Name</th>
-            <th>Description</th>
-            <th>Account Owner</th>
-            <th>Game</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.ItemInstanceId</td>
-                    <td>@item.ItemName</td>
-                    <td>@item.Description</td>
-                    <td>@item.AccountOwner</td>
-                    <td>@item.GameTitle</td>
-                    <td>
-                        @if (item.IsListedForSale)
+
+<div class="row">
+    @if (Model == null || Model.Count() == 0)
+    {
+        <h3 class="text-center my-4">Ingen items for denne bruger</h3>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <p>@item.ItemName</p>
+                        <img src="/images/default.png" class="img-fluid" style="max-height:150px;" />
+                        <hr />
+                        @if (!item.IsListedForSale)
                         {
                             <a asp-controller="Inventory"
-                                   asp-action="InventoryInspect"
-                                   asp-route-itemInstanceId="@item.ItemInstanceId"
-                                   class="btn btn-info btn-sm">
-                                Inspect
+                            asp-action="InventoryInspect"
+                            asp-route-itemInstanceId="@item.ItemInstanceId"
+                            class="btn btn-outline-primary">
+                            SELL / INSPECT
                             </a>
                         }
                         else
                         {
                             <a asp-controller="Inventory"
-                                   asp-action="InventoryInspect"
-                                   asp-route-itemInstanceId="@item.ItemInstanceId"
-                                   class="btn btn-warning btn-sm">
-                                Details / Sell
+                            asp-action="InventoryInspect"
+                            asp-route-itemInstanceId="@item.ItemInstanceId"
+                            class="btn btn-info btn-sm">
+                            INSPECT
                             </a>
                         }
-                    </td>
-                </tr>
-            }
-    </tbody>
-</table>
-}
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
