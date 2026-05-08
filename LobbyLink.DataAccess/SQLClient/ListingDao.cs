@@ -132,7 +132,7 @@ public class ListingDao : BaseDao, IFListingDao
         connection.Open();
 
         //Starter Transaction
-        using var transaction = connection.BeginTransaction();
+        using var transaction = connection.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
 
         //UPDATE Listing
         //STATUS til 2 (Sold) og buyerAccountId til "buyerAccountId"
@@ -151,7 +151,7 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedListing == 0)
             {
-                throw new Exception("Couldnt Update listing buyer and status");
+                throw new Exception("This skin was already bought");
             }
 
             //UPDATE ItemInstance
@@ -170,8 +170,7 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedItemInstance == 0)
             {
-                transaction.Rollback();
-                throw new Exception("Couldnt transfer iteminstance");
+                throw new Exception("This skin was already bought");
             }
 
         //UPDATE Wallet
@@ -190,8 +189,7 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedWalletBuyer == 0)
             {
-                transaction.Rollback();
-                throw new Exception("Couldnt withdraw money from buyer");
+                throw new Exception("You don't have enough balance for this item");
             }
 
             var queryUpdateWalletSeller = @"UPDATE Wallet
@@ -206,19 +204,18 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedWalletSeller == 0)
             {
-                transaction.Rollback();
                 throw new Exception("Couldnt deposit money to seller");
             }
 
             //Commit transaction
             transaction.Commit();
-        //Returner true
+            //Returner true
             return true;
         }
         catch (Exception ex)
         {
             transaction.Rollback(); //fix exception try/catch
-            throw new Exception($"Error while trying to buy listing. Error was: '{ex.Message}'", ex);
+            throw new Exception($"Error while trying to buy skin. '{ex.Message}'");
         }
     }
 

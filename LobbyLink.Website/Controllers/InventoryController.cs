@@ -46,6 +46,7 @@ public class InventoryController : Controller
         return View(model);
     }
 
+
     public IActionResult InventoryInspect(int itemInstanceId)
     {
         var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);

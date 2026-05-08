@@ -137,7 +137,7 @@ namespace LobbyLink.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = $"Error buying listing with id {buyRequest.ListingId}", error = ex.Message });
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -59,23 +59,14 @@ public class MarketplaceController : Controller
 
             var buyerAccountId = _accountApiClient.GetAccountIdByEmail(accountEmail);
 
-            bool result = _listingApiClient.BuyListing(buyerAccountId, listingId);
-            
-            if (!result)
-            {
-                TempData["ErrorMessage"] = "Something went wrong when buying the Item! Try again."; //Dette problem skal vi have løst så det er mere specifikt ->
-                                                                                                    //Jeg har lavet en fejlcatcher i ListingApiClient,
-                                                                                                    //som fanger fejlen fra DB så den bliver retuneret med TempData ErrorMessage
-                return RedirectToAction("Listings");
-            }
+            _listingApiClient.BuyListing(buyerAccountId, listingId);
 
             TempData["SuccessMessage"] = "Item was purchased successfully!"; 
             return RedirectToAction("Listings");
         }
         catch (Exception ex)
         {
-            TempData["ErrorMessage"] = $"Something went wrong when buying the Item!. {ex.Message} "; //Dette problem skal vi have løst så det er mere specifikt ->
-                                                                                                     //Lavede en exception til at catch og vise problemet mere præcist
+            TempData["ErrorMessage"] = ex.Message; 
             return RedirectToAction("Listings");
         }
     }
