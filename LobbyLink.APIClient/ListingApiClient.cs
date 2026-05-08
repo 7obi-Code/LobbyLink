@@ -79,13 +79,9 @@ namespace LobbyLink.APIClient
             {
                 return true;
             }
-            return false;
 
-            // Smider en exception med fejlbeskeden fra API'et -> Lavet så fejlbesked kan kastes korrekt i marketplace buy
-            throw new Exception(
-                $"Købet fejlede. " +
-                $"Status: {response.StatusCode}, " +
-                $"Fejl: {response.Content}");
+            throw new Exception(response.Content);
+            
         }
 
         public Listing? GetActiveListingById(int listingId)
