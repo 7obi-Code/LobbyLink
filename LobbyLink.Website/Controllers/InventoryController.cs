@@ -8,14 +8,18 @@ namespace LobbyLink.Website.Controllers;
 
 public class InventoryController : Controller
 {
-    readonly ItemInstanceApiClient _itemInstanceApiClient =
-    new("https://localhost:8888/api/v1/iteminstances");
+    private readonly ItemInstanceApiClient _itemInstanceApiClient;
 
-    readonly ListingApiClient _listingApiClient =
-        new ListingApiClient("https://localhost:8888/api/v1/listings");
+    private readonly ListingApiClient _listingApiClient;
 
-    readonly AccountApiClient _accountApiClient =
-        new AccountApiClient("https://localhost:8888/api/v1/accounts");
+    private readonly AccountApiClient _accountApiClient;
+
+    public InventoryController(ItemInstanceApiClient itemInstanceApiClient, ListingApiClient listingApiClient, AccountApiClient accountApiClient)
+    {
+        _itemInstanceApiClient = itemInstanceApiClient;
+        _listingApiClient = listingApiClient;
+        _accountApiClient = accountApiClient;
+    }
 
     //shows the inventory with all items
     // Inventory/Account/
@@ -46,22 +50,51 @@ public class InventoryController : Controller
         return View(model);
     }
 
-
+    [Authorize]
     public IActionResult InventoryInspect(int itemInstanceId)
     {
-        var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
-
-        var itemModel = new InventoryItemViewModel
+        try
         {
-            ItemInstanceId = item.ItemInstanceId,
-            ItemName = item.ItemDefinition?.ItemName,
-            Description = item.ItemDefinition?.ItemDescription,
-            AccountOwner = item.Account?.UserName,
-            GameTitle = item.ItemDefinition?.Game?.GameTitle,
-            IsListedForSale = _listingApiClient.IsItemInstanceListed(item.ItemInstanceId)
-        };
+            var item = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
 
-        return View(itemModel);
+            if (item == null)
+            {
+                throw new Exception($"Couldnt find item with id {itemInstanceId}");
+            }
+
+            var accountEmail = User.FindFirst("email")?.Value;
+
+            if (accountEmail == null)
+            {
+                throw new Exception("Couldnt find user email");
+            }
+
+            var accountId = _accountApiClient.GetAccountIdByEmail(accountEmail);
+            //Tjek at ejeren faktisk er den person der er inde på itemet
+
+            //Hvis de ikke matcher, redirect til Account
+            if (item.AccountId != accountId)
+            {
+                return RedirectToAction("Account");
+            }
+
+            var itemModel = new InventoryItemViewModel
+            {
+                ItemInstanceId = item.ItemInstanceId,
+                ItemName = item.ItemDefinition?.ItemName,
+                Description = item.ItemDefinition?.ItemDescription,
+                AccountOwner = item.Account?.UserName,
+                GameTitle = item.ItemDefinition?.Game?.GameTitle,
+                IsListedForSale = _listingApiClient.IsItemInstanceListed(item.ItemInstanceId)
+            };
+
+            return View(itemModel);
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = $"Something went wrong when trying to inspect: {itemInstanceId}! - error was {ex.Message}";
+            return RedirectToAction("Account");
+        }
     }
 
     // Inventory/Sell/
@@ -72,11 +105,16 @@ public class InventoryController : Controller
         { 
         ItemInstance itemInstance = _itemInstanceApiClient.GetItemInstanceById(itemInstanceId);
 
-            //Pris skal være positiv og mindst 0.01 dollars! 
+            if (itemInstance == null)
+            {
+                TempData["ErrorMessage"] = "Item was not found";
+                return RedirectToAction($"Account");
+            }
+
             if (price < 0.01m)
             {
                 TempData["ErrorMessage"] = "Something went wrong when setting the price, try again!.";
-                return RedirectToAction($"Account", new { id = itemInstance.AccountId });
+                return RedirectToAction($"Account");
             }
 
             Listing listing = new Listing
@@ -84,18 +122,18 @@ public class InventoryController : Controller
                 Price = price,
                 StatusId = 1,
                 ItemInstanceId = itemInstance.ItemInstanceId,
-                SellerAccountId = itemInstance.Account.AccountId,
+                SellerAccountId = itemInstance.AccountId,
                 CreationTimeStamp = DateTime.Now
             };
 
             _listingApiClient.ValidateAndInsertListing(listing);
 
             TempData["SuccessMessage"] = "Listing created successfully.";
-            return RedirectToAction("Account", new { id = listing.SellerAccountId });
+            return RedirectToAction("Account");
         }
-        catch
+        catch (Exception ex)
         {
-            TempData["ErrorMessage"] = $"Something went wrong when trying to sell Item with id: {itemInstanceId}!";
+            TempData["ErrorMessage"] = $"Something went wrong when trying to sell Item with id: {itemInstanceId}! - error was {ex.Message}";
             return RedirectToAction("Account");
         }
     }

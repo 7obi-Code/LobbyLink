@@ -1,4 +1,5 @@
-﻿using LobbyLink.DataAccess.Model;
+﻿using LobbyLink.DataAccess.Interfaces;
+using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SqlClient;
 using LobbyLink.DataAccess.SQLClient;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,16 @@ namespace LobbyLink.API.Controllers
     {
         private readonly AccountDao _accountDao;
 
-        public AccountsController()
+        public AccountsController(IConfiguration configuration)
         {
-            _accountDao = new AccountDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
+            string? connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("Couldnt find connection string");
+            }
+
+            _accountDao = new AccountDao(connectionString);
         }
 
         [HttpGet]
@@ -37,7 +45,7 @@ namespace LobbyLink.API.Controllers
                 var account = _accountDao.GetAccountById(id);
 
                 if (account == null)
-                    return NotFound();
+                return NotFound();
 
                 return Ok(account);
             }
@@ -72,8 +80,6 @@ namespace LobbyLink.API.Controllers
                 });
             }
         }
-
-
 
         [HttpPost]
         public ActionResult<int> Post([FromBody] Account account)

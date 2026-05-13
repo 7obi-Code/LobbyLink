@@ -1,4 +1,5 @@
-﻿using LobbyLink.DataAccess.Model;
+﻿using Dapper;
+using LobbyLink.DataAccess.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,17 +8,10 @@ namespace LobbyLink.DataAccess.Interfaces
 {
     public interface IFListingDao
     {
-        IEnumerable<Listing> GetAllActiveListings();
-        Listing? GetActiveListingById(int listingId);
-
-        //Oprettelse af en listing. 
         int ValidateAndInsertListing(Listing listing);
-
         bool BuyListing(int buyerAccountId, int listingId);
-
-        //Checker om Iteminstance er på en listing, for at view kan displaye et item forskelligt alt efter om det er sellable eller er sat til salg.
+        public IEnumerable<Listing> GetFilteredListings(string? game = null, int? minPrice = null, int? maxPrice = null, string? sort = null, string? search = null);
+        Listing? GetActiveListingById(int listingId);
         bool IsItemInstanceListed(int itemInstanceId);
-
-
     }
 }

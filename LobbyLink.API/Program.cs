@@ -1,23 +1,22 @@
-using LobbyLink.API.OpenIDConnect;
+namespace LinkLobby.API;
 
-namespace LinkLobby.API
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
-            // Configure for OpenID
-            OpenIDConnectUtils oidcConfig = new();
-            oidcConfig.ConfigureBuild(builder);
+        builder.Services.AddControllers();
+        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
-            var app = builder.Build();
+        var app = builder.Build();
 
-            // Configure for OpenID
-            oidcConfig.ConfigureApp(app);
+        app.UseHttpsRedirection();
 
-            app.Run();
-        }
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

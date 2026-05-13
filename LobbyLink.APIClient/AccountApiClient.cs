@@ -1,10 +1,6 @@
 ﻿using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
-using Microsoft.AspNetCore.Builder;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LobbyLink.APIClient
 {
@@ -28,11 +24,6 @@ namespace LobbyLink.APIClient
                 $"Status: {response.StatusCode}\n" +
                 $"Response: {response.Content}"
             );
-        }
-
-        public Account? GetAccountById(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public int GetAccountIdByEmail(string email)
@@ -66,7 +57,7 @@ namespace LobbyLink.APIClient
             }
 
             throw new Exception(
-                $"Failed to get ItemInstances.\n" +
+                $"Failed to get all Accounts.\n" +
                 $"Status: {response.StatusCode}\n" +
                 $"Response: {response.Content}"
             );
@@ -89,11 +80,6 @@ namespace LobbyLink.APIClient
                 $"Status: {response.StatusCode}\n" +
                 $"Response: {response.Content}"
             );
-        }
-
-        public bool UpdateAccount(Account account)
-        {
-            throw new NotImplementedException();
         }
     }
 }

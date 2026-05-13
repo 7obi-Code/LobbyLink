@@ -11,23 +11,33 @@ namespace LobbyLink.API.Controllers
     {
         ItemInstanceDao _itemInstanceDao;
 
-        public ItemInstancesController() => _itemInstanceDao = new ItemInstanceDao("Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
+        public ItemInstancesController(IConfiguration configuration)
+        {
+            string? connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("Couldnt find connection string");
+            }
+
+            _itemInstanceDao = new ItemInstanceDao(connectionString);
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ItemInstance>> Get()
-        { 
+        public ActionResult<IEnumerable<ItemInstance>> Get(int accountId)
+        {
             try
             {
                 return Ok(_itemInstanceDao.GetAllItemInstances());
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error retrieving item instances", error = ex.Message });
+                return StatusCode(500, new { message = $"Error retrieving all item instances", error = ex.Message });
             }
         }
 
         [HttpGet("account/{accountId}")]
-        public ActionResult<IEnumerable<ItemInstance>> Get(int accountId)
+        public ActionResult<IEnumerable<ItemInstance>> GetByAccountId(int accountId)
         {
             try
             {
@@ -60,6 +70,7 @@ namespace LobbyLink.API.Controllers
                 });
             }
         }
+
         [HttpPost]
         public ActionResult<int> Post([FromBody] ItemInstance itemInstance)
         {

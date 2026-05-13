@@ -9,78 +9,6 @@ public class ListingDao : BaseDao, IFListingDao
 {
     public ListingDao(string connectionString) : base(connectionString) { }
 
-    public IEnumerable<Listing> GetAllActiveListings()
-    {
-        using var connection = CreateConnection();
-
-        try
-        {
-            var query = @"SELECT
-                        li.listingId,
-                        li.price,
-                        li.creationTimeStamp,
-                        li.itemInstanceId_fk AS ItemInstanceId,
-                        li.sellerAccountId_fk AS SellerAccountId,
-
-                        af.accountId,
-                        af.userName,
-                        af.surName,
-                        af.email,
-                        af.phoneNo,
-
-                        ii.itemInstanceId,
-                        ii.itemDefinitionId_fk,
-                        ii.accountId_fk AS ItemInstanceAccountId,
-
-                        id.itemDefinitionId,
-                        id.itemName,
-                        id.itemDescription,
-                        id.gameId_fk,
-
-                        g.gameId,
-                        g.gameTitle
-
-                        FROM Listing li
-
-                        LEFT JOIN Account af
-                        ON af.accountId = li.sellerAccountId_fk
-
-                        LEFT JOIN ItemInstance ii
-                        ON ii.itemInstanceId = li.itemInstanceId_fk
-
-                        LEFT JOIN ItemDefinition id
-                        ON id.itemDefinitionId = ii.itemDefinitionId_fk
-
-                        LEFT JOIN Game g
-                        ON g.gameId = id.gameId_fk
-
-                        WHERE li.statusId_fk = 1; ";
-
-            IEnumerable<Listing> listings = connection.Query<Listing, Account, ItemInstance, ItemDefinition, Game, Listing>(
-                query,
-                (listing, account, itemInstance, itemDef, game) =>
-                {
-                    itemDef.Game = game;
-                    itemInstance.ItemDefinition = itemDef;
-
-                    listing.SellerAccount = account;
-                    listing.ItemInstance = itemInstance;
-
-
-                    return listing;
-                },
-                    splitOn: "accountId,itemInstanceId,itemDefinitionId,gameId"
-                );
-
-            return listings;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error while trying to get all listings. Error was: '{ex.Message}'", ex);
-        }
-    }
-
-
     //Lav om til at returnere en id istedet og opdater interface og ændre "Create til Insert"
     public int ValidateAndInsertListing(Listing listing)
     {
@@ -121,7 +49,6 @@ public class ListingDao : BaseDao, IFListingDao
         }
     }
 
-
     //Skal vi lave metoder i ItemInstance og Wallet DAO istedet for at gøre det hele her???
     public bool BuyListing(int buyerAccountId, int listingId)
     {
@@ -151,7 +78,7 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedListing == 0)
             {
-                throw new Exception("This skin was already bought");
+                throw new ArgumentException("This skin was already bought");
             }
 
             //UPDATE ItemInstance
@@ -170,7 +97,7 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedItemInstance == 0)
             {
-                throw new Exception("This skin was already bought");
+                throw new Exception("Could not transer item from seller to buyer");
             }
 
         //UPDATE Wallet
@@ -189,7 +116,7 @@ public class ListingDao : BaseDao, IFListingDao
 
             if (rowsAffectedWalletBuyer == 0)
             {
-                throw new Exception("You don't have enough balance for this item");
+                throw new ArgumentException("You don't have enough balance for this item");
             }
 
             var queryUpdateWalletSeller = @"UPDATE Wallet
@@ -209,13 +136,22 @@ public class ListingDao : BaseDao, IFListingDao
 
             //Commit transaction
             transaction.Commit();
-            //Returner true
+
             return true;
         }
+
+        //Forventede fejl - Skin alleredekøbt / ikke nok penge
+        catch (ArgumentException aex)
+        {
+            transaction.Rollback(); 
+            throw new ArgumentException(aex.Message);
+        }
+
+        //Server fejl / Forkert state fejl
         catch (Exception ex)
         {
-            transaction.Rollback(); //fix exception try/catch
-            throw new Exception($"Error while trying to buy skin. '{ex.Message}'");
+            transaction.Rollback(); 
+            throw new Exception($"Server error while trying to buy skin - reason: '{ex.Message}'");
         }
     }
 
