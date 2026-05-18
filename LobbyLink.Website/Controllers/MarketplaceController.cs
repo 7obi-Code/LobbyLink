@@ -80,7 +80,8 @@ public class MarketplaceController : Controller
         }
         catch (Exception ex) 
         {
-            TempData["ErrorMessage"] = ex.Message;
+            TempData["ErrorMessage"] = "Der skete en uventet fejl, prøv igen";
+            Console.WriteLine(ex.Message);
             return RedirectToAction("Listings");
         }
     }
