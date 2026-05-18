@@ -1,5 +1,4 @@
 ﻿using LobbyLink.API.DTOs;
-using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SQLClient;
 using Microsoft.AspNetCore.Mvc;
@@ -12,31 +11,18 @@ namespace LobbyLink.API.Controllers
     {
         private readonly ListingDao _listingDao;
 
-        public ListingsController()
+        public ListingsController(IConfiguration configuration)
         {
+            string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            _listingDao = new ListingDao(
-                "Data Source=hildur.ucn.dk;Initial Catalog=DMA-CSD-V252_10666018;User ID=DMA-CSD-V252_10666018;Password=Password1!;Trust Server Certificate=True;");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("Couldnt find connection string");
+            }
+
+            _listingDao = new ListingDao(connectionString);
         }
 
-        // GET: api/v1/listing/active
-        [HttpGet("active")]
-        public ActionResult<IEnumerable<Listing>> GetAllActiveListings()
-        {
-            try
-            {
-                var listings = _listingDao.GetAllActiveListings();
-                return Ok(listings);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    message = "Error retrieving active listings",
-                    error = ex.Message
-                });
-            }
-        }
 
         [HttpGet("filtered")]
         public ActionResult<IEnumerable<Listing>> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
@@ -97,12 +83,8 @@ namespace LobbyLink.API.Controllers
         {
             try
             {
-                if (listing.SellerAccountId <= 0 || listing.ItemInstanceId <= 0)
-                {
-                    return BadRequest(new { message = "A seller and a item instance are required" });
-                }
-
                 var newListingId = _listingDao.ValidateAndInsertListing(listing);
+
                 return Ok(newListingId);
             }
             catch (Exception ex)
@@ -121,23 +103,19 @@ namespace LobbyLink.API.Controllers
                     return BadRequest(new { message = "No request was found" });
                 }
 
-                if (buyRequest.BuyerAccountId <= 0)
-                {
-                    return BadRequest(new { message = "BuyerAccountId is required" });
-                }
+                _listingDao.BuyListing(buyRequest.BuyerAccountId, buyRequest.ListingId);
 
-                bool result = _listingDao.BuyListing(buyRequest.BuyerAccountId, buyRequest.ListingId);
-
-                if (result == false)
-                {
-                    return NotFound(new { message = $"Could not buy item" });
-                }
-
-                return NoContent();
+                return Ok();
             }
+
+            catch (ArgumentException aex)
+            {
+                return StatusCode(409, aex.Message);
+            }
+
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

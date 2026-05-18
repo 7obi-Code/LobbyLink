@@ -2,9 +2,6 @@
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LobbyLink.APIClient
 {
@@ -14,24 +11,6 @@ namespace LobbyLink.APIClient
     {
         // RestClient er RestSharps HTTP klient, sat op med vores API's basis URL
         RestClient _client = new RestClient(restUrl);
-
-        public IEnumerable<Listing> GetAllActiveListings()
-        {
-            // Bygger et GET request til "api/v1/listings/active"
-            var request = new RestRequest("active");
-
-            // Sender requestet og forventer en liste af Listings tilbage som JSON
-            var response = _client.Execute<List<Listing>>(request);
-
-            // Hvis noget gik galt, log fejlen og returner en tom liste
-            if (!response.IsSuccessful || response.Data == null)
-            {
-                Console.WriteLine(response.Content);
-                return new List<Listing>();
-            }
-
-            return response.Data;
-        }
 
         public int ValidateAndInsertListing(Listing listing)
         {
@@ -51,11 +30,7 @@ namespace LobbyLink.APIClient
             }
 
             // Hvis det fejlede, smid en exception med detaljer om hvad der gik galt
-            throw new Exception(
-            $"Failed to insert listing. " +
-            $"Status code: {response.StatusCode}, " +
-            $"Error: {response.ErrorMessage}, " +
-            $"Content: {response.Content}");
+            throw new Exception(response.ErrorMessage);
         }
 
         public bool BuyListing(int buyerAccountId, int listingId)
@@ -73,15 +48,24 @@ namespace LobbyLink.APIClient
             // Vedhæfter det som JSON i request body
             request.AddJsonBody(rq);
 
-            var response = _client.Execute<bool>(request);
+            var response = _client.Execute(request);
 
             if (response.IsSuccessful)
             {
                 return true;
             }
 
-            throw new Exception(response.Content);
+            if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                throw new ArgumentException(response.Content);
+            }
             
+            if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            {
+                throw new Exception(response.Content);
+            }
+
+            return false;
         }
 
         public Listing? GetActiveListingById(int listingId)
@@ -114,23 +98,40 @@ namespace LobbyLink.APIClient
                 return response.Data;
             }
 
-            Console.WriteLine(response.Content);
             return false;
         }
 
-        public IEnumerable<Listing> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
+        public IEnumerable<Listing> GetFilteredListings(string? game = null, int? minPrice = null, int? maxPrice = null, string? sort = null, string? search = null)
         {
             // Bygger et GET request til "api/v1/listings/filtered"
             var request = new RestRequest("filtered", Method.Get);
 
             // Tilføjer hvert filter som en query parameter i URL'en
-            // ?? "" betyder "brug tom streng hvis værdien er null"
             // så URL'en bliver f.eks. filtered?game=CS2&minPrice=10&maxPrice=100&sort=low&search=knife
-            request.AddQueryParameter("game", game ?? "");
-            request.AddQueryParameter("minPrice", minPrice?.ToString() ?? "");
-            request.AddQueryParameter("maxPrice", maxPrice?.ToString() ?? "");
-            request.AddQueryParameter("sort", sort ?? "");
-            request.AddQueryParameter("search", search ?? "");
+            if (!string.IsNullOrEmpty(game))
+            {
+                request.AddQueryParameter("game", game);
+            }
+
+            if (minPrice != null)
+            {
+            request.AddQueryParameter("minPrice", minPrice.ToString());
+            }
+
+            if (maxPrice != null)
+            {
+            request.AddQueryParameter("maxPrice", maxPrice.ToString());
+            }
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+            request.AddQueryParameter("sort", sort);
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+            request.AddQueryParameter("search", search);
+            }
 
             // Sender requestet og forventer en filtreret liste af Listings tilbage
             var response = _client.Execute<List<Listing>>(request);
@@ -138,7 +139,6 @@ namespace LobbyLink.APIClient
             // Hvis noget gik galt, log fejlen og returner en tom liste
             if (!response.IsSuccessful || response.Data == null)
             {
-                Console.WriteLine(response.Content);
                 return new List<Listing>();
             }
 

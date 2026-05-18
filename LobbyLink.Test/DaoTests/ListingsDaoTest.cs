@@ -20,7 +20,7 @@ public class ListingsDaoTest
         //fordi der derfor ikke er brug for en test dao.
 
         //Act
-        IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
+        IEnumerable<Listing> listings = _listingsDao.GetFilteredListings();
 
         //Assert
         Assert.That(listings, Is.Not.Null, "Listing collection should not be empty");
@@ -38,7 +38,7 @@ public class ListingsDaoTest
         //fordi der derfor ikke er brug for en test dao.
 
         //Act
-        IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
+        IEnumerable<Listing> listings = _listingsDao.GetFilteredListings();
 
         //Assert
         Assert.That(listings, Is.Not.Null, "Listing collectionshould not be empty");
@@ -58,7 +58,7 @@ public class ListingsDaoTest
 
 
         //Act
-        IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
+        IEnumerable<Listing> listings = _listingsDao.GetFilteredListings();
 
         //Assert
         Assert.That(listings, Is.Not.Null, "Listing collection should not be empty");
@@ -79,7 +79,7 @@ public class ListingsDaoTest
 
 
         //Act
-        IEnumerable<Listing> listings = _listingsDao.GetAllActiveListings();
+        IEnumerable<Listing> listings = _listingsDao.GetFilteredListings();
 
         //Assert
         Assert.That(listings, Is.Not.Null, "Listing collection should not be empty");

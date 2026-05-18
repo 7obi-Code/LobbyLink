@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LobbyLink.DataAccess.Model.Listing>
+﻿@model LobbyLink.Website.Models.MarketPlaceViewModel;
 
 @{
     ViewData["Title"] = "Marketplace";
@@ -17,7 +17,7 @@
                         <input type="text"
                                id="searchInput"
                                name="search"
-                               value="@Context.Request.Query["search"]"
+                               value="@Model.Search"
                                class="form-control"
                                placeholder="Search skins..." />
 
@@ -31,13 +31,9 @@
                     <select name="game" class="form-control mb-3">
                         <option value="">All Games</option>
 
-                        @{
-                            var selectedGame = Context.Request.Query["game"].ToString();
-                        }
-
-                        @foreach (string g in ViewBag.Games)
+                        @foreach (string g in Model.GamesTitles)
                         {
-                            if (g == selectedGame)
+                            if (g == Model.Game)
                             {
                                 <option value="@g" selected>@g</option>
                             }
@@ -46,6 +42,7 @@
                                 <option value="@g">@g</option>
                             }
                         }
+
                     </select>
 
                     <!-- Pris filter -->
@@ -53,20 +50,21 @@
                     <div class="row mb-3">
                         <div class="col">
                             <input name="minPrice"
-                                   value="@Context.Request.Query["minPrice"]"
+                                   value="@Model.MinPrice"
                                    type="number"
                                    class="form-control"
                                    placeholder="Min" />
                         </div>
                         <div class="col">
                             <input name="maxPrice"
-                                   value="@Context.Request.Query["maxPrice"]"
+                                   value="@Model.MaxPrice"
                                    type="number"
                                    class="form-control"
                                    placeholder="Max" />
                         </div>
                     </div>
 
+                    <!-- Filter Apply knap -->
                     <button type="submit" class="btn btn-primary">Apply Filters</button>
 
                     <a href="/Marketplace/Listings" class="btn btn-secondary mt-2">Clear</a>
@@ -92,26 +90,27 @@
                 </div>
             }
 
-
-            <!-- Gemmer søgefiltre til konteksten af når man skal søge efter low/high -->
-            @{
-                var game = Context.Request.Query["game"];
-                var min = Context.Request.Query["minPrice"];
-                var max = Context.Request.Query["maxPrice"];
-                var search = Context.Request.Query["search"];
-            }
-
             <!-- Low/high knapper til at sorterer efter pris -->
             <div class="row mb-4">
                 <div class="col text-end">
 
-                    <a href="/Marketplace/Listings?game=@game&minPrice=@min&maxPrice=@max&search=@search&sort=low"
-                           class="btn bg-white text-dark border me-2">
+                    <a asp-action="Listings"
+                       asp-route-game="@Model.Game"
+                       asp-route-minPrice="@Model.MinPrice"
+                       asp-route-maxPrice="@Model.MaxPrice"
+                       asp-route-search="@Model.Search"
+                       asp-route-sort="low"
+                       class="btn bg-white text-dark border me-2">
                         Low → High
                     </a>
 
-                    <a href="/Marketplace/Listings?game=@game&minPrice=@min&maxPrice=@max&search=@search&sort=high"
-                           class="btn bg-white text-dark border">
+                    <a asp-action="Listings"
+                       asp-route-game="@Model.Game"
+                       asp-route-minPrice="@Model.MinPrice"
+                       asp-route-maxPrice="@Model.MaxPrice"
+                       asp-route-search="@Model.Search"
+                       asp-route-sort="high"
+                       class="btn bg-white text-dark border">
                         High → Low
                     </a>
 
@@ -120,7 +119,7 @@
 
             <!-- Item card i marketplace -->
             <div class="row">
-                @foreach (var listing in Model)
+                @foreach (var listing in Model.Listings)
                 {
                     <div class="col-md-4 mb-4">
                         <div class="card text-center">

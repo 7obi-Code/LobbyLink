@@ -58,7 +58,7 @@ namespace LobbyLink.Desktop
         // Loader alle data til adminmenu for aktive artifakter til overview
         private void AdminMenu_Load(object sender, EventArgs e)
         {
-            labelActiveListings.Text = $"Listings: {listingApiClient.GetAllActiveListings().Count()}";
+            labelActiveListings.Text = $"Listings: {listingApiClient.GetFilteredListings().Count()}";
             labelActiveUsers.Text = $"Users: {accountsApiClient.GetAllAccounts().Count()}";
             labelActiveItemInstances.Text = $"Instances: {itemInstancesApiClient.GetAllItemInstances().Count()}";
             labelActiveGames.Text = $"Games: {gameApiClient.GetAllGames().Count()}";

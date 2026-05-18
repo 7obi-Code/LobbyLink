@@ -9,15 +9,10 @@ namespace LobbyLink.Website.Controllers
 {
     public class HomeController : Controller
     {
-
-        readonly ItemInstanceApiClient _itemInstanceApiClient =
-            new("https://localhost:8888/api/v1/iteminstances");
-
         //shows the inventory with all items
         public IActionResult Index()
         {
-            var allItemInstances = _itemInstanceApiClient.GetAllItemInstances();
-            return View(allItemInstances);
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

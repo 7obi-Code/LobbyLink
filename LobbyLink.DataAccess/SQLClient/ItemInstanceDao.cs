@@ -38,7 +38,8 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
-    public IEnumerable<ItemInstance> GetAllItemInstances() {
+    public IEnumerable<ItemInstance> GetAllItemInstances() 
+    {
         try {
             var query = @"SELECT
                 ii.itemInstanceId,

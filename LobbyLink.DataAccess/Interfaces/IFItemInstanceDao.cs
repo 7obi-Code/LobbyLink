@@ -9,7 +9,6 @@ namespace LobbyLink.DataAccess.Interfaces
     public interface IFItemInstanceDao
     {
         IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId);
-        IEnumerable<ItemInstance> GetAllItemInstances();
         ItemInstance GetItemInstanceById(int id);
         int CreateItemInstance(ItemInstance itemInstance);
 
