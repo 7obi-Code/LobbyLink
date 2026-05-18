@@ -21,8 +21,8 @@ public class InventoryController : Controller
         _accountApiClient = accountApiClient;
     }
 
-    //shows the inventory with all items
-    // Inventory/Account/
+    // */Inventory/Account/
+    // Controller Action til at fremvise en bruger som er logget ind (Kræver log ind ved brug af Authorize)
     [Authorize]
     public IActionResult Account()
     {
@@ -50,6 +50,8 @@ public class InventoryController : Controller
         return View(model);
     }
 
+    // */InventoryInspect
+    //Controller til at se detaljer om et ItemInstance og indsætte pris hvis det ikke allerede er Listed
     [Authorize]
     public IActionResult InventoryInspect(int itemInstanceId)
     {
@@ -98,6 +100,7 @@ public class InventoryController : Controller
     }
 
     // Inventory/Sell/
+    //Action controller der opretter en listing ud fra den indtastede pris
     [HttpPost]
     public IActionResult Sell(int itemInstanceId, decimal price)
     {

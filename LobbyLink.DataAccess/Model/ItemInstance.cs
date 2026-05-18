@@ -15,7 +15,5 @@ namespace LobbyLink.DataAccess.Model
         public int? ListingId { get; set; }
         public int? StatusId { get; set; }
         public string? StatusName { get; set; }
-
-        public ItemInstance() { }
     }
 }

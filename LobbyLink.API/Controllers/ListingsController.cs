@@ -11,6 +11,7 @@ namespace LobbyLink.API.Controllers
     {
         private readonly ListingDao _listingDao;
 
+        //API opbygger controller med IConfiguration interfacet, som tager ConnectionString fra appsettings.json
         public ListingsController(IConfiguration configuration)
         {
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -23,7 +24,7 @@ namespace LobbyLink.API.Controllers
             _listingDao = new ListingDao(connectionString);
         }
 
-
+        //Endpoint til at finde alle ItemInstances ud fra de specificerede filtre. Disse er dynamiske og kan bliver kombineret
         [HttpGet("filtered")]
         public ActionResult<IEnumerable<Listing>> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
         {
@@ -42,6 +43,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at frem finde en listing ud fra et Id som har en status der er lig med "Active"
         [HttpGet("active/{listingId}")]
         public ActionResult<IEnumerable<Listing>> GetById(int listingId)
         {
@@ -60,6 +62,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at tjekke om en ItemInstance er koblet på en Listing med en status der er lig "Active"
         [HttpGet("active/iteminstance/{itemInstanceId}")]
         public ActionResult<bool> IsItemInstanceListed(int itemInstanceId)
         {
@@ -78,6 +81,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at Oprette en ny listing
         [HttpPost]
         public ActionResult<int> Post([FromBody] Listing listing)
         {
@@ -93,6 +97,8 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at købe et Item ud fra et DTO objekt af typen BuyListingRequest,
+        //som kun indeholder et BuyerAccountId og ListingId
         [HttpPut]
         public ActionResult Put([FromBody] BuyListingRequest buyRequest)
         {

@@ -10,6 +10,7 @@ public class AccountDao : BaseDao, IFAccountDao
 {
     public AccountDao(string connectionString) : base(connectionString) { }
 
+    //DAO metode til at slette bruger ud fra Id
     public bool DeleteAccount(int id)
     {
         try
@@ -28,20 +29,12 @@ public class AccountDao : BaseDao, IFAccountDao
         }
     }
 
+    //DAO metode finde alle accounts
     public IEnumerable<Account> GetAllAccounts()
     {
         try
         {
-            var query = @"SELECT 
-                                accountId AS AccountId,
-                                userName  AS UserName,
-                                firstName AS FirstName,
-                                surName   AS SurName,
-                                email     AS Email,
-                                phoneNo   AS PhoneNo,
-                                level     AS Level,
-                                type      AS Type
-                              FROM Account";
+            var query = @"SELECT * FROM Account";
 
             using var connection = CreateConnection();
             return connection.Query<Account>(query);
@@ -53,21 +46,13 @@ public class AccountDao : BaseDao, IFAccountDao
         }
     }
 
+    //DAO metode til at finde en account ud fra et Id
     public Account? GetAccountById(int id)
     {
         try
         {
-            var query = @"SELECT 
-                                accountId AS AccountId,
-                                userName  AS UserName,
-                                firstName AS FirstName,
-                                surName   AS SurName,
-                                email     AS Email,
-                                phoneNo   AS PhoneNo,
-                                level     AS Level,
-                                type      AS Type
-                              FROM Account
-                              WHERE accountId = @Id";
+            var query = @"SELECT * FROM Account
+                        WHERE accountId = @Id";
 
             using var connection = CreateConnection();
             return connection.QuerySingleOrDefault<Account>(query, new { Id = id });
@@ -79,6 +64,7 @@ public class AccountDao : BaseDao, IFAccountDao
         }
     }
 
+    //DAO metode til at indsætte en account i databasen
     public int InsertAccount(Account account)
     {
         try
@@ -98,6 +84,7 @@ public class AccountDao : BaseDao, IFAccountDao
         }
     }
 
+    //DAO metode til at opdatere en account ud fra et account objekt
     public bool UpdateAccount(Account account)
     {
         try
@@ -124,6 +111,7 @@ public class AccountDao : BaseDao, IFAccountDao
         }
     }
 
+    //DAO metode til at finde et accountId ud fra en email
     public int GetAccountIdByEmail(string email)
     {
         using var connection = CreateConnection();

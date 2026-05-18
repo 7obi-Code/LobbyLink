@@ -9,7 +9,7 @@ namespace LobbyLink.Website.Controllers
 {
     public class HomeController : Controller
     {
-        //shows the inventory with all items
+        //Controller action som returnere vores Landing Page view (Index)
         public IActionResult Index()
         {
             return View();

@@ -1,4 +1,4 @@
-﻿using LobbyLink.APIClient;
+﻿ using LobbyLink.APIClient;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.Website.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +22,7 @@ public class MarketplaceController : Controller
         _gameApiClient = gameApiClient;
     }
 
+    //Action controller der finder tilgængelige listings ud fra ønskede filtre. Hvis ingen filtre er angivet, læser den alle ind.
     public IActionResult Listings(string? game = null, int? minPrice = null, int? maxPrice = null, string? sort = null, string? search = null)
     {
         //Få alle spilnavne ud til dropdown
@@ -43,7 +44,8 @@ public class MarketplaceController : Controller
         return View(marketPlaceViewModel);
     }
 
-    //Marketplace/MarketInspect/"listingId"
+    //Marketplace/MarketInspect?"listingId"
+    //Action Controller til at se detaljer om et ItemInstance og en knap til at kalde Buy actionen
     [Authorize]
     public IActionResult MarketInspect(int listingId)
     {
@@ -53,8 +55,9 @@ public class MarketplaceController : Controller
     }
 
 
-    //Marketplace/Buy
+    //Marketplace/Buy?"listingId"
     [HttpPost]
+    //Action Controller til at kalde Api klientens GetAccountIdByEmail og BuyListing metoder
     public IActionResult Buy(int listingId)
     {
         try

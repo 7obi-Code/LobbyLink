@@ -12,6 +12,7 @@ namespace LobbyLink.API.Controllers
     {
         private readonly AccountDao _accountDao;
 
+        //API opbygger controller med IConfiguration interfacet, som tager ConnectionString fra appsettings.json
         public AccountsController(IConfiguration configuration)
         {
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -24,6 +25,7 @@ namespace LobbyLink.API.Controllers
             _accountDao = new AccountDao(connectionString);
         }
 
+        //Endpoint til at get alle accounts
         [HttpGet]
         public ActionResult<IEnumerable<Account>> Get()
         {
@@ -37,6 +39,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint som finder en enkelt account ud fra Id
         [HttpGet("{id}")]
         public ActionResult<Account> GetById(int id)
         {
@@ -59,6 +62,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at finde et accountId ud fra email
         [HttpGet("idByEmail")]
         public ActionResult<int> GetAccountIdByEmail([FromQuery] string email)
         {
@@ -81,6 +85,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at oprette en ny account
         [HttpPost]
         public ActionResult<int> Post([FromBody] Account account)
         {
@@ -108,6 +113,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at opdatere en account
         [HttpPut]
         public ActionResult<bool> Put([FromBody] Account account)
         {
@@ -133,6 +139,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at slette en account ud fra et Id
         [HttpDelete("{id}")]
         public ActionResult<bool> Delete(int id)
         {

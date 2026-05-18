@@ -9,5 +9,4 @@ public class Game
     public string GameTitle { get; set; }
     public string GameStudio { get; set; }
     public List<ItemDefinition> ItemDefinitons { get; set; }
-    public Game() { }
 }

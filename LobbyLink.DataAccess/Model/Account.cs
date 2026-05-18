@@ -15,7 +15,5 @@ namespace LobbyLink.DataAccess.Model
         public string PhoneNo { get; set; }
         public int Level { get; set; }
         public string Type { get; set; }
-
-        public Account() {}
     }
 }

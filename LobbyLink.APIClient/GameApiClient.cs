@@ -10,6 +10,7 @@ namespace LobbyLink.APIClient
     {
         private readonly RestClient _client = new RestClient(restUrl);
 
+        //GetAllGames sender request til endpointet der finder alle Games.
         public IEnumerable<Game> GetAllGames()
         {
             var request = new RestRequest("", Method.Get);
@@ -23,24 +24,6 @@ namespace LobbyLink.APIClient
 
             throw new Exception(
                 $"Failed to get Games.\n" +
-                $"Status: {response.StatusCode}\n" +
-                $"Response: {response.Content}"
-            );
-        }
-
-        public Game? GetGameById(int id)
-        {
-            var request = new RestRequest($"{id}", Method.Get);
-
-            var response = _client.Execute<Game>(request);
-
-            if (response.IsSuccessful)
-            {
-                return response.Data;
-            }
-
-            throw new Exception(
-                $"Failed to get Game.\n" +
                 $"Status: {response.StatusCode}\n" +
                 $"Response: {response.Content}"
             );

@@ -8,6 +8,7 @@ public class GamesController : ControllerBase
 {
     private readonly GameDao _gameDao;
 
+    //API opbygger controller med IConfiguration interfacet, som tager ConnectionString fra appsettings.json
     public GamesController(IConfiguration configuration)
     {
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -20,6 +21,7 @@ public class GamesController : ControllerBase
         _gameDao = new GameDao(connectionString);
     }
 
+    //Endpoint til at get alle games
     [HttpGet]
     public ActionResult<IEnumerable<Game>> Get()
     {

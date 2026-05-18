@@ -15,8 +15,6 @@ public class Listing
     public Account? SellerAccount { get; set; }
     public int? BuyerAccountId { get; set; }
     public Account? BuyerAccount { get; set; }
-
-    public Listing() { } 
 }
 
 

@@ -9,6 +9,7 @@ namespace LobbyLink.DataAccess.SQLClient
     {
         public ItemDefinitionDao(string connectionString) : base(connectionString) { }
 
+        //DAO metode til at finde en ItemDefinition ud fra et Id
         public ItemDefinition? GetItemDefinitionById(int id)
         {
             try
@@ -32,6 +33,7 @@ namespace LobbyLink.DataAccess.SQLClient
             }
         }
 
+        //DAO metode til at finde alle ItemDefinitions
         public IEnumerable<ItemDefinition> GetAllItemDefinitions()
         {
             try
@@ -54,6 +56,7 @@ namespace LobbyLink.DataAccess.SQLClient
             }
         }
 
+        //DAO metode til at indsætte en ItemDefinition i databasen
         public int InsertItemDefinition(ItemDefinition itemDefinition)
         {
             try
@@ -73,6 +76,7 @@ namespace LobbyLink.DataAccess.SQLClient
             }
         }
 
+        //DAO metode til at fjerne en ItemDefinition ud fra et Id
         public bool DeleteItemDefinition(int id)
         {
             try
@@ -91,6 +95,7 @@ namespace LobbyLink.DataAccess.SQLClient
             }
         }
 
+        //DAO metode til at opdatere en ItemDefinition
         public bool UpdateItemDefinition(ItemDefinition itemDefinition)
         {
             try

@@ -11,6 +11,7 @@ namespace LobbyLink.API.Controllers
     {
         ItemInstanceDao _itemInstanceDao;
 
+        //API opbygger controller med IConfiguration interfacet, som tager ConnectionString fra appsettings.json
         public ItemInstancesController(IConfiguration configuration)
         {
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -23,8 +24,9 @@ namespace LobbyLink.API.Controllers
             _itemInstanceDao = new ItemInstanceDao(connectionString);
         }
 
+        //Endpoint til at få alle ItemInstances
         [HttpGet]
-        public ActionResult<IEnumerable<ItemInstance>> Get(int accountId)
+        public ActionResult<IEnumerable<ItemInstance>> Get()
         {
             try
             {
@@ -36,6 +38,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at finde alle ItemInstances ud fra et bruger Id
         [HttpGet("account/{accountId}")]
         public ActionResult<IEnumerable<ItemInstance>> GetByAccountId(int accountId)
         {
@@ -49,6 +52,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at finde en ItemInstance ud fra et Id
         [HttpGet("{itemInstanceId}")]
         public ActionResult<ItemInstance> GetById(int itemInstanceId)
         {
@@ -71,6 +75,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at oprette et nyt ItemInstance
         [HttpPost]
         public ActionResult<int> Post([FromBody] ItemInstance itemInstance)
         {

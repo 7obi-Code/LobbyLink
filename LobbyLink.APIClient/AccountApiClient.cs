@@ -8,6 +8,9 @@ namespace LobbyLink.APIClient
     {
         RestClient _client = new RestClient(restUrl);
 
+        //Metoder som sender HTTP request til vores API Server
+        
+        //Delete account sender "id" ind til endpointet der sletter en account
         public bool DeleteAccount(int id)
         {
             var request = new RestRequest($"{id}", Method.Delete);
@@ -26,6 +29,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //GetAccountIdByEmail sender "email" til endpointet der fremfinder en brugers id baseret på en email.
         public int GetAccountIdByEmail(string email)
         {
             var request = new RestRequest($"idByEmail", Method.Get);
@@ -45,6 +49,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //GetAllAccounts sender request til endpointet der fremfinder alle accounts
         public IEnumerable<Account> GetAllAccounts()
         {
             var request = new RestRequest("", Method.Get);
@@ -63,6 +68,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //InsertAccount sender en POST request ud fra account objektet som bliver konverteret til JSON.
         public int InsertAccount(Account account)
         {
             var request = new RestRequest("", Method.Post);

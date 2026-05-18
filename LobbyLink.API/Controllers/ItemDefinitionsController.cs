@@ -12,6 +12,7 @@ namespace LobbyLink.API.Controllers
     {
         private readonly ItemDefinitionDao _ItemDefinitionDao;
 
+        //API opbygger controller med IConfiguration interfacet, som tager ConnectionString fra appsettings.json
         public ItemDefinitionsController(IConfiguration configuration)
         {
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -24,6 +25,7 @@ namespace LobbyLink.API.Controllers
             _ItemDefinitionDao = new ItemDefinitionDao(connectionString);
         }
 
+        //Endpoint til at get alle ItemDefinitions
         [HttpGet]
         public ActionResult<IEnumerable<ItemDefinition>> Get()
         {
@@ -41,6 +43,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at finde en ItemDefinition ud fra et Id
         [HttpGet("{id}")]
         public ActionResult<ItemDefinition> GetById(int id)
         {
@@ -63,6 +66,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til oprettelse af ItemDefinitions 
         [HttpPost]
         public ActionResult<int> Post([FromBody] ItemDefinition itemDefinition)
         {
@@ -90,6 +94,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at opdatere en ItemDefinition
         [HttpPut]
         public ActionResult<bool> Put([FromBody] ItemDefinition itemDefinition)
         {
@@ -115,6 +120,7 @@ namespace LobbyLink.API.Controllers
             }
         }
 
+        //Endpoint til at slette en ItemDefinition ud fra et Id
         [HttpDelete("{id}")]
         public ActionResult<bool> Delete(int id)
         {

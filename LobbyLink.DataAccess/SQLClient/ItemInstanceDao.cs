@@ -8,10 +8,9 @@ using System.Text;
 namespace LobbyLink.DataAccess.SQLClient;
 public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 {
-    public ItemInstanceDao(string connectionString) : base(connectionString) 
-    {
-    }
+    public ItemInstanceDao(string connectionString) : base(connectionString) {}
 
+    //DAO metode til at oprette en ItemInstance ud fra et itemInstance objekt
     public int CreateItemInstance(ItemInstance itemInstance)
     {
         try
@@ -38,6 +37,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
+    //DAO metode til at finde alle iteminstances, inklusiv oprettelse af de typer objekter som en ItemInstance indeholder
     public IEnumerable<ItemInstance> GetAllItemInstances() 
     {
         try {
@@ -90,6 +90,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
+    //DAO metode til at finde en ItemInstance ud fra et bruger Id
     public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
     {
         try
@@ -146,6 +147,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
+    //DAO metode til at finde en ItemInstance ud fra et iteminstance id
     public ItemInstance GetItemInstanceById(int itemInstanceId)
     {
         try

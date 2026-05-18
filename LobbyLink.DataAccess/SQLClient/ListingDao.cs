@@ -9,7 +9,8 @@ public class ListingDao : BaseDao, IFListingDao
 {
     public ListingDao(string connectionString) : base(connectionString) { }
 
-    //Lav om til at returnere en id istedet og opdater interface og ændre "Create til Insert"
+    //DAO metode til at validere om en der findes en Listing med samme iteminstanceid_fk som har en aktiv status
+    //og derefter oprettelse hvis valideringen går igennem
     public int ValidateAndInsertListing(Listing listing)
     {
         using var connection = CreateConnection();
@@ -49,7 +50,7 @@ public class ListingDao : BaseDao, IFListingDao
         }
     }
 
-    //Skal vi lave metoder i ItemInstance og Wallet DAO istedet for at gøre det hele her???
+    //DAO metode med en sql transaktion til at ændre Listing status, ItemInstance accountId_fk, og wallet for buyer og seller id
     public bool BuyListing(int buyerAccountId, int listingId)
     {
         //Opretter en forbindelse ud fra BaseDao
@@ -155,7 +156,7 @@ public class ListingDao : BaseDao, IFListingDao
         }
     }
 
-    // Henter listen af items, hvor db har filteret dem til kun dem som skal bruges til marketplace filteret
+    //DAO metode til at hente alle listings som opfylder de påførte filtre
     public IEnumerable<Listing> GetFilteredListings(string? game, int? minPrice, int? maxPrice, string? sort, string? search)
     {
         using var connection = CreateConnection();

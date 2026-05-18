@@ -10,6 +10,7 @@ namespace LobbyLink.APIClient
     {
         private readonly RestClient _client = new RestClient(restUrl);
 
+        //Sender request til API endpointet der finder alle ItemDefinitions
         public IEnumerable<ItemDefinition> GetAllItemDefinitions()
         {
             var request = new RestRequest("", Method.Get);
@@ -28,6 +29,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //Request til at finde en ItemDefinitions ud fra Id
         public ItemDefinition? GetItemDefinitionById(int id)
         {
             var request = new RestRequest($"{id}", Method.Get);
@@ -46,6 +48,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //Request til at indsætte en ItemDefinition ud fra et objekt af typen ItemDefinition
         public int InsertItemDefinition(ItemDefinition itemDefinition)
         {
             var request = new RestRequest("", Method.Post);
@@ -65,6 +68,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //Request til at opdatere en ItemDefinition
         public bool UpdateItemDefinition(ItemDefinition itemDefinition)
         {
             var request = new RestRequest("", Method.Put);
@@ -84,6 +88,7 @@ namespace LobbyLink.APIClient
             );
         }
 
+        //Request til at slette en ItemDefinition ud fra et Id
         public bool DeleteItemDefinition(int id)
         {
             var request = new RestRequest($"{id}", Method.Delete);

@@ -13,6 +13,4 @@ public class ItemDefinition
     public int GameId { get; set; }
     public List<ItemInstance>? ItemInstances { get; set; }
 
-    public ItemDefinition() { }
-
 }
