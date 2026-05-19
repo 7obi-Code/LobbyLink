@@ -1,12 +1,9 @@
-﻿using LobbyLink.DataAccess.Interfaces;
-using LobbyLink.DataAccess.Model;
+﻿using LobbyLink.DataAccess.Model;
 using RestSharp;
-using System;
-using System.Collections.Generic;
 
 namespace LobbyLink.APIClient
 {
-    public class GameApiClient(string restUrl) : IFGameDao
+    public class GameApiClient(string restUrl)
     {
         private readonly RestClient _client = new RestClient(restUrl);
 

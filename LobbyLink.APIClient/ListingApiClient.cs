@@ -1,11 +1,10 @@
 ﻿using LobbyLink.API.DTOs;
-using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using RestSharp;
 
 namespace LobbyLink.APIClient
 {
-    public class ListingApiClient(string restUrl) : IFListingDao
+    public class ListingApiClient(string restUrl)
     {
         RestClient _client = new RestClient(restUrl);
 

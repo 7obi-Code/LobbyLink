@@ -1,6 +1,5 @@
 using LobbyLink.APIClient;
 using LobbyLink.DataAccess.Model;
-using LobbyLink.DataAccess.SqlClient;
 using LobbyLink.DataAccess.SQLClient;
 
 namespace LobbyLink.Desktop

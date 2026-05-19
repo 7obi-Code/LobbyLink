@@ -1,10 +1,9 @@
-﻿using LobbyLink.DataAccess.Interfaces;
-using LobbyLink.DataAccess.Model;
+﻿using LobbyLink.DataAccess.Model;
 using RestSharp;
 
 namespace LobbyLink.APIClient
 {
-    public class AccountApiClient(string restUrl) : IFAccountDao
+    public class AccountApiClient(string restUrl)
     {
         RestClient _client = new RestClient(restUrl);
 

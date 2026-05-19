@@ -203,4 +203,23 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                 $"Error while trying to get Item Instance with Id='{itemInstanceId}'. Error was: '{ex.Message}'", ex);
         }
     }
+
+    //DAO metode til at slette en ItemInstance ud fra et Id
+    public bool DeleteItemInstance(int id)
+    {
+        try
+        {
+            var query = "DELETE FROM ItemInstance WHERE itemInstanceId = @Id";
+
+            using var connection = CreateConnection();
+            var rowsAffected = connection.Execute(query, new { Id = id });
+
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error deleting ItemInstance with id='{id}'. Error: '{ex.Message}'", ex);
+        }
+    }
 }

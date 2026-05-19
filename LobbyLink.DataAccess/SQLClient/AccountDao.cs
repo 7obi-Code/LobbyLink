@@ -4,7 +4,7 @@ using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SQLClient;
 using System.Security.Principal;
 
-namespace LobbyLink.DataAccess.SqlClient;
+namespace LobbyLink.DataAccess.SQLClient;
 
 public class AccountDao : BaseDao, IFAccountDao
 {

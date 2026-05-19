@@ -11,6 +11,6 @@ namespace LobbyLink.DataAccess.Interfaces
         IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId);
         ItemInstance GetItemInstanceById(int id);
         int CreateItemInstance(ItemInstance itemInstance);
-
+        bool DeleteItemInstance(int id);
     }
 }

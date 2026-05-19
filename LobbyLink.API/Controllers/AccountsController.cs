@@ -1,6 +1,5 @@
 ﻿using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
-using LobbyLink.DataAccess.SqlClient;
 using LobbyLink.DataAccess.SQLClient;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,12 +1,9 @@
-﻿using LobbyLink.DataAccess.Interfaces;
-using LobbyLink.DataAccess.Model;
+﻿using LobbyLink.DataAccess.Model;
 using RestSharp;
-using System;
-using System.Collections.Generic;
 
 namespace LobbyLink.APIClient
 {
-    public class ItemDefinitionApiClient(string restUrl) : IFItemDefinitionDao
+    public class ItemDefinitionApiClient(string restUrl)
     {
         private readonly RestClient _client = new RestClient(restUrl);
 
