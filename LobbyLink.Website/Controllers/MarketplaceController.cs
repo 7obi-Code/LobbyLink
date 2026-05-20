@@ -25,7 +25,20 @@ public class MarketplaceController : Controller
     //Action controller der finder tilgængelige listings ud fra ønskede filtre. Hvis ingen filtre er angivet, læser den alle ind.
     public IActionResult Listings(string? game = null, int? minPrice = null, int? maxPrice = null, string? sort = null, string? search = null)
     {
-        //Få alle spilnavne ud til dropdown
+        //Guardrails til at sikre at søgningen er mindst 3 tegn og at minPrice ikke er højere end maxPrice
+        if (search != null && search.Length < 3)
+        {
+            TempData["ErrorMessage"] = "Search must be at least 3 characters long";
+            return RedirectToAction("Listings");
+        }
+
+        if (minPrice != null && maxPrice != null && minPrice > maxPrice)
+        {
+            TempData["ErrorMessage"] = "Min price cannot be higher than max price";
+            return RedirectToAction("Listings");
+        }
+
+        //Få alle spilnavne ud til dropdown ved brug ad LINQ
         List<String> gameTitles = _gameApiClient.GetAllGames().Select(g => g.GameTitle).ToList();
 
         var marketPlaceViewModel = new MarketPlaceViewModel
@@ -47,6 +60,7 @@ public class MarketplaceController : Controller
     //Marketplace/MarketInspect?"listingId"
     //Action Controller til at se detaljer om et ItemInstance og en knap til at kalde Buy actionen
     [Authorize]
+    [HttpGet("MarketPlace/MarketInspect/{listingId}")]
     public IActionResult MarketInspect(int listingId)
     {
         Listing? listing = _listingApiClient.GetActiveListingById(listingId);

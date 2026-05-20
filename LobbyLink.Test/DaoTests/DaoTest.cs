@@ -105,10 +105,10 @@ public class DaoTest
         ItemInstance? result = _itemInstanceDao.GetItemInstanceById(tempItemInstanceId);
 
         //Assert
-        Assert.That(result, Is.Not.Null, "Expected an ItemInstance object to be returned");
-        Assert.That(result.Account, Is.Not.Null, "Expected Account to be loaded");
-        Assert.That(result.ItemDefinition, Is.Not.Null, "Expected ItemDefinition to be loaded");
-        Assert.That(result.ItemDefinition.Game, Is.Not.Null, "Expected Game to be loaded");
+        Assert.That(result, Is.Not.Null, "ItemInstance was null");
+        Assert.That(result.Account, Is.Not.Null, "Account was null");
+        Assert.That(result.ItemDefinition, Is.Not.Null, "ItemDefinition was null");
+        Assert.That(result.ItemDefinition.Game, Is.Not.Null, "Game was null");
     }
 
     [Test]
