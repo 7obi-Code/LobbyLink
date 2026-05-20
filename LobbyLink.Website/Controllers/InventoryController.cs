@@ -53,6 +53,7 @@ public class InventoryController : Controller
     // */InventoryInspect
     //Controller til at se detaljer om et ItemInstance og indsætte pris hvis det ikke allerede er Listed
     [Authorize]
+    [HttpGet("Inventory/InventoryInspect/{itemInstanceId}")]
     public IActionResult InventoryInspect(int itemInstanceId)
     {
         try

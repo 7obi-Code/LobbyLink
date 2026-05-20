@@ -60,6 +60,7 @@ public class MarketplaceController : Controller
     //Marketplace/MarketInspect?"listingId"
     //Action Controller til at se detaljer om et ItemInstance og en knap til at kalde Buy actionen
     [Authorize]
+    [HttpGet("MarketPlace/MarketInspect/{listingId}")]
     public IActionResult MarketInspect(int listingId)
     {
         Listing? listing = _listingApiClient.GetActiveListingById(listingId);
