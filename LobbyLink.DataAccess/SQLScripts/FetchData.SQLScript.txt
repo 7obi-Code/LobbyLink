@@ -1,21 +1,21 @@
 USE [DMA-CSD-V252_10666018];
 GO
 
-INSERT INTO Wallet (saldo)
+INSERT INTO Account (userName, firstName, surName, email, phoneNo, level, type)
 VALUES
-(1000.00),
-(750.00),
-(500.00),
-(300.00),
-(1200.00);
+('TobiGamer',   'Tobias', 'Jensen',      'mads.jensen@wonderland', '12345678', 10, 'User'),
+('LauraGamer',  'Laura',  'Berthelsen',  'laura.pedersen@wonderland',  '22222222',  7, 'User'),
+('JonasPro',    'Jonas',  'Larsen',      'emil.nielsen@wonderland',  '33333333', 12, 'User'),
+('NoahPlayz',   'Noah',   'Quito',       'mette.vuns@wunderland',   '44444444',  3, 'User'),
+('MikkelDK',    'Mikkel', 'Andersen',    'anders.pedersen@wonderland', '55555555', 15, 'User');
 
-INSERT INTO Account (userName, firstName, surName, email, phoneNo, level, type, walletId_fk)
+INSERT INTO Wallet (balance, accountId_fk)
 VALUES
-('TobiGamer',   'Tobias', 'Jensen',      'tobias@gmail.com', '12345678', 10, 'User', 1),
-('LauraGamer',  'Laura',  'Berthelsen',  'laura@gmail.com',  '22222222',  7, 'User', 2),
-('JonasPro',    'Jonas',  'Larsen',      'jonas@gmail.com',  '33333333', 12, 'User', 3),
-('NoahPlayz',   'Noah',   'Quito',       'noah@gmail.com',   '44444444',  3, 'User', 4),
-('MikkelDK',    'Mikkel', 'Andersen',    'mikkel@gmail.com', '55555555', 15, 'User', 5);
+(1000.00, 1),
+(750.00, 2),
+(500.00, 3),
+(300.00, 4),
+(1200.00, 5);
 
 INSERT INTO Game (gameTitle, gameStudio)
 VALUES
@@ -88,7 +88,7 @@ VALUES
 (2, 'SOLD'),
 (3, 'CANCELLED');
 
-INSERT INTO Listing (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, accountId_fk)
+INSERT INTO Listing (price, creationTimeStamp, statusId_fk, itemInstanceId_fk, sellerAccountId_fk)
 VALUES
 (250.00, GETDATE(), 1,  1, 1),
 (500.00, GETDATE(), 1,  4, 4),

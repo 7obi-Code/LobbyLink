@@ -1,4 +1,4 @@
-﻿@model LobbyLink.DataAccess.Model.ItemInstance
+﻿@model LobbyLink.Website.Models.InventoryItemViewModel
 
 @{
     ViewData["Title"] = "Inspect Item";
@@ -10,41 +10,103 @@
     <div class="card bg-secondary text-light p-4 shadow-lg" style="width: 600px;">
 
         <!-- ITEM TITLE -->
-        <h3 class="text-center">@Model.ItemDefinition?.ItemName</h3>
+        <h3 class="text-center">@Model.ItemName</h3>
 
         <hr />
 
         <!-- IMAGE -->
-        @if (!string.IsNullOrEmpty(Model.ItemDefinition?.ItemImageUrl))
-        {
-            <div class="text-center mb-3">
-                <img src="@Model.ItemDefinition.ItemImageUrl"
-                     class="img-fluid rounded"
-                     style="max-height: 200px;" />
-            </div>
-        }
+        <div class="text-center mb-3">
+            <img src="/images/default.png" class="img-fluid" style="max-height:150px;" />
+        </div>
+        
 
         <!-- DESCRIPTION -->
-        <p><strong>Description:</strong><br /> @Model.ItemDefinition?.ItemDescription</p>
+        <p><strong>Description:</strong><br /> @Model.Description</p>
 
         <!-- GAME -->
-        <p><strong>Game:</strong> @Model.ItemDefinition?.Game?.GameTitle</p>
+        <p><strong>Game:</strong> @Model.GameTitle</p>
 
         <!-- INSTANCE INFO -->
         <p><strong>Item ID:</strong> @Model.ItemInstanceId</p>
-        <p><strong>Owner:</strong> @Model.Account?.Username</p>
+        <p><strong>Owner:</strong> @Model.AccountOwner</p>
 
+        @if (@Model.IsListedForSale == false)
+        {  
         <hr />
-
         <!-- ACTION BUTTON -->
-        <div class="text-center mt-4">
-            <a asp-controller="Inventory"
-               asp-action="Sell"
-               asp-route-id="@Model.ItemInstanceId"
-               class="btn btn-warning btn-lg">
-                Sell Item
-            </a>
-        </div>
+        @* Form der sender item og pris til controller *@
+        <form asp-controller="Inventory" asp-action="Sell" method="post">
 
+            @* Skjult felt med item id *@
+            <input type="hidden" name="itemInstanceId" value="@Model.ItemInstanceId" />
+
+            <div class="d-flex justify-content-between align-items-end mt-4">
+
+                @* Input sektion til pris *@
+                <div>
+                    <label class="mb-1">Set price:</label>
+
+                    @* Input med dollar tegn *@
+                    <div class="input-group" style="width:160px;">
+                        <span class="input-group-text">$</span>
+
+                        @* Brugeren indtaster pris (min 0.01, max 2 decimaler, ingen e,+,-) *@
+                        <input type="number"
+                               name="price"
+                               min="0.01"
+                               step="0.01"
+                               required
+                               placeholder="Enter price"
+                               class="form-control"
+                               onkeydown="return !['e','E','+','-'].includes(event.key)" />
+                    </div>
+                </div>
+
+                @* Knap der åbner popup i stedet for at sende med det samme *@
+                <button type="button"
+                        class="btn btn-warning"
+                        data-bs-toggle="modal"
+                        data-bs-target="#confirmSellModal">
+                    Sell Item
+                </button>
+
+            </div>
+
+            @* Popup til bekræftelse før listing bliver oprettet *@
+            <div class="modal fade" id="confirmSellModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content text-dark">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirm Listing</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        @* Tekst til bruger *@
+                        <div class="modal-body">
+                            Are you sure you want to put this item up for sale?
+                        </div>
+
+                        <div class="modal-footer">
+                            @* Lukker popup uden at gøre noget *@
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            @* Sender form til controller *@
+                            <button type="submit"
+                                    class="btn btn-warning">
+                                Confirm Listing
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        }
     </div>
 </div>

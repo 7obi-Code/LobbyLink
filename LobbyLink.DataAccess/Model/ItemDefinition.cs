@@ -9,11 +9,8 @@ public class ItemDefinition
     public string ItemName { get; set; }
     public string ItemImageUrl { get; set; }
     public string ItemDescription { get; set; }
-    public Game Game { get; set; }
+    public Game? Game { get; set; }
     public int GameId { get; set; }
-    public List<ItemPropertyLine> ItemPropertyLines { get; set; }
-    public List<ItemInstance> ItemInstances { get; set; }
-
-    public ItemDefinition() { }
+    public List<ItemInstance>? ItemInstances { get; set; }
 
 }

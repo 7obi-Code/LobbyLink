@@ -8,10 +8,9 @@ using System.Text;
 namespace LobbyLink.DataAccess.SQLClient;
 public class ItemInstanceDao : BaseDao, IFItemInstanceDao
 {
-    public ItemInstanceDao(string connectionString) : base(connectionString) 
-    {
-    }
+    public ItemInstanceDao(string connectionString) : base(connectionString) {}
 
+    //DAO metode til at oprette en ItemInstance ud fra et itemInstance objekt
     public int CreateItemInstance(ItemInstance itemInstance)
     {
         try
@@ -38,12 +37,11 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
-    public IEnumerable<ItemInstance> GetAllItemInstances()
+    //DAO metode til at finde alle iteminstances, inklusiv oprettelse af de typer objekter som en ItemInstance indeholder
+    public IEnumerable<ItemInstance> GetAllItemInstances() 
     {
-        try
-        {
-            var query = @"
-            SELECT
+        try {
+            var query = @"SELECT
                 ii.itemInstanceId,
                 ii.accountId_fk,
                 ii.itemDefinitionId_fk,
@@ -55,7 +53,6 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                 af.phoneNo,
                 af.level,
                 af.type,
-                af.walletId_fk,
                 idf.itemDefinitionId,
                 idf.itemName,
                 idf.itemImageUrl,
@@ -74,8 +71,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
             using var connection = CreateConnection();
 
             List<ItemInstance> itemInstances = connection.Query<ItemInstance, Account, ItemDefinition, Game, ItemInstance>
-                (
-                query, 
+                (query, 
                 
                 (instance, account, definition, game) =>
                 {
@@ -85,19 +81,16 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                     return instance;
                 },
 
-                splitOn: "accountId, itemDefinitionId, gameId"
-                )
-                .ToList();
-
+                splitOn: "accountId, itemDefinitionId, gameId").ToList();
+            
             return itemInstances;
         }
-        catch (Exception ex)
-        {
-            throw new Exception(
-                $"Error while trying to get all ItemInstances. Error was: '{ex.Message}'", ex);
+        catch (Exception ex) {
+            throw new Exception($"Error while trying to get all ItemInstances. Error was: '{ex.Message}'", ex);
         }
     }
 
+    //DAO metode til at finde en ItemInstance ud fra et bruger Id
     public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
     {
         try
@@ -115,7 +108,6 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                 af.phoneNo,
                 af.level,
                 af.type,
-                af.walletId_fk,
                 idf.itemDefinitionId,
                 idf.itemName,
                 idf.itemImageUrl,
@@ -155,6 +147,7 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         }
     }
 
+    //DAO metode til at finde en ItemInstance ud fra et iteminstance id
     public ItemInstance GetItemInstanceById(int itemInstanceId)
     {
         try
@@ -172,7 +165,6 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
                 af.phoneNo,
                 af.level,
                 af.type,
-                af.walletId_fk,
                 idf.itemDefinitionId,
                 idf.itemName,
                 idf.itemImageUrl,
@@ -209,6 +201,25 @@ public class ItemInstanceDao : BaseDao, IFItemInstanceDao
         {
             throw new Exception(
                 $"Error while trying to get Item Instance with Id='{itemInstanceId}'. Error was: '{ex.Message}'", ex);
+        }
+    }
+
+    //DAO metode til at slette en ItemInstance ud fra et Id
+    public bool DeleteItemInstance(int id)
+    {
+        try
+        {
+            var query = "DELETE FROM ItemInstance WHERE itemInstanceId = @Id";
+
+            using var connection = CreateConnection();
+            var rowsAffected = connection.Execute(query, new { Id = id });
+
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error deleting ItemInstance with id='{id}'. Error: '{ex.Message}'", ex);
         }
     }
 }

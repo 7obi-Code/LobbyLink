@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LobbyLink.API\LobbyLink.API.csproj" />
     <ProjectReference Include="..\LobbyLink.DataAccess\LobbyLink.DataAccess.csproj" />
   </ItemGroup>
 

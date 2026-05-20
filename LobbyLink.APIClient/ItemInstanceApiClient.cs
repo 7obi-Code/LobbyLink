@@ -1,16 +1,13 @@
-﻿using LobbyLink.DataAccess.Interfaces;
-using LobbyLink.DataAccess.Model;
+﻿using LobbyLink.DataAccess.Model;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LobbyLink.APIClient
 {
-    public class ItemInstanceApiClient(string restUrl) : IFItemInstanceDao
+    public class ItemInstanceApiClient(string restUrl)
     {
         RestClient _client = new RestClient(restUrl);
 
+        //Request til at oprette en ItemInstance ud fra et objekt af typen ItemInstance
         public int CreateItemInstance(ItemInstance itemInstance)
         {
             var request = new RestRequest("", Method.Post);
@@ -30,19 +27,21 @@ namespace LobbyLink.APIClient
             );
         }
 
-
-        public IEnumerable<ItemInstance> GetAllItemInstances()
-        {
-            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest());
-            return response ?? new List<ItemInstance>();
-        }
-
+        //Request til at finde alle ItemInstances ud fra et bruger id
         public IEnumerable<ItemInstance> GetAllItemInstancesByAccountId(int accountId)
         {
             var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest($"account/{accountId}"));
             return response ?? new List<ItemInstance>();
         }
 
+        //Request til at finde alle ItemInstances
+        public IEnumerable<ItemInstance> GetAllItemInstances()
+        {
+            var response = _client.Get<IEnumerable<ItemInstance>>(new RestRequest($""));
+            return response ?? new List<ItemInstance>();
+        }
+
+        //Request til at finde en ItemInstance ud fra et Id
         public ItemInstance? GetItemInstanceById(int id)
         {
             var request = new RestRequest($"{id}");

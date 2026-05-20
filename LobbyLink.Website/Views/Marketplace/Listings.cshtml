@@ -1,45 +1,144 @@
-﻿@model IEnumerable<LobbyLink.DataAccess.Model.Listing>
+﻿@model LobbyLink.Website.Models.MarketPlaceViewModel;
 
 @{
     ViewData["Title"] = "Marketplace";
 }
 
-<h1 class="text-center my-4">Marketplace</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<div class="table-responsive">
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th>Item ID</th>
-                <th>Item Name</th>
-                <th>Description</th>
-                <th>Seller</th>
-                <th>Game</th>
-                <th>Price</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var listing in Model)
+        <div class="col-md-3 border-end">
+            <div class="p-3">
+                <form method="get" asp-action="Listings">
+
+
+                    <!-- Søgebar -->
+                    <div class="mb-3 position-relative">
+                        <input type="text"
+                               id="searchInput"
+                               name="search"
+                               value="@Model.Search"
+                               class="form-control"
+                               placeholder="Search skins..." />
+
+                        <div id="searchResults"
+                             class="list-group position-absolute w-100"
+                             style="z-index:1000; max-height:200px; overflow-y:auto; display:none;">
+                        </div>
+                    </div>
+
+                    <!-- Game filter -->
+                    <select name="game" class="form-control mb-3">
+                        <option value="">All Games</option>
+
+                        @foreach (string g in Model.GamesTitles)
+                        {
+                            if (g == Model.Game)
+                            {
+                                <option value="@g" selected>@g</option>
+                            }
+                            else
+                            {
+                                <option value="@g">@g</option>
+                            }
+                        }
+
+                    </select>
+
+                    <!-- Pris filter -->
+                    <label>Price Range</label>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <input name="minPrice"
+                                   value="@Model.MinPrice"
+                                   type="number"
+                                   class="form-control"
+                                   placeholder="Min" />
+                        </div>
+                        <div class="col">
+                            <input name="maxPrice"
+                                   value="@Model.MaxPrice"
+                                   type="number"
+                                   class="form-control"
+                                   placeholder="Max" />
+                        </div>
+                    </div>
+
+                    <!-- Filter Apply knap -->
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+
+                    <a href="/Marketplace/Listings" class="btn btn-secondary mt-2">Clear</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-9 p-4">
+
+            <!-- Success besked ved køb seccess -->
+            @if (TempData["SuccessMessage"] != null)
             {
-                <tr>
-                    <td>@listing.ItemInstanceId</td>
-                    <td>@listing.ItemInstance.ItemDefinition?.ItemName</td>
-                    <td>@listing.ItemInstance.ItemDefinition?.ItemDescription</td>
-                    <td>@listing.SellerAccount?.Username</td>
-                    <td>@listing.ItemInstance.ItemDefinition?.Game?.GameTitle</td>
-                    <td>@listing.Price</td>
-                    <td>
-                        <a asp-controller="Marketplace"
-                               asp-action="MarketInspect"
-                               asp-route-itemInstanceId="@listing.ItemInstanceId"
-                               asp-route-mode="buy"
-                               class="btn btn-success">
-                            Details / Buy
-                        </a>
-                    </td>
-                </tr>
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
             }
-        </tbody>
-    </table>
+
+            <!-- Fejl besked ved køb fejl -->
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <!-- Low/high knapper til at sorterer efter pris -->
+            <div class="row mb-4">
+                <div class="col text-end">
+
+                    <a asp-action="Listings"
+                       asp-route-game="@Model.Game"
+                       asp-route-minPrice="@Model.MinPrice"
+                       asp-route-maxPrice="@Model.MaxPrice"
+                       asp-route-search="@Model.Search"
+                       asp-route-sort="low"
+                       class="btn bg-white text-dark border me-2">
+                        Low → High
+                    </a>
+
+                    <a asp-action="Listings"
+                       asp-route-game="@Model.Game"
+                       asp-route-minPrice="@Model.MinPrice"
+                       asp-route-maxPrice="@Model.MaxPrice"
+                       asp-route-search="@Model.Search"
+                       asp-route-sort="high"
+                       class="btn bg-white text-dark border">
+                        High → Low
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Item card i marketplace -->
+            <div class="row">
+                @foreach (var listing in Model.Listings)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card text-center">
+
+                            <div class="card-body">
+                                <p>@listing.ItemInstance.ItemDefinition.ItemName</p>
+                                <img src="/images/default.png" class="img-fluid" style="max-height:150px;" />
+                                <p>Seller: @listing.SellerAccount.UserName</p>
+                                <p class="fw-bold">PRICE: @listing.Price</p>
+                                <hr />
+                                <a asp-controller="Marketplace" 
+                                asp-action="MarketInspect" 
+                                asp-route-listingId="@listing.ListingId" 
+                                class="btn btn-outline-primary">BUY</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

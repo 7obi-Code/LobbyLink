@@ -1,3 +1,6 @@
+using LobbyLink.APIClient;
+using LobbyLink.Website.OpenIDConnect;
+
 namespace LobbyLink.Website
 {
     public class Program
@@ -6,29 +9,32 @@ namespace LobbyLink.Website
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            // Configure for OpenID
+            OpenIDConnectUtils oidcConfig = new();
+            oidcConfig.ConfigureBuild(builder);
+
+            //Registrering af Api Client
+            var apiSettings = builder.Configuration.GetSection("ApiSettings");
+
+            builder.Services.AddScoped<ItemInstanceApiClient>(sp =>
+                new ItemInstanceApiClient(apiSettings["ItemInstancesUrl"]));
+
+            builder.Services.AddScoped<ListingApiClient>(sp =>
+                new ListingApiClient(apiSettings["ListingsUrl"]));
+
+            builder.Services.AddScoped<AccountApiClient>(sp =>
+                new AccountApiClient(apiSettings["AccountsUrl"]));
+
+            builder.Services.AddScoped<GameApiClient>(sp =>
+                new GameApiClient(apiSettings["GamesUrl"]));
+
+            builder.Services.AddScoped<ItemDefinitionApiClient>(sp =>
+            new ItemDefinitionApiClient(apiSettings["ItemDefinitionsUrl"]));
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            // Configure for OpenID
+            oidcConfig.ConfigureApp(app);
 
             app.Run();
         }

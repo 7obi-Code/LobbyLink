@@ -2,118 +2,133 @@
 using LobbyLink.DataAccess.Interfaces;
 using LobbyLink.DataAccess.Model;
 using LobbyLink.DataAccess.SQLClient;
+using System.Security.Principal;
 
-namespace LobbyLink.DataAccess.SqlClient
+namespace LobbyLink.DataAccess.SQLClient;
+
+public class AccountDao : BaseDao, IFAccountDao
 {
-    public class AccountDao : BaseDao, IFAccountDao
+    public AccountDao(string connectionString) : base(connectionString) { }
+
+    //DAO metode til at slette bruger ud fra Id
+    public bool DeleteAccount(int id)
     {
-        public AccountDao(string connectionString) : base(connectionString) { }
-
-        public bool DeleteAccount(int id)
+        try
         {
-            try
-            {
-                var query = "DELETE FROM Account WHERE accountId = @Id";
-                using var connection = CreateConnection();
-                var rowsAffected = connection.Execute(query, new { Id = id });
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error while trying to delete account with id='{id}'. Error was: '{ex.Message}'", ex);
-            }
+            var query = "DELETE FROM Account WHERE accountId = @Id";
+
+            using var connection = CreateConnection();
+            var rowsAffected = connection.Execute(query, new { Id = id });
+
+            return rowsAffected > 0;
         }
-
-        public IEnumerable<Account> GetAllAccounts()
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"SELECT 
-                                accountId   AS AccountId,
-                                name        AS Name,
-                                surname     AS Surname,
-                                birthday    AS Birthday,
-                                email       AS Email,
-                                phoneno     AS PhoneNo,
-                                type        AS Type
-                              FROM Account";
-
-                using var connection = CreateConnection();
-                return connection.Query<Account>(query);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error while trying to get all accounts. Error was: '{ex.Message}'", ex);
-            }
+            throw new Exception(
+                $"Error deleting account with id='{id}'. Error: '{ex.Message}'", ex);
         }
+    }
 
-        public Account? GetAccountById(int id)
+    //DAO metode finde alle accounts
+    public IEnumerable<Account> GetAllAccounts()
+    {
+        try
         {
-            try
-            {
-                var query = @"SELECT 
-                                accountId   AS AccountId,
-                                name        AS Name,
-                                surname     AS Surname,
-                                birthday    AS Birthday,
-                                email       AS Email,
-                                phoneno     AS PhoneNo,
-                                type        AS Type
-                              FROM Account
-                              WHERE accountId = @Id";
+            var query = @"SELECT * FROM Account";
 
-                using var connection = CreateConnection();
-                return connection.QuerySingleOrDefault<Account>(query, new { Id = id });
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error while trying to get account with id='{id}'. Error was: '{ex.Message}'", ex);
-            }
+            using var connection = CreateConnection();
+            return connection.Query<Account>(query);
         }
-
-        public int InsertAccount(Account account)
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"INSERT INTO Account (name, surname, birthday, email, phoneno, type)
+            throw new Exception(
+                $"Error getting all accounts. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    //DAO metode til at finde en account ud fra et Id
+    public Account? GetAccountById(int id)
+    {
+        try
+        {
+            var query = @"SELECT * FROM Account
+                        WHERE accountId = @Id";
+
+            using var connection = CreateConnection();
+            return connection.QuerySingleOrDefault<Account>(query, new { Id = id });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error getting account with id='{id}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    //DAO metode til at indsætte en account i databasen
+    public int InsertAccount(Account account)
+    {
+        try
+        {
+            var query = @"INSERT INTO Account 
+                              (userName, firstName, surName, email, phoneNo, level, type)
                               OUTPUT INSERTED.accountId
-                              VALUES (@Name, @Surname, @Birthday, @Email, @PhoneNo, @Type)";
+                              VALUES (@UserName, @FirstName, @SurName, @Email, @PhoneNo, @Level, @Type)";
 
-                using var connection = CreateConnection();
-                var newId = connection.QuerySingle<int>(query, account);
-                return newId;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error while trying to insert account with email='{account.Email}'. Error was: '{ex.Message}'",
-                    ex);
-            }
+            using var connection = CreateConnection();
+            return connection.QuerySingle<int>(query, account);
         }
-
-        public bool UpdateAccount(Account account)
+        catch (Exception ex)
         {
-            try
-            {
-                var query = @"UPDATE Account
-                              SET name = @Name,
-                                  surname = @Surname,
-                                  birthday = @Birthday,
-                                  email = @Email,
-                                  phoneno = @PhoneNo,
-                                  type = @Type
+            throw new Exception(
+                $"Error inserting account with email='{account.Email}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    //DAO metode til at opdatere en account ud fra et account objekt
+    public bool UpdateAccount(Account account)
+    {
+        try
+        {
+            var query = @"UPDATE Account
+                              SET userName  = @UserName,
+                                  firstName = @FirstName,
+                                  surName   = @SurName,
+                                  email     = @Email,
+                                  phoneNo   = @PhoneNo,
+                                  level     = @Level,
+                                  type      = @Type
                               WHERE accountId = @AccountId";
 
-                using var connection = CreateConnection();
-                var rowsAffected = connection.Execute(query, account);
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error while trying to update account with id='{account.AccountId}', email='{account.Email}'. Error was: '{ex.Message}'",
-                    ex);
-            }
+            using var connection = CreateConnection();
+            var rowsAffected = connection.Execute(query, account);
+
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error updating account with id='{account.AccountId}'. Error: '{ex.Message}'", ex);
+        }
+    }
+
+    //DAO metode til at finde et accountId ud fra en email
+    public int GetAccountIdByEmail(string email)
+    {
+        using var connection = CreateConnection();
+        try
+        {
+            var query = @"SELECT accountId 
+                          FROM Account 
+                          WHERE email = @Email";
+
+            int result = connection.ExecuteScalar<int>(query, new { Email = email });
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error getting accountId from email:{email}. Error: '{ex.Message}'", ex);
         }
     }
 }

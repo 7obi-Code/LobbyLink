@@ -1,27 +1,22 @@
-namespace LinkLobby.API
+namespace LinkLobby.API;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+        builder.Services.AddControllers();
+        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
-            builder.Services.AddControllers();
+        var app = builder.Build();
 
-            var app = builder.Build();
+        app.UseHttpsRedirection();
 
-            // Configure the HTTP request pipeline.
+        app.UseAuthorization();
 
-            app.UseHttpsRedirection();
+        app.MapControllers();
 
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
-        }
+        app.Run();
     }
 }
